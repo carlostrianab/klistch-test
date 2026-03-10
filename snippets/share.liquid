@@ -1,0 +1,33 @@
+<div class="share-button" {{ block.shopify_attributes }} 
+    x-title="Share button" 
+    x-data="Share('{{ request.origin | append: data }}')">
+    <details x-ref="share_details" class="relative">
+        <summary class="share-button__button inline-flex items-center gap-2 cursor-pointer">
+            {% render 'icon-share' %}
+            {{ block.settings.share_label | escape }}
+        </summary>
+        <div class="share-button__fallback flex gap-3 absolute w-full bg-white">
+            <div class="field w-full relative">
+            <span x-show="copied" class="share-button__message absolute inset-1 bg-white flex items-center justify-center" role="status">
+                {{ 'general.share.success_message' | t }}
+            </span>
+            <input type="text" class="form__input w-full shadow-md" id="url"
+                    value="{{ request.origin | append: data }}"
+                    placeholder="{{ 'general.share.share_url' | t }}"
+                    readonly>
+            <label class="sr-only" for="url">{{ 'general.share.share_url' | t }}</label>
+            </div>
+
+            <button class="share-button__close hidden no-js-hidden">
+            {% render 'icon-close' %}
+            <span class="sr-only">{{ 'general.share.close' | t }}</span>
+            </button>
+
+            <button class="share-button__copy no-js-hidden px-3 rounded-md" @click="copyToClipboard()">
+            {% render 'icon-clipboard', class: 'w-6' %}
+            <span class="sr-only">{{ 'general.share.copy_to_clipboard' | t }}</span>
+            </button>
+
+        </div>
+    </details>
+</div>

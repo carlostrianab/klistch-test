@@ -1,0 +1,205 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+
+  <head>
+<!-- Start of Shoplift scripts -->
+{% render 'shoplift' %}
+<!-- End of Shoplift scripts -->
+
+
+    {% render 'skio-head' %}
+
+    {% render 'gcm-integration-script' %}
+
+    <!-- Begin BlackCrow Script Tag: DO NOT MODIFY! -->
+    <script
+      type="text/javascript"
+      async
+      src="https://shopify-init.blackcrow.ai/js/core/kitschllc.js?shopify_app_version=1.0.243&shop=kitschllc.myshopify.com"
+    ></script>
+    <!-- End BlackCrow Script Tag -->
+    {% render 'replo-head' %}
+    {%- comment -%} <script src="https://cdn.intelligems.io/11be3e21f4f1.js" data-em-load="lazyOnLoad" defer></script> {%- endcomment -%}
+    <meta name="facebook-domain-verification" content="s9x0zjyr3g0su9p0zqdfa2g3a185s2">
+
+    {% if template contains 'page' and page.handle contains 'stranger-things' %}
+      <script data-cfasync="false">
+        window.ju_num="C4DE1707-7658-4B96-92C0-C0C295C2C97A";window.asset_host='//cdn.jst.ai/';(function(i,s,o,g,r,a,m){i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)};a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script',asset_host+'vck.js','juapp');
+      </script>
+    {% endif %}
+
+    <script>
+      if((document.referrer).includes('remotasks.com')){location.replace("https://www.remotasks.com/forgot")}
+    </script>
+
+    {% comment %} GLADLY 10.2.24 {% endcomment %}
+    <script>
+      !function(c,n,r,t){if(!c[r]){var i,d,p=[];d="PROD"!==t&&t?"STAGING"===t?"https://cdn.gladly.qa/gladly/chat-sdk/widget.js":t:"https://cdn.gladly.com/chat-sdk/widget.js",c[r]={init:function(){i=arguments;var e={then:function(t){return p.push({type:"t",next:t}),e},catch:function(t){return p.push({type:"c",next:t}),e}};return e}},c.__onHelpAppHostReady__=function(t){if(delete c.__onHelpAppHostReady__,(c[r]=t).loaderCdn=d,i)for(var e=t.init.apply(t,i),n=0;n<p.length;n++){var a=p[n];e="t"===a.type?e.then(a.next):e.catch(a.next)}},function(){try{var t=n.getElementsByTagName("script")[0],e=n.createElement("script");e.async=!0,e.src=d+"?q="+(new Date).getTime(),t.parentNode.insertBefore(e,t)}catch(t){}}()}}
+      (window,document,'Gladly','PROD')
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect dns-prefetch" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect dns-prefetch" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="preconnect dns-prefetch" href="https://v.shopify.com" crossorigin>
+    <link rel="preconnect dns-prefetch" href="https://cdn.shopifycloud.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <!-- LoudCrowd -->
+    {% if request.path contains '/pages/shop' %}
+      <link rel="preload" href="{{ 'loudcrowd.css' | asset_url }}" as="style">
+      {{ 'loudcrowd.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+    <script src="{{ 'app.js' | asset_url }}" defer></script>
+
+    {% capture h_content %}
+    	{{ content_for_header }}
+    {% endcapture %}
+
+    {% comment %} Remove octaneai from all other pages {% endcomment %}
+    {% unless page.handle contains 'take-the-kitsch-quiz' %}
+      {{
+        h_content
+        | remove: 'https:\/\/cdn.getcarro.com\/script-tags\/all\/cro-pixel-bundle.js?event_key=8be8299b-f9ce-4297-a133-2e785c45c087\u0026shop=kitschllc.myshopify.com'
+        | remove: '"https:\/\/app.octaneai.com\/43m48tpugrhv7cwq\/shopify.js?x=xu42gwL5aaEhOnmd\u0026shop=kitschllc.myshopify.com",'
+        | remove: '"\/\/searchserverapi.com\/widgets\/shopify\/init.js?a=4J1Y4r9x5n\u0026shop=kitschllc.myshopify.com",'
+        | remove: '"\/\/searchserverapi.com\/widgets\/shopify\/init.js?a=4J1Y4r9x5n\u0026shop=kitschllc.myshopify.com",'
+        | remove: '"https:\/\/d275fvz7g8rvo.cloudfront.net\/kitschllc.myshopify.com\/online_store_script.js?shop=kitschllc.myshopify.com",'
+        | remove: '"https:\/\/cdn.getcarro.com\/script-tags\/all\/050820094100.js?shop=kitschllc.myshopify.com"'
+        | remove: '"https:\/\/cdn.getcarro.com\/script-tags\/all\/nb-101920173500.js?shop=kitschllc.myshopify.com"'
+      }}
+    {% else %}
+      {{
+        h_content
+        | remove: 'https:\/\/cdn.getcarro.com\/script-tags\/all\/cro-pixel-bundle.js?event_key=8be8299b-f9ce-4297-a133-2e785c45c087\u0026shop=kitschllc.myshopify.com'
+        | remove: '"\/\/searchserverapi.com\/widgets\/shopify\/init.js?a=4J1Y4r9x5n\u0026shop=kitschllc.myshopify.com",'
+        | remove: '"\/\/searchserverapi.com\/widgets\/shopify\/init.js?a=4J1Y4r9x5n\u0026shop=kitschllc.myshopify.com",'
+        | remove: '"https:\/\/d275fvz7g8rvo.cloudfront.net\/kitschllc.myshopify.com\/online_store_script.js?shop=kitschllc.myshopify.com",'
+        | remove: '"https:\/\/cdn.getcarro.com\/script-tags\/all\/050820094100.js?shop=kitschllc.myshopify.com"'
+        | remove: '"https:\/\/cdn.getcarro.com\/script-tags\/all\/nb-101920173500.js?shop=kitschllc.myshopify.com"'
+      }}
+    {% endunless %}
+
+    {% render 'theme-head-styles' %}
+    {% render 'theme-head-scripts' %}
+    {{ 'app.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      if (Shopify.designMode) {
+        document.documentElement.classList.add('shopify-design-mode');
+      }
+    </script>
+    <!-- Start of Wordsworth AI Script -->   
+    <script defer src="https://d2zd0wa1vpt7j9.cloudfront.net/1f8659abc4c7529d/wwai_section_analytics.js"></script>
+    <script defer src="https://d2zd0wa1vpt7j9.cloudfront.net/engagement_metrics_visualisation.js"></script>
+    <!-- End of Wordsworth AI Script -->   
+
+    {% if template.name == 'index' %}
+      <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "WebSite",
+          "name": "{{ shop.name }}",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ routes.search_url }}?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          },
+          "url": "{{ shop.url }}{{ page.url }}"
+        }
+      </script>
+    {% endif %}
+
+    <!-- comment -->
+    <dynamic>
+      {% capture boostersnippet %}{% include "booster-apps-common" %}{% endcapture -%}
+      {%- unless boostersnippet contains 'Liquid error' %}{{ boostersnippet }}{% endunless %}
+    </dynamic>
+    <!-- comment -->
+
+    {% comment %} <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          if(!Unick.getCookie('discount_code')){
+            Unick.setCookie('discount_code', 'LOVE25', 1);
+            window.dispatchEvent(new CustomEvent('discount-applied'))
+          }
+        }, 1000)
+      })
+    </script> {% endcomment %}
+  </head>
+
+  <body class="gradient">
+    <a class="skip-to-content-link button sr-only" href="#MainContent">
+      {{ 'accessibility.skip_to_text' | t }}
+    </a>
+
+    {% liquid
+      if settings.cart_type == 'drawer'
+        render 'cart-drawer'
+      endif
+
+      if settings.quick_view_enabled
+        render 'quick-view-drawer'
+      endif
+      sections 'header-group'
+
+      render 'quick-view-bundle'
+    %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% comment %} {% section 'footer-trust' %} {% endcomment %}
+
+    {% liquid
+      render 'dynamic-modal'
+      section 'footer'
+      render 'pickup-availability-drawer'
+      render 'json-ld'
+    %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    </ul>
+
+    <script src="https://cdn.attn.tv/mykitsch/dtag.js" defer></script>
+    {% render 'afterpay' %}
+    {% render 'ship-scott-ab-test' %}
+
+    <!-- This line added automatically by JSON-LD for SEO. -->
+    {% include 'jsonld-for-seo' %}
+
+    {% comment %}Loop returns onsite snippet - 11.20.23 {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/@loophq/onstore-sdk@latest/dist/loop-onstore-sdk.min.js"></script>
+    <script>
+      LoopOnstore.init({
+      key: "6395308e501fa4e607c1dcefb57023fdbc9893dd",
+      attach: "#checkout_button_new",
+      });
+    </script>
+  </body>
+</html>

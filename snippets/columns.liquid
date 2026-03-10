@@ -1,0 +1,31 @@
+<div class="columns__block grid gap-4 {{ block.settings.grid_mobile }} {{ block.settings.grid_desktop }} {{ block.settings.text_align_mobile }} {{ block.settings.text_align }}">
+    {% if block.settings.column_1_heading != blank or block.settings.column_1_text != blank %}
+        <div class="columns__item">
+            {% if block.settings.icon_style != 'none' %}
+                {% render 'icon-list', name: block.settings.icon_style, class: 'w-4' %}
+            {% endif %}
+            <h3 class="columns__item-heading font-heading mb-2 font-bold">{{ block.settings.column_1_heading }}</h3>
+            <div class="columns__item-text">{{ block.settings.column_1_text }}</div>
+        </div>
+    {% endif %}
+
+    {% if block.settings.column_2_heading != blank or block.settings.column_2_text != blank %}
+        <div class="columns__item">
+            {% if block.settings.icon_style != 'none' %}
+                {% render 'icon-list', name: block.settings.icon_style, class: 'w-4' %}
+            {% endif %}
+            <h3 class="columns__item-heading font-heading mb-2 font-bold">{{ block.settings.column_2_heading }}</h3>
+            <div class="columns__item-text">{{ block.settings.column_2_text }}</div>
+        </div>
+    {% endif %}
+
+    {% if block.settings.column_3_heading != blank or block.settings.column_3_text != blank %}
+        <div class="columns__item">
+            {% if block.settings.icon_style != 'none' %}
+                {% render 'icon-list', name: block.settings.icon_style, class: 'w-4' %}
+            {% endif %}
+            <h3 class="columns__item-heading font-heading mb-2 font-bold">{{ block.settings.column_3_heading }}</h3>
+            <div class="columns__item-text">{{ block.settings.column_3_text }}</div>
+        </div>
+    {% endif %}
+</div>

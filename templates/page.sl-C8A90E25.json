@@ -1,0 +1,233 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "image_with_text_UeJtj3": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_NDRx3C": {
+          "type": "heading",
+          "settings": {
+            "heading": "hair & body care",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 50,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-medium",
+            "font_size_mobile": 36,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_HQRgJk": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>RESHAPE YOUR SHOWER EXPERIENCE<\/strong><\/p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-center",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "heading_NDRx3C",
+        "text_HQRgJk"
+      ],
+      "custom_css": [
+        "p {font-weight: 700;}"
+      ],
+      "settings": {
+        "container": "full-width",
+        "image": "shopify:\/\/shop_images\/desktop_haircare.jpg",
+        "image_mobile": "shopify:\/\/shop_images\/best-seller-mobile.jpg",
+        "image_link": "",
+        "image_padding": false,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": "#f2e7e5"
+      }
+    },
+    "collection_tabs_vertical_JgekpR": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_jQwfzR": {
+          "type": "filter",
+          "settings": {
+            "title": "Shampoo & Conditioner",
+            "collection": "shampoo-conditioner-combo-packs",
+            "products_to_show": 11,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_8prfFN": {
+          "type": "filter",
+          "settings": {
+            "title": "Shampoo",
+            "collection": "shampoo",
+            "products_to_show": 7,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_feDaLR": {
+          "type": "filter",
+          "settings": {
+            "title": "Conditioner",
+            "collection": "conditioner",
+            "products_to_show": 9,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_YMTjix": {
+          "type": "filter",
+          "settings": {
+            "title": "Hair Treatment",
+            "collection": "hair-treatment",
+            "products_to_show": 8,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_AbimHY": {
+          "type": "filter",
+          "settings": {
+            "title": "Hair Styling",
+            "collection": "hair-styling-no-bundles",
+            "products_to_show": 3,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_x9XD3X": {
+          "type": "filter",
+          "settings": {
+            "title": "Accessories",
+            "collection": "bottle-free-accessories",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_e4qJhM": {
+          "type": "filter",
+          "settings": {
+            "title": "Shower Filters",
+            "collection": "shower-filters",
+            "products_to_show": 8,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_Nqzazm": {
+          "type": "filter",
+          "settings": {
+            "title": "Body Care",
+            "collection": "body-care",
+            "products_to_show": 8,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_6wX9Bt": {
+          "type": "filter",
+          "settings": {
+            "title": "Bundles",
+            "collection": "hair-body-page-bundles",
+            "products_to_show": 12,
+            "show_atc": true,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_dQXcd4": {
+          "type": "filter",
+          "settings": {
+            "title": "Minis",
+            "collection": "minis",
+            "products_to_show": 2,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_jQwfzR",
+        "filter_8prfFN",
+        "filter_feDaLR",
+        "filter_YMTjix",
+        "filter_AbimHY",
+        "filter_x9XD3X",
+        "filter_e4qJhM",
+        "filter_Nqzazm",
+        "filter_6wX9Bt",
+        "filter_dQXcd4"
+      ],
+      "custom_css": [
+        "@media (max-width: 728px) {h2 {font-size: 1.25rem; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": true,
+        "filter_title": "Category",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_UeJtj3",
+    "collection_tabs_vertical_JgekpR"
+  ]
+}

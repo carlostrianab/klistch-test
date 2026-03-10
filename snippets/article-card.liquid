@@ -1,0 +1,72 @@
+
+{%- if article and article != empty -%}
+  <div class="card article-card h-full">
+    <a href="{{ article.url }}" class="card__inner relative cursor-pointer flex flex-col h-full">
+      {% assign image_class = ' object-cover ' %}
+      {% assign image_class = image_class | append: media_aspect_ratio %}
+      {%- if article.image -%}
+        <div class="card__media">
+            {% render 'img-medium', image: article.image, class: image_class %}
+        </div>
+      {%- endif -%}
+      <div class="card__content py-4 mt-auto">        
+        <div class="card__information space-y-2">
+          <div class="article-card__info flex flex-wrap gap-2">
+            {%- if show_date -%}
+              {% render '_label', text: article.published_at | time_tag: format: 'date' %}
+            {%- endif -%}
+            {%- if show_author -%}
+              {% render '_label', text: article.author %}
+            {%- endif -%}
+          </div>
+
+          <h3 class="card__heading font-heading text-2xl">
+              {{ article.title | truncate: 50 | escape }}
+          </h3>
+          
+          {%- if show_excerpt -%}
+            {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+              <p class="article-card__excerpt rte-width">
+                {%- if article.excerpt.size > 0 -%}
+                  {{ article.excerpt | strip_html | truncatewords: 30 }}
+                {%- else -%}
+                  {{ article.content | strip_html | truncatewords: 30 }}
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+            <div class="article-card__footer">
+              {%- if article.comments_count > 0 and blog.comments_enabled? -%}
+                <span>{{ 'blogs.article.comments' | t: count: article.comments_count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if show_badge -%}
+          <div class="card__badge absolute top-2 right-2 bg-white rounded-md px-3 py-1 text-sm border">
+            <span class="badge">{{ 'blogs.article.blog' | t }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </a>
+  </div>
+{% else %}
+  <div class="card article-card">
+    <div class="card__media bg-gray-50">
+        {% assign image_class = ' object-cover ' %}
+        {% assign image_class = image_class | append: media_aspect_ratio %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+    <div class="card__content my-2">
+      <div class="card__information space-y-2">
+        <h3 class="card__heading font-heading text-2xl">
+            {{ 'onboarding.article_title' | t }}
+        </h3>
+        <p class="article-card__excerpt">
+          {{ 'onboarding.article_excerpt' | t }}
+        </p>
+      </div>
+    </div>
+
+  </div>
+{%- endif -%}

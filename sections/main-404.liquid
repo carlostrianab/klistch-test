@@ -1,0 +1,60 @@
+<style>
+  .shopify-section{
+    height: 100%;
+  }
+</style>
+
+<div class="template-404 {{ section.settings.container }} mx-auto px-4 h-full">
+  <div class="space-y-2 grid place-items-center place-content-center h-full">
+    <h1 class="title text-2xl md:text-4xl font-heading">
+      {{ 'templates.404.title' | t }}
+    </h1>
+    <p>
+      {{ 'templates.404.subtext' | t }}
+    </p>
+    <a href="{{ routes.all_products_collection_url }}" class="underline block">
+      {{ 'general.continue_shopping' | t }}
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,444 @@
+
+<div 
+    style="
+    {% if section.settings.bg_image != blank %}
+      background-image: url({{ section.settings.bg_image | img_url: 'master' }});
+    {% endif %}
+    background-color: {{ section.settings.bg_color }}; 
+    padding-top: {{ section.settings.padding_top }}px; 
+    padding-bottom: {{ section.settings.padding_bottom}}px;"
+    class="{{ section.settings.container }} mx-auto px-4 bg-contain 2xl:bg-cover bg-bottom bg-no-repeat">
+    {% if section.settings.title != blank %}
+        <h2 class="{{ section.settings.align_text }} mb-4 font-bold" style="font-size: {{ section.settings.font_size }}px">{{ section.settings.title | escape }}</h2>
+    {% endif %}
+
+    <div class="{% if section.settings.content_wrapper %} page-width {% endif %}">
+      <div class="icons grid 
+          {{ section.settings.grid_gap }}
+          {{ section.settings.grid_desktop }}
+          {{ section.settings.grid_tablet }}
+          {{ section.settings.grid_mobile }}">
+          {% for block in section.blocks %}
+              {% assign options = block.settings %}
+              {% if options.use_custom_style %}
+                <style>
+                  .block_{{block.id}}{
+                    border: 2px solid;
+                    border-radius: 4px;
+                    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+                    background-color: {{ options.bg_color }};
+                    border-color: {{ options.border_color }};
+                    
+                  }
+  
+                  .block_{{block.id}} .icon__title{
+                    color: {{ options.title_color }};
+                  }
+                  
+                  .block_{{block.id}} .icon__text{
+                    padding: 1rem;
+                    background-color: {{ options.text_bg }};
+                  }
+  
+                </style>
+              {% endif %}
+              <div class="block_{{block.id}} icon {{ section.settings.align_text }} {% if section.settings.classic_style %} md:flex items-center justify-center {% endif %}">
+                  {% if options.icon != blank %}
+                      <img 
+                          data-em-optimize
+                          loading="lazy" 
+                          class="
+                          {% if section.settings.spaced_icons %}
+                            py-5
+                          {% endif %}
+                          {% if section.settings.classic_style %} 
+                            mb-2 md:mb-0 mx-auto md:ml-4 max-w-[70px] md:mr-4 
+                          {% else %} 
+                            mx-auto 
+                          {% endif %}"
+                          width="{{ section.settings.image_size | replace: 'x', '' }}"
+                          height="{{ section.settings.image_size | replace: 'x', '' | divided_by: options.icon.aspect_ratio }}"
+                          src="{{ options.icon | img_url: section.settings.image_size }}" alt="{{ options.icon.alt | default: shop.name | append: 'image' }}">
+                  {% endif %}
+  
+                  {% if options.title != blank %}
+                      <h3 class="icon__title font-bold py-2" 
+                          style="color: {{ section.settings.text_color }}; font-size: {{ section.settings.title_font_size }}px; ">{{ options.title }}</h3>
+                  {% endif %}
+  
+                  {% if options.text != blank %}
+                      <div class="icon__text font-medium" style="color: {{ section.settings.text_color }}">
+                          {{ options.text }}
+                      </div>
+                  {% endif %}
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Footer trust",
+  "tag": "section",
+  "class": "icon-with-text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "checkbox",
+      "id": "content_wrapper",
+      "label": "Content Wrapper",
+      "default": false
+    },
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "classic_style",
+      "label": "Classic style",
+      "default": false,
+      "info": "This will make the icons and text display side-by-side"
+    },
+    {
+      "type": "checkbox",
+      "id": "spaced_icons",
+      "label": "Spaced icons",
+      "default": false,
+      "info": "This will add padding to icons"
+    },
+    {
+        "type": "range",
+        "id": "font_size",
+        "label": "Font size",
+        "unit": "px",
+        "min": 8,
+        "max": 50,
+        "step": 2,
+        "default": 24
+    },
+    {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding_top",
+      "unit": "px",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0
+    },
+    {
+        "type": "select",
+        "id": "align_text",
+        "label": "Align text",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-center",
+            "label": "Center"
+          },
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-right",
+            "label": "Right"
+          }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "image_size",
+        "label": "Image size",
+        "default": "400x",
+        "options": [
+          {
+            "value": "110x",
+            "label": "2X small"
+          },
+          {
+            "value": "150x",
+            "label": "X small"
+          },
+          {
+            "value": "280x",
+            "label": "Small"
+          },
+          {
+            "value": "400x",
+            "label": "Medium"
+          },
+          {
+            "value": "600x",
+            "label": "Large"
+          },
+          {
+            "value": "master",
+            "label": "Full image"
+          }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "grid_desktop",
+        "label": "Desktop grid",
+        "info": "Number of items per row",
+        "default": "lg:grid-cols-5",
+        "options": [
+          {
+            "value": "lg:grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "lg:grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "lg:grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "lg:grid-cols-4",
+            "label": "4 item"
+          },
+          {
+            "value": "lg:grid-cols-5",
+            "label": "5 item"
+          },
+          {
+            "value": "lg:grid-cols-6",
+            "label": "6 item"
+          },
+          {
+            "value": "lg:grid-cols-7",
+            "label": "7 item"
+          },
+          {
+            "value": "lg:grid-cols-8",
+            "label": "8 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_tablet",
+        "label": "Tablet grid",
+        "info": "Number of items per row",
+        "default": "md:grid-cols-3",
+        "options": [
+          {
+            "value": "md:grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "md:grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "md:grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "md:grid-cols-4",
+            "label": "4 item"
+          },
+          {
+            "value": "md:grid-cols-5",
+            "label": "5 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_mobile",
+        "label": "Mobile grid",
+        "info": "Number of items per row",
+        "default": "grid-cols-2",
+        "options": [
+          {
+            "value": "grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "grid-cols-4",
+            "label": "4 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_gap",
+        "label": "Item gap",
+        "info": "Space between images",
+        "default": "gap-2",
+        "options": [
+          {
+            "value": "gap-0",
+            "label": "None"
+          },
+          {
+            "value": "gap-1",
+            "label": "X small"
+          },
+          {
+            "value": "gap-2",
+            "label": "Small"
+          },
+          {
+            "value": "gap-3",
+            "label": "Medium"
+          },
+          {
+            "value": "gap-4",
+            "label": "Large"
+          },
+          {
+            "value": "gap-6",
+            "label": "X large"
+          },
+          {
+            "value": "gap-8",
+            "label": "2X large"
+          },
+          {
+            "value": "gap-12",
+            "label": "3X large"
+          }
+        ]
+      },
+      {
+          "type": "range",
+          "id": "title_font_size",
+          "label": "Title font size",
+          "unit": "px",
+          "min": 8,
+          "max": 36,
+          "step": 2,
+          "default": 14
+      }
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+            "type": "image_picker",
+            "id": "icon",
+            "label": "Icon",
+            "info": "Recommended size: 500x500"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_style",
+          "label": "Use custom style",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title color"
+        },
+        {
+          "type": "color",
+          "id": "text_bg",
+          "label": "Text background"
+        }
+      ]
+    }
+    
+  ]
+}
+{% endschema %}

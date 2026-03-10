@@ -1,0 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "header-group.json",
+  "context": {
+    "market": "lithuania"
+  },
+  "sections": {
+    "announcement-bar": {
+      "settings": {},
+      "blocks": {
+        "announcement_qCfHjt": {
+          "type": "announcement",
+          "disabled": true,
+          "settings": {
+            "text": "<p><strong>Sun’s out, deals on: 25% OFF SITEWIDE!</strong></p>",
+            "header-cd7d71b5800882d6637b2fb744bd153b": null,
+            "font_size": 16,
+            "background_color": "#000000",
+            "text_color": "#ffffff"
+          }
+        },
+        "announcement_fPmEGt": {
+          "type": "announcement",
+          "disabled": true,
+          "settings": {
+            "text": "<p><strong>Sun’s out, deals on: 25% OFF SITEWIDE!</strong></p>",
+            "header-eb5c3348058c869bc7a4d5a015d96c8e": null,
+            "font_size": 16,
+            "background_color": "#000000",
+            "text_color": "#ffffff"
+          }
+        },
+        "announcement_bUARHq": {
+          "disabled": true,
+          "settings": {}
+        },
+        "announcement_CJhhXW": {
+          "settings": {
+            "text": "<p><strong>🇱🇹 FREE DELIVERY IN LITHUANIA 🇱🇹</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_qCfHjt",
+        "announcement_fPmEGt",
+        "announcement_bUARHq",
+        "discount_message_ULnAzq",
+        "announcement_RHRr9B",
+        "announcement_kAzcMN",
+        "announcement_CJhhXW",
+        "announcement_HdfMnN"
+      ]
+    }
+  }
+}

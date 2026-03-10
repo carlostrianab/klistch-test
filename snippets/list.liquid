@@ -1,0 +1,23 @@
+<ul class="list 
+    {% unless block.settings.list_style == 'list-checkmark' or block.settings.list_style == 'list-cross' %}
+        ml-4
+    {% endunless %}
+    {{ block.settings.list_style }} {{ block.settings.mobile_columns }} {{ block.settings.desktop_columns }}">
+    {% for i in (1..10) %}
+        {% assign name = 'list_item_' | append: i %}
+        {% if block.settings[name] != blank %}
+            <li class="py-1">
+                <div class="flex gap-x-2 {{ block.settings.text_align }} {{ block.settings.text_align_mobile }}">
+                    {% if block.settings.list_style == 'list-checkmark' %}
+                        {% render 'icon-checkmark', class: 'w-4' %}
+                    {% endif %}
+
+                    {% if block.settings.list_style == 'list-cross' %}
+                        {% render 'icon-close', class: 'w-4' %}
+                    {% endif %}
+                    {{ block.settings[name] }}
+                </div>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

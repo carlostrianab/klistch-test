@@ -1,0 +1,155 @@
+<style>
+  #Main-account-{{ section.id }}{
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+</style>
+
+<div id="Main-account-{{ section.id }}" class="account {{ section.settings.container }} mx-auto px-4">
+  <div>
+    <h1 class="customer__title font-heading text-3xl py-5">{{ 'customer.account.title' | t }}</h1>
+  </div>
+
+  <div class="md:grid md:grid-cols-4 md:gap-6">
+    <div class="md:col-span-1">
+      {% render 'account-nav', section: section %}
+    </div>
+
+    <div class="mt-5 md:mt-0 md:col-span-3">
+        <div class="sm:overflow-hidden">
+            <h3 class="text-2xl pb-2">{{ 'customer.orders.title' | t }}</h3>
+            <div class="mt-3 overflow-hidden overflow-x-auto border-t md:border-transparent">
+              {% paginate customer.orders by 20 %}
+                {%- if customer.orders.size > 0 -%}
+                  <div class="grid-cols-5 hidden md:grid border-b text-sm py-2 opacity-80">
+                    <div class="">{{ 'customer.orders.order_number' | t }}</div>
+                    <div class="">{{ 'customer.orders.date' | t }}</div>
+                    <div class="">{{ 'customer.orders.payment_status' | t }}</div>
+                    <div class="">{{ 'customer.orders.fulfillment_status' | t }}</div>
+                    <div class="">{{ 'customer.orders.total' | t }}</div>
+                  </div>
+
+                  {% for order in customer.orders %}
+                    <div class="grid grid-cols-5 border-b items-center py-2">
+                      <div class="capitalize py-1 order-1 col-span-1 text-sm md:text-base">
+                        <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
+                          {{ order.name }}
+                        </a>
+                      </div>
+                      <div class="capitalize py-1 order-2 col-span-3 md:col-span-1 text-sm md:text-base">{{ order.created_at | date: '%B %d, %Y' }}</div>
+                      <div class="capitalize py-1 order-4 md:order-3 col-span-1 md:col-span-1 font-bold md:font-medium">{{ order.financial_status }}</div>
+                      <div class="capitalize py-1 order-5 md:order-4 col-span-3 md:col-span-1 font-bold md:font-medium">{{ order.fulfillment_status }}</div>
+                      <div class="capitalize py-1 order-3 md:order-5 col-span-1 row-span-2 md:row-span-1">{{ order.total_price | money }}</div>
+                    </div>
+                  {% endfor %}
+                {%- else -%}
+                  <p>{{ 'customer.orders.none' | t }}</p>
+                {%- endif -%}
+        
+                {%- if paginate.pages > 1 -%}
+                  {%- if paginate.parts.size > 0 -%}
+                      <nav class="pagination py-3" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+                        <ul role="list" class="flex gap-2 items-center">
+                        {%- if paginate.previous -%}
+                          <li>
+                            <a href="{{ paginate.previous.url }}" class="p-2 block" aria-label="{{ 'general.pagination.previous' | t }}">
+                              {% render 'icon-chevron-left', class: 'w-4' %}
+                            </a>
+                          </li>
+                        {%- endif -%}
+        
+                        {%- for part in paginate.parts -%}
+                          <li>
+                            {%- if part.is_link -%}
+                              <a href="{{ part.url }}" class="underline p-2 block" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                            {%- else -%}
+                              {%- if part.title == paginate.current_page -%}
+                                <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                              {%- else -%}
+                                <span>{{ part.title }}</span>
+                              {%- endif -%}
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+        
+                        {%- if paginate.next -%}
+                          <li>
+                            <a href="{{ paginate.next.url }}" class="p-2 block" aria-label="{{ 'general.pagination.next' | t }}" >
+                              {% render 'icon-chevron-right', class: 'w-4' %}
+                            </a>
+                          </li>
+                        {%- endif -%}
+                        </ul>
+                      </nav>
+                  {%- endif -%}
+                {%- endif -%}
+              {% endpaginate %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    }
+  ]
+}
+{% endschema %}

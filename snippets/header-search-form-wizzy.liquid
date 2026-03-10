@@ -1,0 +1,83 @@
+
+<div class="relative z-10 wizzy-custom-search" 
+    {%- if settings.predictive_search_enabled -%}
+        x-data="Wizzy(`{{ search.terms | escape }}`, {{ settings.predictive_search_limit }})"
+        x-init="$nextTick(() => {
+            currency = '{{ cart.currency.iso_code }}';
+        });"
+        @toggle-search.window="showSearch = !showSearch"
+        @show-search.window="showSearch = true"
+        @keydown.escape.window="showSearch = false;"
+        x-cloak
+        x-trap="showSearch"
+        x-show="showSearch"
+    {% endif %}>
+    
+    <div class="header__search w-full absolute left-0 right-0 z-[1000] border-b bg-white px-2">
+        <form action="{{ routes.search_url }}" method="get" class="header__search-form page-width z-[100] relative py-3">
+            <div class=" flex flex-row-reverse">
+                <input type="search" name="q" 
+                    x-ref="search_input" 
+                    x-cloak
+                    x-transition:enter="transform transition ease-in duration-400" 
+                    x-transition:enter-start="w-[0px] opacity-0" 
+                    x-transition:enter-end="w-full opacity-1" 
+                    x-transition:leave="transform transition ease-out duration-400" 
+                    x-transition:leave-start="w-full" 
+                    x-transition:leave-end="w-[0px] opacity-0"
+                {% if settings.predictive_search_enabled %}
+                    x-model.debounce="query"
+                    @focus.debounce="performSearch(); showSearch = true"
+                    @input.debounce="performSearch()"
+                {% endif %}
+                class="border-1 w-full py-1" 
+                placeholder="{{ 'general.search.search' | t }}" autocomplete="off" autofocus>
+                
+            </div>
+            {% if settings.predictive_search_enabled %}
+                <div x-cloak class="predictive__search border rounded-b absolute w-full left-0 bg-white z-10 overflow-hidden" 
+                    x-show="showSearch && query != ''">
+                    <h3 class="text-gray-600 border-b p-3 uppercase text-xs" x-show="products.length > 0">{{ 'general.search.products' | t }}</h3>
+                    <div class="relative">
+                    <template x-if="products.length > 0">
+                        <ul class="predictive__search-products px-3 flex flex-col" role="list">
+                        <template x-for="item in products">
+
+                            <li class="products__item py-2 border-b my-2">
+                                <a :href="item.url" class="flex gap-x-3 items-center">
+
+                                    <div class="products__item-image w-20">
+                                        <img :src="item?.mainImage" loading="lazy" class="object-cover" :alt="item.name">
+                                    </div>
+
+                                    <div class="products__item-info flex flex-col">
+                                        <span class="products__item-name-text hover:underline" x-text="item.name"></span>
+                                        <span class="prdoucts__item-price text-sm text-gray-500" x-text="Unick.formatMoney2(item.sellingPrice)"></span>
+
+                                    </div>
+                                </a>
+                            </li>
+                        </template>
+                        </ul>
+                        
+                    </template>
+                    </div>
+
+                    <button type="submit" class="px-4 py-2 bg-gray-100 flex justify-between text-sm items-center w-full" aria-label="{{ 'general.search.button' | t }}">
+                        <span class="flex items-center gap-1"> 
+                            <i>
+                                {% render 'icon-magic2', class: 'w-5 h-5' %}
+                            </i>
+                            {{ 'general.search.search_for' | t }} "<i x-text="query"></i>" 
+                        </span>
+                        <span> {% render 'icon-arrow-right' %} </span>
+                    </button>
+
+                </div>             
+            {% endif %}
+        </form>
+    </div>
+
+    <div @click="showSearch = false" class="bg-overlay bg-black/10 fixed inset-0"></div>
+
+</div>

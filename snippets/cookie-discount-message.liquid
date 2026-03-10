@@ -1,0 +1,175 @@
+<div class="discount-message text-center font-medium {{ class }}"
+    x-title="Discount Message"
+    x-init="$nextTick(() => initializeDiscount())"
+    x-show="show_message"
+    x-data="{
+        discount_applied: false,
+        show_message: true,
+        theme_discount_code: '{{ block.settings.discount_code }}',
+        discount_code: `{{ block.settings.discount_code }}`,
+        message: `{{ block.settings.discount_message }}`,
+        show_apply_button: true,
+        discount_apply_button: '{{ block.settings.discount_apply_button }}',
+
+        initializeDiscount() {
+          this.checkDiscount();
+          this.handleAnnouncementBar();
+          this.handleDiscountOpacity();
+          this.checkLocalDiscount();
+        },
+
+        handleAnnouncementBar() {
+          {% if block.settings.position == 'absolute' %}
+            document.querySelectorAll('.announcement__item')
+              .forEach(el => el.style.opacity = 0);
+          {% endif %}
+        },
+
+        handleDiscountOpacity() {
+          document.querySelectorAll('.discount-message')
+            .forEach(el => el.classList.remove('opacity-0'));
+        },
+
+        checkLocalDiscount() {
+          {% if block.settings.discount_code == blank %}
+            const ShopifyDiscount = Unick.getCookie('discount_code');
+            if (ShopifyDiscount) {
+              this.discount_code = ShopifyDiscount;
+              this.show_message = true;
+              this.show_apply_button = false;
+              this.discount_applied = true;
+            } else {
+              this.show_message = false;
+              this.discount_applied = false;
+            }
+          {% endif %}
+        },
+
+        applyDiscount(){
+          Unick.setCookie('discount_code', this.discount_code, 1);
+          this.show_apply_button = false;
+          this.$dispatch('discount-applied');
+          this.discount_applied = true;
+        },
+
+        async checkDiscount(){
+        
+          const cookieData = Unick.getCookie('unick_discount');
+          const ShopifyDiscount = Unick.getCookie('discount_code');
+
+          console.log('ShopifyDiscount __.', ShopifyDiscount);
+
+          const applyDiscountCode = async (code) => {
+            await fetch(`${window.location.origin}/discount/${code}`);
+            this.discount_code = code;
+            this.show_message = true;
+            this.show_apply_button = false;
+
+            {% comment %} if(this.$refs.checkbox) {
+              this.$refs.checkbox.checked = true;
+              this.discount_applied = true;
+            }else{
+              console.log('checkbox not found');
+              this.discount_applied = false;
+            } {% endcomment %}
+
+          };
+
+          if (ShopifyDiscount) {
+            this.discount_applied = true;
+            await applyDiscountCode(ShopifyDiscount);
+          }
+
+          if (cookieData) {
+            const unick_discount = JSON.parse(cookieData);
+            await applyDiscountCode(unick_discount.discount);
+          }
+
+          setTimeout(() => {
+            $dispatch('update-cart');
+          }, 2000);
+        }
+    }"
+    @discount-removed.window="$nextTick(() => {
+        console.log('discount-removed');
+        discount_applied = false;
+        show_apply_button = true;
+        $refs.checkbox.checked = false;
+    })"
+    @discount-applied.window="$nextTick(() => checkDiscount())"
+    style="background-color: {{ block.settings.background_color }}; color: {{ block.settings.text_color }}; border-color: {{ block.settings.background_color }};">
+    <div class="md:flex gap-x-2 justify-center items-center">
+        <div class="flex items-center discount-toggle-wrapper">
+          {% if block.settings.show_toggle_button == true %}
+            <label for="toggle-discount-message" class="mx-2 cursor-pointer font-semibold flex gap-2">
+                <input type="checkbox" x-ref="checkbox"
+                    id="toggle-discount-message"
+                    class="sr-only peer"
+                    @change="
+                        if ($event.target.checked) {
+                            discount_applied = true;
+                            applyDiscount();
+                        } else {
+                            discount_applied = false;
+                            Unick.eraseCookie('discount_code');
+                            $dispatch('discount-removed');
+
+                            fetch('/discount/empty-discount').then((res) => {
+                              $dispatch('update-cart');
+                            })
+                        }
+                        show_message = true;
+                    "
+                    @keydown.space.prevent="$refs.checkbox.click()"
+                    @keydown.enter.prevent="$refs.checkbox.click()"
+                    role="switch"
+                    :aria-checked="!show_apply_button">
+                <div class="relative w-11 h-6
+                    bg-[#707070]
+                    rounded-full
+                    after:content-['']
+                    after:absolute after:top-[2px]
+                    after:start-[2px]
+                    after:border-gray-200
+                    after:border after:rounded-full
+                    after:h-5
+                    after:w-5
+                    after:transition-all
+                    after:bg-white
+                    peer-focus:outline-none
+                    peer-focus:ring-2
+                    peer-focus:ring-offset-2
+                    peer-focus:ring-[#d6a285]
+                    peer-checked:bg-[#d6a285]
+                    peer-checked:after:bg-white
+                    peer-checked:after:translate-x-full
+                    peer-checked:after:border-none
+                "></div>
+            </label>
+          {% endif %}
+            <div class="block text-sm" x-show="discount_code == theme_discount_code" x-ref="discount_message" x-cloak x-html="message.replace('{discount_code}', discount_code)">
+              {{ block.settings.discount_message }}
+            </div>
+        </div>
+
+        <div class="flex justify-center items-center flex-col  h-7 overflow-hidden">
+        {% if block.settings.discount_apply_button != blank %}
+          <span x-ref="applay_button" class="discount-apply-button" x-show="!discount_applied">
+            <button
+                x-text="discount_apply_button.replace('{discount_code}', discount_code)"
+                class="py-1 px-2 bg-white text-black font-medium text-sm border border-black min-w-[250px] md:min-w-[auto]"
+                @click="applyDiscount()">
+                {{ block.settings.discount_apply_button }}
+            </button>
+          </span>
+        {% endif %}
+
+        {% if block.settings.show_applied_message %}
+          <span :class="{ 'hidden': !discount_applied }" class="block text-sm"> Code Applied</span>
+        {% endif %}
+
+        </div>
+
+
+    </div>
+</div>

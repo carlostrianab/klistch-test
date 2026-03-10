@@ -1,0 +1,91 @@
+{% if template.name == 'product' %}
+    {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+    {% assign product_variant = product.selected_or_first_available_variant %}
+      <div class="pickup-availability-container" x-data="Pickup({{ product.selected_or_first_available_variant | json | escape }}, true)">
+        {%- if pick_up_availabilities.size > 0 -%}
+          <div  
+            x-show="showPickupModal" 
+            x-trap="showPickupModal"
+            role="dialog"
+            x-cloak
+            aria-modal="true"
+            class="pickup-availabilities-modal fixed inset-0 z-40 h-full"
+            aria-labelledby="PickupAvailabilitiesModalProductTitle">
+            <div @click="showPickupModal = false" class="pickup-availabilities-modal__overlay absolute inset-0 bg-black opacity-30"></div>
+            <div class="absolute bg-white z-50 top-0 bottom-0 w-full right-0 max-w-[320px]"
+              x-show="showPickupModal"
+              x-transition:enter="transform transition ease-in-out duration-400" 
+              x-transition:enter-start="translate-x-full opacity-0" 
+              x-transition:enter-end="-translate-x-0 opacity-1" 
+              x-transition:leave="transform transition ease-in-out duration-400" 
+              x-transition:leave-start="-translate-x-0" 
+              x-transition:leave-end="translate-x-full opacity-0">
+                <div class="p-4">
+                  <div class="pickup-availabilities-modal__header">
+                    <div class="pickup-availabilities-modal__product-information">
+
+                      <div class="flex justify-between">
+                        <h2 id="PickupAvailabilitiesModalProductTitl" class="pickup-availabilities-modal__product-title text-lg font-heading">
+                          {{ product.title | escape }}
+                        </h2>
+                        <button type="button" @click="showPickupModal = false" class="pickup-availabilities-modal__close is-focusable" aria-label="{{ 'general.accessibility.close_modal' | t }}">
+                          {% render 'icon-close' %}
+                        </button>
+                      </div>
+
+                      <div class="pickup-availabilities-modal__variant-title">
+                        {%- unless product_variant.product.has_only_default_variant -%}
+                          <p class="pickup-availability-variant text-sm py-2">
+                            {%- for product_option in product_variant.product.options_with_values -%}
+                              {{ product_option.name | escape }}:&nbsp;
+                              {%- for value in product_option.values -%}
+                                {%- if product_option.selected_value == value -%}
+                                  <span>{{ value | escape }}</span>
+                                {%- endif -%}
+                              {%- endfor -%}
+                              {%- unless forloop.last -%},&nbsp;{%- endunless forloop.last -%}
+                            {%- endfor -%}
+                          </p>
+                        {%- endunless -%}
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <ul class="pickup-availabilities-list divide-y-2" role="list">
+                    {%- for availability in pick_up_availabilities -%}
+                      <li class="pickup-availability-list__item space-y-2">
+                        <h3 class="pickup-availability-list__location text-base font-bold">
+                          {{ availability.location.name }}
+                        </h3>
+
+                        <div class="pickup-availability-list__stock text-sm flex gap-x-2">
+                          {%- if availability.available -%}
+                            {% render 'icon-checkmark', class: 'w-4 text-green-600' %} {{ 'products.product.pickup_availability.pick_up_available' | t }}, {{ availability.pick_up_time | downcase }}
+                          {%- else -%}
+                            {% render 'icon-close', class: 'w-4 text-red-600' %} {{ 'products.product.pickup_availability.pick_up_currently_unavailable' | t }}
+                          {%- endif -%}
+                        </div>
+                        {%- assign address = availability.location.address -%}
+                        <div class="flex gap-x-2">
+                          {% render 'icon-map-pin', class: 'w-4' %}
+                          <address class="pickup-availability-list__address text-sm">
+                            {{ address | format_address }}
+                          </address>
+                        </div>
+                        {%- if address.phone.size > 0 -%}
+                          <p class="pickup-availability-list__phone text-sm flex gap-x-2">
+                            {{ address.phone }}<br>
+                          </p>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  
+                </div>
+            </div>
+      
+          </div>
+        {%- endif -%}
+      </div>
+{% endif %}

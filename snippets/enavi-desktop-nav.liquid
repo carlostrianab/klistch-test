@@ -1,0 +1,164 @@
+<ul class="list-menu abtest-menu list-menu--inline gap-6 flex items-center justify-center" role="list">
+  {%- for link in linklists['new-menu-a-b-test'].links -%}
+    <li class="header__menu-wrap">
+      {%- if link.links != blank -%}
+        <noscript>
+          <a href="{{ link.url }}" class="block {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+            <span>{{ link.title | escape }}</span>
+          </a>
+        </noscript>
+
+        {% liquid
+          assign has_sub_menu = true
+          assign has_mega_menu = false
+
+          for submenu in link.links
+            if submenu.url contains '#'
+              assign has_mega_menu = true
+              assign has_sub_menu = false
+            endif
+          endfor
+        %}
+
+        <div class="{% if has_sub_menu %} has-dropdown-menu {% endif %} {% if has_mega_menu %} has-mega-menu {% endif %}">
+          <a href="{{ link.url }}"
+             class="header__menu-item py-10 flex gap-1 items-center {% if link.current %} header__active-menu-item {% endif %}"
+             {% if link.current %} aria-current="page"{% endif %}>
+            <span>{{ link.title | escape }}</span>
+
+            {% if section.settings.show_arrows_in_dropdown %}
+              <span class="flex items-center">
+                {% render 'icon-chevron-right', class: "h-5 transform rotate-90" %}
+              </span>
+            {% endif %}
+          </a>
+
+          <div class="mega-menu-wrapper absolute right-0 left-0 bg-[#f6f6f6] shadow-md hidden" id="megamenu-{{ forloop.index | plus:100}}" x-data x-cloak aria-label="{{ 'accessibility.megamenu' | t }}">
+            {% if has_mega_menu %}
+              <div class="hidden-section__blocks header__menu-dropdown bg-white divide-y md:divide-y-0 text-left md:gap-3">
+                <div class="md:px-4 page-width">
+                  <div class="flex flex-wrap gap-y-6 md:gap-y-4 md:py-3 {% if link.links.size <=3 %} big-column gap-x-6{% else %}gap-x-2{% endif %}">
+                    {%- for subLink in link.links -%}
+                      <div class="megamenu-submenu ml-2 mb-2 md:ml-0 text-sm tracking-normal font-secondary text-left">
+                      {% if link.title == 'Hair Care' and forloop.first %}
+                        <h3 class="text-base md:text-xl mb-2 all-menu-link">
+                        <a href="{{ link.url }}" class="">
+                        All {{ link.title | escape}}
+                        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 0.5L6.70066 6.20066C7.14212 6.64212 7.14212 7.35788 6.70066 7.79934L1 13.5" stroke="black"/>
+                        </svg>
+                        </a>
+                        </h3>
+                      {% endif %}
+                      {% if subLink.title contains 'All'%}
+                        <h3 class="text-base md:text-xl mb-2 all-menu-link">
+                          <a href="{{ subLink.url }}" class="">
+                          {{ subLink.title | escape}}
+                          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 0.5L6.70066 6.20066C7.14212 6.64212 7.14212 7.35788 6.70066 7.79934L1 13.5" stroke="black"/>
+                          </svg>
+                          </a>
+                          </h3>
+                      {% else %}  
+                      <h3 class="text-base md:text-xl mb-2">
+                          <a href="{{ subLink.url }}" class="">{{ subLink.title }}</a>
+                        </h3>
+                      {% endif %}
+
+                        {% if subLink.links != blank %}
+                          <ul>
+                            {% for childLink in subLink.links %}
+                              <li>
+                                <a href="{{ childLink.url }}" class="link link--text py-1 block font-normal {{ childLink.object }}">
+                                  <span>{{ childLink.title }}</span>
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </div>
+                    {%- endfor -%}
+                    {% if link.title == 'Hair Care' %}
+                    <div class="megamenu-image flex gap-3 md:gap-1 items-center md:flex-col relative hair-care-featured">
+                                <a href="/collections/hair-perfumes" class="block w-24 md:w-full" title="{{ block.settings.button_text }}">
+                                  <img src="https://cdn.shopify.com/s/files/1/0104/6904/8384/files/image_3_c213712c-17f1-4544-b404-e0ee3217e92a.jpg?v=1749065401" loading="lazy"/>
+                                </a>
+                                <div class="overlay-menu-content absolute">
+                                  <h5>Your signature<br/>scent is waiting</h5>
+                                  <a href="/collections/hair-perfumes" 
+                                    class="lowercase font-bold button button--primary py-2 text-sm block" 
+                                    title="Shop Hair Perfume">
+                                    shop hair perfume
+                                </a>
+                                </div>
+                    </div>
+                    {% elsif link.title == 'Sleep' %}
+                      <div class="megamenu-image flex gap-3 md:gap-1 items-center md:flex-col relative sleep-featured">
+                                <a href="/collections/all-pillowcases" class="block w-24 md:w-full" title="{{ block.settings.button_text }}">
+                                  <img src="https://cdn.shopify.com/s/files/1/0104/6904/8384/files/image_4.jpg?v=1749135781" loading="lazy"/>
+                                </a>
+                                <div class="overlay-menu-content absolute">
+                                  <h5>Treat Your Hair & Skin<br/>to a Night In</h5>
+                                  <a href="/collections/all-pillowcases" 
+                                    class="lowercase font-bold button button--primary py-2 text-sm block" 
+                                    title="shop pillowcases">
+                                    shop pillowcases
+                                </a>
+                                </div>
+                    </div>
+                    {% elsif link.title == 'Shower'  %}
+                      <div class="megamenu-image flex gap-3 md:gap-1 items-center md:flex-col relative shower-featured">
+                                <a href="/collections/shower-caps" class="block w-24 md:w-full" title="{{ block.settings.button_text }}">
+                                  <img src="https://cdn.shopify.com/s/files/1/0104/6904/8384/files/image_5.jpg?v=1749136101" loading="lazy"/>
+                                </a>
+                                <div class="overlay-menu-content absolute">
+                                  <h5>Keeps Hair Dry Without<br/>Compromising Your Style</h5>
+                                  <a href="/collections/shower-caps" 
+                                    class="lowercase font-bold button button--primary py-2 text-sm block" 
+                                    title="shop shower caps">
+                                    shop shower caps
+                                </a>
+                                </div>
+                    </div>
+                    {% elsif link.title == 'Skin' %}
+                      <div class="megamenu-image flex gap-3 md:gap-1 items-center md:flex-col relative skin-featured">
+                                <a href="/collections/body-wash" class="block w-24 md:w-full" title="{{ block.settings.button_text }}">
+                                  <img src="https://cdn.shopify.com/s/files/1/0104/6904/8384/files/image_6_d142b0de-330f-46b1-b89c-4e2eab9a3b60.jpg?v=1749136210" loading="lazy"/>
+                                </a>
+                                <div class="overlay-menu-content absolute">
+                                  <h5>Refresh and Hydrate<br/>your Skin</h5>
+                                  <a href="/collections/body-wash" 
+                                    class="lowercase font-bold button button--primary py-2 text-sm block" 
+                                    title="shop body wash">
+                                    shop body wash
+                                </a>
+                                </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if has_sub_menu %}
+              <ul class="header__menu-dropdown shadow min-w-[200px] py-3 bg-white flex-col hidden absolute left-1/2 transform -translate-x-1/2" role="listitem" aria-label="{{ 'accessibility.submenu' | t }}">
+                {% for subLink in link.links %}
+                  <li>
+                    <a href="{{ subLink.url }}" class="py-1.5 px-4 block opacity-75 hover:opacity-100 text-left ">
+                      {{ subLink.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      {%- else -%}
+        <a href="{{ link.url }}" data-handle="{{ link.title | handleize }}" class="header__menu-item block animate-link {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+          <span>{{ link.title | escape }}</span>
+        </a>
+        <div class="mega-menu-wrapper absolute right-0 left-0 bg-[#f6f6f6] shadow-md hidden" id="megamenu-{{ forloop.index | plus:100}}" x-data x-cloak aria-label="{{ 'accessibility.megamenu' | t }}"></div>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

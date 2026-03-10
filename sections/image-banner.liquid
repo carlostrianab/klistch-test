@@ -1,0 +1,931 @@
+
+<style>
+
+  #image__banner-{{ section.id }} {
+    max-height: {{ section.settings.max_height }}px;
+    {% if section.settings.visibility %}
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    {% endif %}
+  }
+  #image__banner-{{ section.id }} .banner__box{
+    max-width: {{ section.settings.max_width }}px;
+    padding: {{ section.settings.box_padding }}px;
+  }
+  @media (max-width: 768px) {
+    #image__banner-{{ section.id }} {
+      max-height: {{ section.settings.max_height_mobile }}px;
+    }
+    #image__banner-{{ section.id }} .banner__box{
+      max-width: {{ section.settings.max_width_mobile }}px;
+      padding: {{ section.settings.box_padding_mobile }}px;
+    }
+  }
+
+</style>
+
+{% if section.settings.visibility %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var banner = document.getElementById('image__banner-{{ section.id }}');
+      var urlParams = new URLSearchParams(window.location.search);
+      var hideBanner = urlParams.get('hide_banner');
+      var visibilityValues = '{{ section.settings.visibility }}'.split(',').map(function(item) {
+        return item.trim();
+      });
+      
+      if (!visibilityValues.includes(hideBanner)) {
+        banner.style.display = 'block';
+        // Small delay to ensure display:block takes effect
+        requestAnimationFrame(() => {
+          banner.style.opacity = '1';
+          banner.style.visibility = 'visible';
+        });
+      }
+    });
+  </script>
+{% endif %}
+
+
+<div id="image__banner-{{ section.id }}" class="image__banner relative overflow-hidden {{ section.settings.container }} mx-auto px-0">
+    {% if section.settings.overlay_image %}
+      <div class="dark-overly absolute inset-0" style="background-color: rgba({{ section.settings.overlay_color.red }}, {{ section.settings.overlay_color.green }}, {{ section.settings.overlay_color.blue }}, {{ section.settings.overlay_opacity }});"></div>
+    {% endif %}
+    {% if section.settings.banner_link != blank %}
+      <a href="{{ section.settings.banner_link }}" title="{{ section.settings.image_mobile.alt |  default: 'Kitsch image links'  }}">
+    {% endif %}
+
+      {%- if section.settings.image != blank or section.settings.video_url != blank -%}
+        {% if  section.settings.image != blank and section.settings.video_url == blank %}
+          <div class="banner__media {% if section.settings.image_mobile != blank %} hidden md:block  {% endif %}">
+              {% render 'img-large', image: section.settings.image, class: 'w-full', loading: section.settings.image_loading %}
+          </div>
+        {%- elsif section.settings.video_url != blank -%}
+          <div class="banner__media relative {% if section.settings.video_url_mobile != blank %} hidden md:block {% endif %}"
+            {% unless section.settings.desktop_height == 100 %}
+            style="height: {{ section.settings.desktop_height | append: 'px'  }}" 
+            {% endunless %} 
+            x-data="{ playing: {{ section.settings.autoplay }}, muted: true }">
+            {{ section.settings.video_url | media_tag: image_size: "1200x", autoplay: section.settings.autoplay , loop: section.settings.loop, controls: section.settings.controls, preload: "none", class: "w-full h-full object-cover", muted: true, loading: "lazy", x-ref: "video" }}
+            {% if section.settings.custom_controls %}
+                {% render '_video-custom-controls' %}
+            {% endif %}
+          </div>
+        {%- endif -%}
+
+      {% else %}
+        <div class="banner__media">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.image_mobile != blank or section.settings.video_url_mobile != blank -%}
+
+        {% if section.settings.video_url_mobile == blank %}
+          <div class="banner__media md:hidden">
+            {% render 'img-mobile', image: section.settings.image_mobile, loading: section.settings.image_loading %}
+          </div>
+        {% else %}
+          <div class="banner__media relative md:hidden" 
+            x-data="{ playing: {{ section.settings.autoplay }}, muted: true }">
+            {{ section.settings.video_url_mobile | media_tag: image_size: "700x", autoplay: section.settings.autoplay , loop: section.settings.loop, controls: section.settings.controls, preload: "none", class: "w-full h-full object-cover", muted: true, loading: "lazy", x-ref: "video" }}
+            {% if section.settings.custom_controls %}
+              {% render '_video-custom-controls' %}
+            {% endif %}
+          </div>
+        {% endif %}
+        
+      {%- endif -%}
+
+      <div class="inset-0 {% if section.settings.below_image_mobile %} relative z-30 md:absolute {% else %} absolute {% endif %}">
+        <div class="{{ section.settings.image_container }} mx-auto h-full">
+          <div class="banner__content inset-0 flex z-10 h-full
+              {{ section.settings.vertical_alignment }} 
+              {{ section.settings.horizontal_alignment }}
+              {{ section.settings.vertical_alignment_mobile }}
+              {{ section.settings.horizontal_alignment_mobile }}">
+              
+              {% if section.blocks.size > 0 %}
+                <div style="background-color: rgba({{ section.settings.content_background.red }}, {{ section.settings.content_background.green }}, {{ section.settings.content_background.blue }}, {{ section.settings.content_background_opacity }}); 
+                    color: {{ section.settings.text_color }};"
+                  class="banner__box space-y-6 w-full">
+                  {%- for block in section.blocks -%}
+                    {%- case block.type -%}
+                    {%- when 'custom_liquid' -%}
+                      {% if block.settings.custom_liquid != blank %}
+                      <div id="Custom_liquid_{{ block.id }}">
+                        {{ block.settings.custom_liquid }}
+                      </div>
+                      {% endif %}
+                      {%- when 'heading' -%}
+                        {%- render 'heading', options: block.settings, id: block.id -%}
+                      {%- when 'text' -%}
+                        {% render 'text', block: block %}
+                      {%- when 'buttons' -%}
+                        {% render 'buttons', section: section block: block %}
+                    {%- endcase -%}
+                  {%- endfor -%}
+                </div>
+              {% endif %}
+
+          </div>
+        </div>
+      </div>
+
+    {% if section.settings.banner_link != blank %}
+      </a>
+    {% endif %}
+    
+
+
+</div>
+
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (desktop)",
+      "info": "Recommended size: 1920x1080px"
+    },
+    {
+      "type": "range",
+      "id": "max_height",
+      "label": "Max height",
+      "unit": "px",
+      "min": 100,
+      "max": 1100,
+      "step": 10,
+      "default": 650
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)",
+      "info": "Recommended size: 768x1024px"
+    },
+    {
+      "type": "select",
+      "id": "image_loading",
+      "label": "Image loading",
+      "options": [
+        {
+          "value": "lazy",
+          "label": "Lazy"
+        },
+        {
+          "value": "eager",
+          "label": "Eager"
+        }
+      ],
+      "default": "lazy",
+      "info": "Eager load if the image is above the fold"
+    },
+    {
+      "type": "range",
+      "id": "max_height_mobile",
+      "label": "Max height (mobile)",
+      "unit": "px",
+      "min": 100,
+      "max": 1300,
+      "step": 50,
+      "default": 900
+    },
+    {
+      "type": "video",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "This will override the image."
+    },
+    {
+      "type": "video",
+      "id": "video_url_mobile",
+      "label": "Video URL (mobile)",
+      "info": "This will override the image."
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Banner link"
+    },
+    {
+      "type": "select",
+      "id": "image_container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Content container"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_image",
+      "label": "Overlay",
+      "default": false,
+      "info": "This will darken the background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3,
+      "unit": "%"
+    },
+    {
+        "type": "header",
+        "content": "Video settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Controls",
+      "info": "Show video controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_controls",
+      "label": "Custom controls",
+      "info": "Show custom controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "info": "Replay the video when it ends"
+    },
+    {
+      "type": "header",
+      "content": "Content",
+      "info": "Adjust how you want to display the block content"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "options": [
+        {
+          "value": "md:items-center",
+          "label": "Center"
+        },
+        {
+          "value": "md:items-start",
+          "label": "Top"
+        },
+        {
+          "value": "md:items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "md:items-center",
+      "label": "Vertical alignment"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "options": [
+        {
+          "value": "md:justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "md:justify-start",
+          "label": "Left"
+        },
+        {
+          "value": "md:justify-end",
+          "label": "Right"
+        }
+      ],
+      "default": "md:justify-center",
+      "label": "Horizontal alignment"
+    },
+    {
+      "type": "range",
+      "id": "box_padding",
+      "label": "Padding",
+      "unit": "px",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment_mobile",
+      "options": [
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-center",
+      "label": "Vertical alignment"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment_mobile",
+      "options": [
+        {
+          "value": "justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-start",
+          "label": "Left"
+        },
+        {
+          "value": "justify-end",
+          "label": "Right"
+        }
+      ],
+      "default": "justify-center",
+      "label": "Horizontal alignment"
+    },
+    {
+      "type": "range",
+      "id": "box_padding_mobile",
+      "label": "Padding (mobile)",
+      "unit": "px",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "below_image_mobile",
+      "label": "Below image on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "color",
+      "id": "content_background",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "range",
+      "id": "content_background_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Width",
+      "unit": "px",
+      "min": 100,
+      "max": 1200,
+      "step": 20,
+      "default": 540
+    },
+    {
+      "type": "range",
+      "id": "max_width_mobile",
+      "label": "Width (mobile)",
+      "unit": "px",
+      "min": 100,
+      "max": 900,
+      "step": 10,
+      "default": 540
+    },
+    {
+      "type": "header",
+      "content": "Section visibility"
+    },
+    {
+      "type": "liquid",
+      "id": "visibility",
+      "label": "Visibility",
+      "info": "Hide this section if the following UTM parameters are present in the URL. eg: &hide_banner=secretsale"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "custom_liquid",
+      "name": "Custom liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom liquid",
+          "info": "Add app snippets or other Liquid code to create advanced customizations."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Image banner",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "sub_heading",
+          "label": "Sub heading"
+        },
+        {
+          "type": "text",
+          "id": "heading_label",
+          "label": "Label",
+          "info": "This text will show above the heading as a label"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 100,
+          "step": 2,
+          "default": 42
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:text-left",
+          "options": [
+            {
+              "value": "md:text-left",
+              "label": "Left"
+            },
+            {
+              "value": "md:text-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "font",
+          "label": "Font family",
+          "default": "font-heading",
+          "options": [
+            {
+              "value": "font-primary",
+              "label": "Primary"
+            },
+            {
+              "value": "font-secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "font-heading",
+              "label": "Heading"
+            },
+            {
+              "value": "font-sophillia",
+              "label": "Sophillia"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "font_weight",
+          "label": "Font weight",
+          "default": "font-bold",
+          "options": [
+            {
+              "value": "font-bold",
+              "label": "Bold"
+            },
+            {
+              "value": "font-semibold",
+              "label": "Semibold"
+            },
+            {
+              "value": "font-medium",
+              "label": "Medium"
+            },
+            {
+              "value": "font-normal",
+              "label": "Normal"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 80,
+          "step": 2,
+          "default": 32
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "text-left",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Give customers details about the banner image(s) or content on the template.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 50,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "label": "Letter spacing",
+          "unit": "px",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:text-left",
+          "options": [
+            {
+              "value": "md:text-left",
+              "label": "Left"
+            },
+            {
+              "value": "md:text-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "font_weight",
+          "label": "Font weight",
+          "default": "font-normal",
+          "options": [
+            {
+              "value": "font-normal",
+              "label": "Normal"
+            },
+            {
+              "value": "font-medium",
+              "label": "Medium"
+            },
+            {
+              "value": "font-semibold",
+              "label": "Semibold"
+            },
+            {
+              "value": "font-bold",
+              "label": "Bold"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 50,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "text-left",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "primary_button",
+          "default": "Primary button",
+          "label": "Primary button",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "primary_button_link",
+          "label": "Primary button link"
+        },
+        {
+          "type": "select",
+          "id": "primary_button_style",
+          "label": "Primary button style",
+          "options": [
+            {
+              "value": "button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Black"
+            },
+            {
+              "value": "button--white",
+              "label": "White"
+            },
+            {
+              "value": "button--outline",
+              "label": "Outline"
+            },
+            {
+              "value": "button--outline-dark",
+              "label": "Outline dark"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "secondary_button",
+          "label": "Secondary button",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "Secondary button link"
+        },
+        {
+          "type": "select",
+          "id": "secondary_button_style",
+          "label": "Secondary button style",
+          "options": [
+            {
+              "value": "button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Black"
+            },
+            {
+              "value": "button--white",
+              "label": "White"
+            },
+            {
+              "value": "button--outline",
+              "label": "Outline"
+            },
+            {
+              "value": "button--outline-dark",
+              "label": "Outline dark"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "select",
+          "id": "buttons_justify",
+          "label": "Buttons justify",
+          "default": "md:justify-start",
+          "options": [
+            {
+              "value": "md:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "md:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "md:justify-between",
+              "label": "Between"
+            },
+            {
+              "value": "md:justify-around",
+              "label": "Around"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "buttons_justify_mobile",
+          "label": "Buttons justify mobile",
+          "default": "justify-start",
+          "options": [
+            {
+              "value": "justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "justify-between",
+              "label": "Between"
+            },
+            {
+              "value": "justify-around",
+              "label": "Around"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image banner",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

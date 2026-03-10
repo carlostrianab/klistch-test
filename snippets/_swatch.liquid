@@ -1,0 +1,121 @@
+
+{% assign count_product = 0 %}
+{% for p_loop in block.settings.products %}
+    {% if p_loop.available == true or p_loop.type contains 'Bundle' %}
+        {% assign count_product = count_product | plus: 1 %}
+    {% endif %}
+{% endfor %}
+
+{% if block.settings.products != blank and count_product > 0 %}
+
+    <div class="color-swatches mt-2" x-size="{{ count_product }}">
+        {% if block.settings.title != blank %}
+            <div class="color-swatches__title font-medium mb-2">
+                {{ block.settings.title }}
+            </div>
+        {% endif %}
+
+        {% if block.settings.swatch_style == 'swatch' %}
+            <div class="other-options flex flex-wrap gap-1.5 mb-6">
+                {% for p_color in block.settings.products %}
+                    {% if p_color.available == true or p_color.type contains 'Bundle' %}
+                        {% if p_color.handle == product.handle %}
+                            {% assign img = p_color.images[block.settings.image_position] %}
+                            {% if p_color.images.size < 3 %}
+                                {% assign img = p_color.featured_image %}
+                            {% endif %}
+                            {% if p_color.metafields.custom.swatch_image != blank %}
+                                {% assign img = p_color.metafields.custom.swatch_image %}
+                            {% endif %}
+                            <div class="flex items-center gap-1.5 flex-col !p-0">
+                                <div class="gradient-border border-2 text-[0px] w-11 h-11 bg-cover bg-no-repeat rounded-full border-gray-600 inline-block" style="background-image: url({{ img | img_url: '100x' }});" title="{{ p_color.title }}">
+                                    {{ p_color.title }}
+                                </div>
+                                {% for p_tag in p_color.tags %}
+                                    {% if p_tag contains "size:" %}
+                                        {% assign size = p_tag | split: ":" | last %}
+                                        <span class="text-sm font-semibold">
+                                            {{ size }}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+    
+                            {% assign img = p_color.images[block.settings.image_position] %}
+                            {% if p_color.images.size < 3 %}
+                                {% assign img = p_color.featured_image %}
+                            {% endif %}
+    
+                            {% if p_color.metafields.custom.swatch_image != blank %}
+                                {% assign img = p_color.metafields.custom.swatch_image %}
+                            {% endif %}
+                            <div class="flex items-center gap-1.5 flex-col !p-0">
+                                <a class="text-[0px] w-11 h-11 bg-cover bg-no-repeat rounded-full border border-gray-600 inline-block" 
+                                    style="background-image: url({{ img | img_url: '100x' }});" 
+                                    href="{{ p_color.url }}" 
+                                    title="{{ p_color.title }}">
+                                    {{ p_color.title }}
+                                </a>
+                                {% for p_tag in p_color.tags %}
+                                    {% if p_tag contains "size:" %}
+                                        {% assign size = p_tag | split: ":" | last %}
+                                        <span class="text-sm font-medium">
+                                            {{ size }}
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+    
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="other-options options-2 grid grid-cols-2 gap-2">
+                {% for p_color in block.settings.products %}
+                    {% if p_color.available == true or p_color.type contains 'Bundle' %}
+                        {% assign title = p_color.title |  downcase %}
+                        {% if p_color.handle == product.handle %}
+                            {% assign img = p_color.images[block.settings.image_position] %}
+                            <div class="gradient-border border-2 bg-cover bg-no-repeat rounded border-gray-600 inline-block lowercase text-center bg-[#e8eaec] p-2" 
+                                title="{{ p_color.title }}">
+
+                                {% comment %} <img src="{{ img | img_url: '200x' }}" width="44" height="44" class="mx-auto" alt="{{ p_color.title }}"> {% endcomment %}
+
+                                {% if title contains 'king' %}
+                                    <span class="text-sm">
+                                        {{ 'products.product.size.king' | t }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-sm">
+                                        {{ 'products.product.size.standard' | t }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {% assign img = p_color.images[block.settings.image_position] %}
+                            <a class="bg-cover bg-no-repeat rounded border border-gray-600 lowercase text-center bg-[#e8eaec] flex items-center justify-center"  
+                                href="{{ p_color.url }}" 
+                                title="{{ p_color.title }}">
+                                {% comment %} <img src="{{ img | img_url: '200x' }}" width="44" height="44" class="mx-auto" alt="{{ p_color.title }}"> {% endcomment %}
+                                {% if title contains 'king' %}
+                                    <span class="text-sm">
+                                        {{ 'products.product.size.king' | t }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-sm">
+                                        {{ 'products.product.size.standard' | t }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+       
+    </div>
+{% endif %}
+    

@@ -1,0 +1,36 @@
+<div class="flex justify-between items-center relative">
+
+    {% if title != blank %}
+      <h3 class="font-heading font-semibold text-2xl">
+          {{ title }}
+      </h3>
+    {% endif %}
+    {% if subtitle != blank %}
+      <div class="subtitle">
+        {{ subtitle }}
+      </div>
+    {% endif %}
+</div>
+
+<div class="variants space-y-3 mt-4 overflow-scroll max-h-full pb-20 md:pb-0" x-show="expanded" x-collapse.min.{{ collapsed_height | append: 'px' }}>
+    {% for variant in product.variants %}
+        <div class="variant flex items-center justify-between">
+            <div class="variant__details">
+                <div class="variant__title font-semibold">
+                    {{ variant.title }}
+                </div>
+                <div class="variant__price">
+                    {{ variant.price | money }}
+                </div>
+            </div>
+            <div class="variant__button">
+                <button class="button button--secondary w-full is-focusable" type="button" @click="Unick.buyNow({{ variant.id }}, 1)">
+                    {{ 'products.product.buy_now' | t }}
+                </button>
+                <button class="button button--link w-full is-focusable" type="button"  @click="Unick.addToCart({{ variant.id }}, 1)">
+                    {{ 'products.product.add_to_cart' | t }}
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+</div>

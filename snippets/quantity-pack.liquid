@@ -1,0 +1,106 @@
+                
+{% assign discount_price = 0 %}
+{% for tag in product.tags %}
+    {% if tag contains "discount:" and settings.enable_tag_discount %}
+        {% assign discount_percentage = tag | split: ':' | last | plus: 0 %}
+        {% assign discount_price = product.price | times: discount_percentage | divided_by: 100 %}
+        {% assign has_discount = true %}
+    {% endif %}
+{% endfor %}
+
+<div class="grid grid-cols-3 gap-1 my-4 quantity-pack__wrapper py-3"
+    x-init="
+    $nextTick(() => {
+        {% if settings.discount_table != blank %}
+            const cookieDiscount = Unick.getCookie('discount_code');
+            if(cookieDiscount){
+                const discount = discount_table.find((item) => {
+                    return item.toLowerCase().includes(cookieDiscount.toLowerCase());
+                });
+                const discountValue = discount?.split(':')[1];
+                discountPercentage = discountValue;
+            }
+        {% endif %}
+
+    });
+    $watch('selected', value => {
+        $dispatch('quantity-pack-updated', { qty: value });
+    })"
+    x-data="{
+        {% if settings.discount_table != blank %}
+            discount_table: JSON.parse(JSON.stringify(`{{ settings.discount_table }}`)).split(','),
+        {% endif %}
+        productPrice: {{ product.price  | minus: discount_price }},
+        selected: {{ blocks[0].settings.value }},
+        discountPercentage: 0,
+        selectPack(pack) {
+            this.selected = pack;
+        },
+        packagePrice(packageDiscount){
+            let price = this.productPrice - packageDiscount;
+            if(this.discountPercentage > 0){
+                price = price - (price * (this.discountPercentage / 100));
+            }
+            return Unick.formatMoney(price);
+        }
+    }">
+    <style>
+        .product-form__qty{
+            display: none !important;
+        }
+    </style>
+    {% for block in blocks %}
+        <button 
+            class="relative border font-medium text-gray-700 hover:bg-gray-100 hover:border-gray-400 py-2 px-4 rounded-sm"
+            :class="{ '!border-black bg-gray-200': selected === {{ block.settings.value }} }"
+            {% if block.settings.pre_selected %}
+                x-init="selectPack({{ block.settings.value }})"
+            {% endif %}
+            type="button"
+            @click="selectPack({{ block.settings.value }})">
+            <div class="flex flex-col justify-center">
+                {% if block.settings.title != blank %}
+                    <span class="quantity-pack__title font-medium"> {{ block.settings.title }}</span>
+                {% endif %}
+
+                {% if block.settings.discount != '0' %}
+                    {% if block.settings.discount_type == 'fixed' %}
+                        {% assign discount = block.settings.discount | times: 100 %}
+                        <span 
+                            class="quantity-pack__price text-red-700 font-normal">
+                            {{ product.price | minus : discount | minus: discount_price | money }} {{ block.settings.price_suffix }}
+                        </span>
+                        <s class="line-through font-normal">{{ product.price | money }} {{ block.settings.price_suffix }} </s>
+                    {% else %}
+                        {% assign discount_percentage = block.settings.discount | times: 1 %}
+                        {% assign discount_amount = product.price | times: discount_percentage | divided_by: 100 %}
+                        <span class="quantity-pack__price text-red-700 font-normal"> 
+                            {{ product.price | minus : discount_amount | minus: discount_price | money }} {{ block.settings.price_suffix }}
+                        </span>
+                        <s class="line-through font-normal">{{ product.price | money }} {{ block.settings.price_suffix }} </s> 
+                    {% endif %}
+                {% else %}
+                    <span class="quantity-pack__price font-normal flex-col flex gap-1"> 
+                        {% if has_discount %}
+                            <span class="text-red-700">{{ product.price | minus: discount_price | money }} {{ block.settings.price_suffix }}</span>
+                            <s>
+                                {{ product.price | money }} {{ block.settings.price_suffix }}
+                            </s>
+                        {% else %}
+                            <span 
+                                :class="{ 'text-red-700': discountPercentage > 0 }"
+                                x-text="Unick.formatMoney(productPrice - (productPrice * (discountPercentage / 100)))">
+                                {{ product.price | money }} {{ block.settings.price_suffix }}
+                            </span>
+                            <s x-show="discountPercentage > 0" class="line-through font-normal">{{ product.price | money }}</s>
+                        {% endif %}
+                    </span>
+                {% endif %}
+
+            </div>
+            {% if block.settings.flag != blank %}
+                <span class="quantity-pack__flag absolute font-medium text-[#e53935] -top-4 left-1/2 transform -translate-x-1/2 text-sm bg-white border border-gray-400 w-full max-w-[calc(100%-1rem)] rounded-md">{{ block.settings.flag }}</span>
+            {% endif %}
+        </button>
+    {% endfor %}
+</div>

@@ -1,0 +1,15 @@
+{% comment %} 
+    This section is used for loading the cart content 
+    and the cart form in the cart drawer.
+    We have access to all liquid variables in this section.
+{% endcomment %}
+<template data-options>
+    {
+        "item_count": {{ cart.item_count | json }},
+        "cart_total": {{ cart.total_price | json }},
+        "cart_discount": {{ cart.total_discount | json }}
+    }
+</template>
+<div id="cart-drawer-content">
+    {% render 'cart-drawer-form' %}
+</div>

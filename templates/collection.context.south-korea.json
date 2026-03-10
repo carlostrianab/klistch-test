@@ -1,0 +1,66 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "collection.json",
+  "context": {
+    "market": "south-korea"
+  },
+  "sections": {
+    "image_banner_wqnHt": {
+      "type": "image-banner",
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/25OFF_desktop_collection.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/25OFF_mobile_collection.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "video_url": null,
+        "video_url_mobile": null,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "header-01e1dd3380542bf9f286358380ef2184": null,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "header-788137122578d9ecf8f59c2bfe85f208": null,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "header-3be92166a7cd8babf0dd7eb631ff62fe": null,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "header-83eb479fa05239b66875fe28cfac3367": null,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "header-24f723c0abbb82f14f86a3fc0ba96d97": null,
+        "visibility": ""
+      },
+      "blocks": {},
+      "block_order": [],
+      "name": "Image banner"
+    }
+  },
+  "order": [
+    "image_banner_wqnHt",
+    "banner",
+    "product-grid"
+  ]
+}

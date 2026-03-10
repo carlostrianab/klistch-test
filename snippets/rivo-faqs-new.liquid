@@ -1,0 +1,209 @@
+<div class="rivo-faq-wrapper" id="faq-wrapper">
+  <!-- FAQ items will be dynamically added here -->
+</div>
+
+<style>
+  .rivo-faq-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-size: 16px;
+  }
+
+  .rivo-question-wrapper {
+    border-bottom: 1px solid #000;
+  }
+
+  .rivo-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 20px 0;
+    padding-bottom: 0;
+    border: none;
+    text-align: left !important;
+    margin-bottom: 1rem;
+    font-size: 16px;
+    color: #000;
+    font-weight: 500;
+  }
+
+  .rivo-question span {
+    max-width: 90%;
+  }
+
+  .rivo-faq-icon {
+    --hitbox: 20px;
+    background: #000;
+    border-radius: 50%;
+    width: var(--hitbox);
+    height: var(--hitbox);
+    display: block;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .rivo-faq-icon:before,
+  .rivo-faq-icon:after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(var(--angle));
+    transition: transform .55s cubic-bezier(.55, 0, .1, 1) 0s;
+    background-color: #FFF;
+  }
+
+  .rivo-faq-icon:before {
+    --angle: 0deg;
+  }
+
+  .rivo-faq-icon:after {
+    --angle: 90deg;
+  }
+
+  .rivo-answer {
+    display: none;
+    text-align: left;
+    padding: 20px 0;
+    font-size: 16px;
+    color: #000;
+    font-weight: 400;
+    line-height: 1.375;
+  }
+
+  .rivo-question-wrapper.open .rivo-faq-icon:before {
+    --angle: 90deg;
+  }
+
+  @media (max-width: 767px) {
+    .rivo-faq-wrapper {
+      max-width: 100%;
+    }
+  }
+
+  .rivo-section {
+    padding: 50px 0.5rem;
+  }
+
+  .rivo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .rivo-title {
+  }
+</style>
+
+<script>
+  let faqs = [
+    {
+      question: "How do I join Kitsch Rewards?",
+      answer: "Joining Kitsch Rewards is quick and easy, simply create an account on our website and opt-in to the program. You will automatically start earning points with your first purchase!"
+    },
+    {
+      question: "Is the Kitsch Rewards free to join?",
+      answer: "Yes! It’s completely free! There are no membership fees or hidden costs. It’s just our way of saying thank you for being a loyal customer!"
+    },
+    {
+      question: "How do I earn points?",
+      answer: "You can earn points in a variety of ways! Points are earned by making purchases, following us on our social media sites, submitting product reviews, referring friends and more! The more points you earn, the higher your loyalty tier, which unlocks even more rewards and benefits."
+    },
+    {
+      question: "How do I redeem rewards?",
+      answer: "Make sure you are logged into your account and scroll down to the loyalty page section with our 5 reward options. Pick a reward to redeem your points for $$ off your purchase with a coupon, and apply the coupon code at checkout! Coupons cannot be combined."
+    },
+    {
+      question: "What happens to my points if I return a purchase?",
+      answer: "If you make a return, the points you earned from the purchase will be deducted from your account."
+    },
+    {
+    question: "Do my points expire?",
+    answer: "Yes! To ensure your points don’t expire, be sure to complete an activity (like adding your birthday or placing an order) within 12 months."
+  },
+  {
+    question: "How long do I qualify for each tier?",
+    answer: "At Kitsch, you keep your tier status for a full year—or until you level up to the next one!"
+  },
+  {
+    question: "Do subscription orders qualify for reward loyalty points?",
+    answer: "Yes! You’ll earn points on every subscription order (and save 10%!)."
+  },
+  {
+    question: "Can I combine my loyalty reward and a promo code?",
+    answer: "We hate to say it, but Kitsch Rewards and promo codes cannot be combined."
+  },
+  {
+    question: "Is there a limit to the number of points I can earn?",
+    answer: "Earn as many points as you can—we dare you! The number of points you can earn is uncapped, so shop and earn away."
+  },
+  {
+    question: "Is there a limit to how many product reviews I can earn points for?",
+    answer: "We love hearing from you (and rewarding you for it!), so post as many reviews for different products as you’d like and continue earning points for each one."
+  },
+  {
+    question: "How soon will I see points from an in-store receipt I submitted?",
+    answer: "You can expect to see points added to your account within 10 business days of submitting your receipt."
+  },
+  ];
+
+        const faqWrapper = document.querySelector("#faq-wrapper");
+
+        faqs.forEach((faq, index) => {
+          const questionWrapper = document.createElement("div");
+          const question = document.createElement("div");
+          const questionText = document.createElement("span");
+          const faqIcon = document.createElement("span"); // Changed from button to span
+          const answer = document.createElement("div");
+
+          questionWrapper.className = "rivo-question-wrapper";
+          questionWrapper.setAttribute("data-question", index);
+
+          question.className = "rivo-question";
+
+          questionText.innerHTML = faq.question; // Changed to innerHTML
+          question.appendChild(questionText);
+
+          faqIcon.className = "rivo-faq-icon"; // Updated class name
+          question.appendChild(faqIcon);
+
+          answer.className = "rivo-answer";
+          answer.innerHTML = faq.answer; // Changed to innerHTML
+          answer.style.display = "none"; // Initially hide answers
+
+          questionWrapper.appendChild(question);
+          questionWrapper.appendChild(answer);
+
+          faqWrapper.appendChild(questionWrapper);
+
+          question.addEventListener("click", () => {
+            const isOpen = questionWrapper.classList.contains("open");
+
+            // Close all other open questions
+            const openQuestions = document.querySelectorAll(".rivo-question-wrapper.open");
+            openQuestions.forEach(openQuestion => {
+              const openAnswer = openQuestion.querySelector(".rivo-answer");
+              const openIcon = openQuestion.querySelector(".rivo-faq-icon");
+
+              openAnswer.style.display = "none";
+              openIcon.style.transform = "rotate(0deg)";
+              openQuestion.classList.remove("open");
+            });
+
+            // Toggle clicked question
+            if (isOpen) {
+              answer.style.display = "none";
+              faqIcon.style.transform = "rotate(0deg)";
+              questionWrapper.classList.remove("open");
+            } else {
+              answer.style.display = "block";
+              faqIcon.style.transform = "rotate(90deg)";
+              questionWrapper.classList.add("open");
+            }
+          });
+        });
+</script>

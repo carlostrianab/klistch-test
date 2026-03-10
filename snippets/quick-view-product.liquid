@@ -1,0 +1,250 @@
+<div class="quick-view-product p-4 overflow-y-scroll h-full">
+    {% if product %}
+        {% if product.featured_image %}
+            <div class="quick-view-product__image w-4/12">
+                {% render 'img-medium', image: product.featured_image, class: 'w-full' %}
+            </div>
+        {% endif %}
+
+        <h4 class="quick-view-product__title font-heading text-xl md:text-2xl py-4">
+            {{ product.title }}
+        </h4>
+
+        {% if settings.quick_view_show_price %}
+            <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+            {%- render 'price', product: product, use_variant: true, show_badges: true, price_class: 'price--large' -%}
+            </div>
+            {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                <div class="product__tax caption rte">
+                {%- if shop.taxes_included -%}
+                    {{ 'products.product.include_taxes' | t }}
+                {%- endif -%}
+                {%- if shop.shipping_policy.body != blank -%}
+                    {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                {%- endif -%}
+                </div>
+            {%- endif -%}
+
+            <div {{ block.shopify_attributes }}>
+                {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+                {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                {{ form | payment_terms }}
+                {%- endform -%}
+            </div>
+        {% endif %}
+
+        {%- if product.description != blank -%}
+            <div class="quick-view-product__description">
+                {{ product.description | strip_html | truncate: 180 }}
+            </div>
+        {%- endif -%}
+
+        {% if settings.quick_view_show_share %}
+            <div class="py-2">
+                {% render 'share', block: block, data: product.url %}
+            </div>
+        {% endif %}
+
+        <a href="{{ product.url }}" class="quick-view-product__view-full inline-block">
+            {{ 'products.product.quick_view.view_full' | t }}
+        </a>
+
+        <div class="py-3">
+            <div class="border-t"></div>
+        </div>
+        {% if settings.quick_view_show_variants %}
+            <div class="quick-view-product__variants space-y-4">
+                {% if product.tags contains 'is-event' %}
+                    <div class="" 
+                        x-data="{
+                            expanded: false, 
+                            text: `{{ 'products.product.show_more' | t }}`,
+                        }"
+                        x-init="$nextTick(() => {
+                            $watch('expanded', (value) => {
+                            (value) ? text = `{{ 'products.product.show_less' | t }}` : text = `{{ 'products.product.show_more' | t }}`
+                            });
+                        })">
+                        {% render 'event-varaints', title: settings.quick_view_event_title, subtitle: settings.quick_view_event_subtitle, collapsed_height: settings.quick_view_event_collapsed_height %}
+                        <button type="button" @click="expanded = !expanded" class="w-full is-focusable" x-text="text">
+                            {{ 'products.product.show_more' | t }}
+                        </button>
+                    </div>
+                {% else %}
+                    {%- unless product.has_only_default_variant -%}
+                        {%- if settings.quick_view_variant_picker_type == 'radio-buttons' -%}
+                            <div x-data="variantsSelector({{ product.variants | json | escape }}, {{ product.selected_or_first_available_variant | json | escape }})"
+                                @variant-changed.window="$nextTick(() => {
+                                let getVariant = Unick.findVariant(variants , selectOptions); 
+                                selectedVariant = (getVariant) ? getVariant : null;
+                                })"
+                            class="space-y-3 radio-variant__buttons">
+                            {%- for option in product.options_with_values -%}
+                                {% assign loopIndex = forloop.index0 %}
+                                <fieldset class="js product-form__input">
+                                    <legend class="form__label pb-2 font-semibold">{{ option.name }}: <span class="font-medium" x-text="selectedVariant['option{{ forloop.index }}']"></span></legend>
+                                    {% assign option_name = option.name | downcase %}
+                                    {% if option_name == 'color' or option_name == 'colors' or option_name == 'colour' or option_name == 'colours' %}
+                                    {% if settings.quick_view_color_swatch_style == 'color-swatch' %}
+                                        <div class="flex flex-wrap gap-3 items-center radio-swatch">
+                                        {%- for value in option.values -%}
+                                            <input type="radio" aria-label="{{ value }}" class="sr-only" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                                @change="selectOptions[{{ loopIndex }}] = '{{ value | escape }}'; $dispatch('variant-changed', { position: {{ loopIndex }}, event: $event });"
+                                                name="{{ option.name }}" value="{{ value | escape }}" form="{{ product_form_id }}"
+                                                {% if option.selected_value == value %}checked{% endif %}>
+                                            <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" 
+                                                class="border-2 border-transparent cursor-pointer w-8 h-8 rounded-full overflow-hidden text-[0px]" 
+                                                style="background-color: {{ value }};">
+                                                {{ value }}
+                                            </label>
+                                        {%- endfor -%}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if settings.quick_view_color_swatch_style == 'basic' %}
+                                        <div class="flex flex-wrap gap-3 items-center">
+                                        {%- for value in option.values -%}
+                                            <input type="radio" aria-label="{{ value }}" class="sr-only" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                                @change="selectOptions[{{ loopIndex }}] = '{{ value | escape }}'; $dispatch('variant-changed', { position: {{ loopIndex }}, event: $event });"
+                                                name="{{ option.name }}" value="{{ value | escape }}" form="{{ product_form_id }}"
+                                                {% if option.selected_value == value %}checked{% endif %}>
+                                            <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" 
+                                            class="px-4 py-2 border rounded-md cursor-pointer text-sm">
+                                            {{ value }}
+                                            </label>
+                                        {%- endfor -%}
+                                        </div>
+                                    {% endif %}
+                                    {% else %}
+                                    <div class="flex flex-wrap gap-3 items-center">
+                                        {%- for value in option.values -%}
+                                        <input type="radio" aria-label="{{ value }}" class="sr-only" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                                @change="selectOptions[{{ loopIndex }}] = '{{ value | escape }}'; $dispatch('variant-changed', { position: {{ loopIndex }}, event: $event });"
+                                                name="{{ option.name }}" value="{{ value | escape }}" form="{{ product_form_id }}"
+                                                {% if option.selected_value == value %}checked{% endif %}>
+                                        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" 
+                                            class="px-4 py-2 border rounded-md cursor-pointer text-sm">
+                                            {{ value }}
+                                        </label>
+                                        {%- endfor -%}
+                                    </div>
+                                    {% endif %}
+
+                                </fieldset>
+                            {%- endfor -%}
+                            </div>
+                        {%- endif -%}
+
+                        {%- if settings.quick_view_variant_picker_type == 'dropdown' -%}
+                            <div  x-data="variantsSelector({{ product.variants | json | escape }}, {{ product.selected_or_first_available_variant | json | escape }})"
+                                @variant-changed.window="$nextTick(() => {
+                                    let getVariant = Unick.findVariant(variants , selectOptions); 
+                                    selectedVariant = (getVariant) ? getVariant : null;
+                                })" 
+                                class="no-js-hidden {% if product.variants.size == 1 %} hidden {% endif %}" 
+                                data-section="{{ section.id }}" 
+                                data-url="{{ product.url }}" {{ block.shopify_attributes }}>
+                                <div class="grid md:grid-cols-2 gap-3 mt-3 mb-2 ">
+                                    {%- for option in product.options_with_values -%}
+                                        {% assign option_size = option.values | size %}
+                                        {% if option_size > 1 %}
+                                        {% assign name = option.name %}
+                                        {% assign loopIndex = forloop.index0 %}
+                                        
+                                        <div class="relative w-full">
+                                            <template  x-if='selectedVariant'>
+                                                <input type="hidden" name="id" x-bind:value="selectedVariant.id">
+                                            </template>
+                                            <label for="{{ name | downcase }}" class="form__label font-medium mb-2 block">{{ name }}</label>
+                                            <select 
+                                                x-model="selectOptions[{{ loopIndex }}]"
+                                                @change="selectOptions[{{ loopIndex }}] = $event.target.selectedOptions[0].value; 
+                                                $dispatch('variant-changed', { position: {{ loopIndex }}, event: $event });"
+                                                name="{{ name | downcase }}"
+                                                form="{{ product_form_id }}"
+                                                class="form__select w-full">
+                                                {% for optionItem in option.values %}
+                                                        <option value="{{ optionItem }}">
+                                                            {{ optionItem | capitalize }}
+                                                        </option>
+                                                {% endfor %}
+                                            </select>
+                                            
+                                        </div>
+
+                                        {% endif %}
+
+                                    {%- endfor -%}
+                                </div>
+                            </div>
+                        {%- endif -%}
+                    {%- endunless -%}
+
+                    <noscript class="product-form__noscript-wrapper-{{ section.id }}">
+                    <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+                        <label class="form__label" for="Variants-{{ section.id }}">{{ 'products.product.product_variants' | t }}</label>
+                        <div class="select">
+                        <select name="id" id="Variants-{{ section.id }}" class="select__select" form="{{ product_form_id }}">
+                            {%- for variant in product.variants -%}
+                            <option
+                                {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                                {% if variant.available == false %}disabled{% endif %}
+                                value="{{ variant.id }}"
+                            >
+                                {{ variant.title }}
+                                {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                                - {{ variant.price | money | strip_html }}
+                            </option>
+                            {%- endfor -%}
+                        </select>
+                        {% render 'icon-caret' %}
+                        </div>
+                    </div>
+                    </noscript>
+
+                    <div  @variant-updated.window="variant = $event.detail.variant; soldOut = !$event.detail.availibility"
+                    x-data="addToCart({{ product.selected_or_first_available_variant | json | escape }})">
+                        <div role="alert" x-show="error">
+                        <span class="text-sm text-red-600" x-text="message"></span>
+                        </div>
+                        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form', x-ref: 'product_form' -%}
+                        <input type="hidden" name="id" x-model="variant.id" value="{{ product.selected_or_first_available_variant.id }}">
+                        <div class="product-form__buttons space-y-3 {% if settings.quick_view_show_dynamic_checkout %} has-express-checkout {% endif %}">
+                            <button name="add" 
+                            {% if settings.cart_type == 'drawer' %}
+                                @click="addToCart()"
+                                type="button" 
+                            {% else %}
+                                type="submit"
+                            {% endif %}
+                            x-ref="add_to_cart_button" 
+                            class="product-form__submit button button--outline-dark button-add-to-cart w-full"
+                            {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                                <span x-text="addToCartLabel">
+                                {%- if product.selected_or_first_available_variant.available -%}
+                                    {{ 'products.product.add_to_cart' | t }}
+                                {%- else -%}
+                                    {{ 'products.product.sold_out' | t }}
+                                {%- endif -%}
+                                </span>
+                            </button>
+                            {%- if block.settings.show_dynamic_checkout -%}
+                            <div class="express-checkout">
+                                {{ form | payment_button }}
+                            </div>
+                            {%- endif -%}
+                        </div>
+                        {%- endform -%}
+                    </div>
+            
+                {% endif %}
+            </div>
+        {% endif %}
+
+    {% else %}
+        <h4 class="text-center">
+            {{ 'products.product.quick_view.no_product' | t }}
+        </h4>
+    {% endif %}
+</div>

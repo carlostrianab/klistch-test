@@ -1,0 +1,879 @@
+<style>
+  #Rich-text-{{ section.id }}{
+      background-color: {{ section.settings.background_color }};
+      color: {{ section.settings.text_color }};
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+      margin-top: {{ section.settings.margin_top | append: 'px' }};
+      margin-bottom: {{ section.settings.margin_bottom | append: 'px' }};
+  }
+</style>
+
+<div id="Rich-text-{{ section.id }}" class="rich-text relative">
+    <div class="{{ section.settings.container }} mx-auto px-4">
+      <div class="rich-text__content flex h-full">
+        <div style="max-width: {{ section.settings.max_width }}px; margin: 0 auto;"
+          class="space-y-6 w-full">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+                {%- render 'heading', options: block.settings, id: block.id -%}
+              {%- when 'text' -%}
+                {% render 'text', block: block %}
+              {%- when 'columns' -%}
+                {% render 'columns', block: block %}
+              {%- when 'list' -%}
+                {% render 'list', block: block %}
+              {%- when 'buttons' -%}
+                {% render 'buttons', block: block %}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+  
+      </div>
+    </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "unit": "px",
+      "min": 100,
+      "max": 1600,
+      "step": 20,
+      "default": 1080
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Margin top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Margin bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Heading text",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "sub_heading",
+          "label": "Sub heading"
+        },
+        {
+          "type": "text",
+          "id": "heading_label",
+          "label": "Label",
+          "info": "This text will show above the heading as a label"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 100,
+          "step": 2,
+          "default": 42
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:text-left",
+          "options": [
+            {
+              "value": "md:text-left",
+              "label": "Left"
+            },
+            {
+              "value": "md:text-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "font",
+          "label": "Font family",
+          "default": "font-heading",
+          "options": [
+            {
+              "value": "font-primary",
+              "label": "Primary"
+            },
+            {
+              "value": "font-secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "font-heading",
+              "label": "Heading"
+            },
+            {
+              "value": "font-sophillia",
+              "label": "Sophillia"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "font_weight",
+          "label": "Font weight",
+          "default": "font-medium",
+          "options": [
+            {
+              "value": "font-bold",
+              "label": "Bold"
+            },
+            {
+              "value": "font-semibold",
+              "label": "Semibold"
+            },
+            {
+              "value": "font-medium",
+              "label": "Medium"
+            },
+            {
+              "value": "font-normal",
+              "label": "Normal"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 80,
+          "step": 2,
+          "default": 32
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "text-left",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Give customers details about the content on the template.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "select",
+          "id": "text_font",
+          "label": "Text font",
+          "default": "font-default",
+          "options": [
+            {
+              "value": "font-next",
+              "label": "Next"
+            },
+            {
+              "value": "font-default",
+              "label": "Avenir Next"
+            },
+            {
+              "value": "font-didot",
+              "label": "Linotype Didot"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 50,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:text-left",
+          "options": [
+            {
+              "value": "md:text-left",
+              "label": "Left"
+            },
+            {
+              "value": "md:text-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 50,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "text-left",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "columns",
+      "name": "Columns",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add up to 3 columns text."
+        },
+        {
+          "type": "header",
+          "content": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "column_1_heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "column_1_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "column_2_heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "column_2_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "column_3_heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "column_3_text",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:text-left",
+          "options": [
+            {
+              "value": "md:text-left",
+              "label": "Left"
+            },
+            {
+              "value": "md:text-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "grid_desktop",
+          "label": "Desktop grid",
+          "info": "Number of items per row",
+          "default": "md:grid-cols-3",
+          "options": [
+            {
+              "value": "md:grid-cols-1",
+              "label": "1 item"
+            },
+            {
+              "value": "md:grid-cols-2",
+              "label": "2 items"
+            },
+            {
+              "value": "md:grid-cols-3",
+              "label": "3 items"
+            },
+            {
+              "value": "md:grid-cols-4",
+              "label": "4 items"
+            },
+            {
+              "value": "md:grid-cols-5",
+              "label": "5 items"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "text-left",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "grid_mobile",
+          "label": "Mobile grid",
+          "info": "Number of items per row",
+          "default": "grid-cols-2",
+          "options": [
+            {
+              "value": "grid-cols-1",
+              "label": "1 item"
+            },
+            {
+              "value": "grid-cols-2",
+              "label": "2 items"
+            },
+            {
+              "value": "grid-cols-3",
+              "label": "3 items"
+            },
+            {
+              "value": "grid-cols-4",
+              "label": "4 items"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "list",
+      "name": "List",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add up to 10 list items."
+        },
+        {
+          "type": "select",
+          "id": "list_style",
+          "label": "List style",
+          "options": [
+            {
+              "value": "list-disc",
+              "label": "Dots"
+            },
+            {
+              "value": "list-decimal",
+              "label": "Numbers"
+            },
+            {
+              "value": "list-checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "list-cross",
+              "label": "Cross"
+            },
+            {
+              "value": "list-none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_1",
+          "label": "List item 1"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_2",
+          "label": "List item 2"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_3",
+          "label": "List item 3"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_4",
+          "label": "List item 4"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_5",
+          "label": "List item 5"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_6",
+          "label": "List item 6"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_7",
+          "label": "List item 7"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_8",
+          "label": "List item 8"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_9",
+          "label": "List item 9"
+        },
+        {
+          "type": "richtext",
+          "id": "list_item_10",
+          "label": "List item 10"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "default": "md:justify-start",
+          "options": [
+            {
+              "value": "md:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "md:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:justify-end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "desktop_columns",
+          "label": "Desktop grid",
+          "info": "Number of columns",
+          "default": "md:columns-1",
+          "options": [
+            {
+              "value": "md:columns-1",
+              "label": "1 column"
+            },
+            {
+              "value": "md:columns-2",
+              "label": "2 columns"
+            },
+            {
+              "value": "md:columns-3",
+              "label": "3 columns"
+            },
+            {
+              "value": "md:columns-4",
+              "label": "4 columns"
+            },
+            {
+              "value": "md:columns-5",
+              "label": "5 columns"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile styles"
+        },
+        {
+          "type": "select",
+          "id": "text_align_mobile",
+          "label": "Text align",
+          "default": "justify-start",
+          "options": [
+            {
+              "value": "justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "justify-end",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "mobile_columns",
+          "label": "Mobile columns",
+          "info": "Number of columns",
+          "default": "columns-1",
+          "options": [
+            {
+              "value": "columns-1",
+              "label": "1 column"
+            },
+            {
+              "value": "columns-2",
+              "label": "2 columns"
+            },
+            {
+              "value": "columns-3",
+              "label": "3 columns"
+            },
+            {
+              "value": "columns-4",
+              "label": "4 columns"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "primary_button",
+          "default": "Primary button",
+          "label": "Primary button",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "primary_button_link",
+          "label": "Primary button link"
+        },
+        {
+          "type": "select",
+          "id": "primary_button_style",
+          "label": "Primary button style",
+          "options": [
+            {
+              "value": "button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "button--outline",
+              "label": "Outline"
+            },
+            {
+              "value": "button--outline-dark",
+              "label": "Outline dark"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "secondary_button",
+          "label": "Secondary button",
+          "info": "Leave the label blank to hide the button."
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "Secondary button link"
+        },
+        {
+          "type": "select",
+          "id": "secondary_button_style",
+          "label": "Secondary button style",
+          "options": [
+            {
+              "value": "button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "button--secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "button--outline",
+              "label": "Outline"
+            },
+            {
+              "value": "button--outline-dark",
+              "label": "Outline dark"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "select",
+          "id": "buttons_justify",
+          "label": "Buttons justify",
+          "default": "md:justify-start",
+          "options": [
+            {
+              "value": "md:justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "md:justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "md:justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "md:justify-between",
+              "label": "Between"
+            },
+            {
+              "value": "md:justify-around",
+              "label": "Around"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "buttons_justify_mobile",
+          "label": "Buttons justify mobile",
+          "default": "justify-start",
+          "options": [
+            {
+              "value": "justify-start",
+              "label": "Left"
+            },
+            {
+              "value": "justify-center",
+              "label": "Center"
+            },
+            {
+              "value": "justify-end",
+              "label": "Right"
+            },
+            {
+              "value": "justify-between",
+              "label": "Between"
+            },
+            {
+              "value": "justify-around",
+              "label": "Around"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

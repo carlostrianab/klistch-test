@@ -1,0 +1,376 @@
+{% assign extra_products = "" %}
+{% if block.settings.extra_products != blank %}
+    {% for extra_product in block.settings.extra_products %}
+        {% if extra_product.available %}
+            {% assign extra_products = extra_products | append: extra_product.first_available_variant.id | append:',' %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% assign extra_products = extra_products | remove_last:',' %}
+
+<div class="bundle-buy-button mt-6" 
+    x-title="bundle-buy-button"
+    data-bundle="{{ product.compare_at_price }}"
+    x-data='{
+        bundle_price: {{ block.settings.initial_price | times: 100 }},
+        bundle_compare_price: {{ block.settings.initial_compare_price | times: 100 }},
+        selected_items: [],
+        extra_items: [{{ extra_products }}],
+        qty: 1,
+        selected_selling_plan_index: 0,
+        subscribe: false,
+        setData(value, index){
+            this.selected_items[index] = JSON.parse(JSON.stringify(value));
+        },
+        getSubscriptionPrice(){
+            let price = 0;
+            this.selected_items.forEach((item) => {
+                const selected_delivery_plan = item.selling_plan_allocations[this.selected_selling_plan_index];
+                if(selected_delivery_plan){
+                    price += selected_delivery_plan.price;
+                }
+            });
+            return price;
+        },
+        
+        getOneTimePrice(){
+            let price = 0;
+            this.selected_items.forEach((item) => {
+                price += item.price;
+            });
+
+            return price;
+        },
+
+        getBundlePrice(){
+            let price = 0;
+            this.selected_items.forEach((item) => {
+                const selected_delivery_plan = item.selling_plan_allocations[this.selected_selling_plan_index];
+                if(this.subscribe && selected_delivery_plan){
+                    price += selected_delivery_plan.price;
+                }else{
+                    price += item.price;
+                }
+            });
+
+            return price;
+        },
+        addToCart(){
+            const originalText = this.$refs.addToCartButton.textContent;
+            this.$refs.addToCartButton.textContent = "Adding...";
+            setTimeout(() => {
+                this.$refs.addToCartButton.textContent = originalText;
+            }, 1000);
+
+            let formData = this.selected_items.map((item) => {
+                const selected_delivery_plan = item.selling_plan_allocations[this.selected_selling_plan_index];
+                if(this.subscribe && selected_delivery_plan){
+                    return {
+                        id: item.variant_id,
+                        selling_plan: selected_delivery_plan.id,
+                        quantity: this.qty,
+                        properties: {
+                            "_bundle": "true",
+                            "_isBundleBuilder": "true"
+                        }
+                    }
+                }else{
+                    return {
+                        id: item.variant_id,
+                        quantity: this.qty,
+                        properties: {
+                            "_bundle": "true",
+                            "_isBundleBuilder": "true"
+                        }
+                    }
+                }
+            });
+
+            if(this.extra_items.length > 0){
+                const extraFormData = this.extra_items.map((item) => {
+                    return {
+                        id: item,
+                        quantity: this.qty,
+                        properties: {
+                            "_bundle": "true",
+                            "_isBundleBuilder": "true"
+                        }
+                    }
+                });
+                formData = extraFormData.concat(formData);
+            }
+
+            console.log("formData: ", formData);
+
+            fetch(window.Shopify.routes.root + "cart/add.js", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({items: formData})
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                this.$dispatch("update-cart", { cart: data });
+                this.$dispatch("toggle-cart-drawer");
+            })  
+            .catch((error) => {
+                console.error("Error:", error);
+            }); 
+
+        }
+    }'>
+
+    {% if block.settings.show_price %}
+        <div class="bundle-price text-xl font-semibold flex gap-2 items-center">
+            <span x-text="Unick.formatMoney(getBundlePrice())" :class="bundle_compare_price > getBundlePrice() ? 'text-red-700' : ''"></span>
+            <s x-show="bundle_compare_price > getBundlePrice()" class="bundle-price__compare text-gray-700" x-text="Unick.formatMoney(bundle_compare_price)"></s>
+        </div>
+    {% endif %}
+
+    {% if block.settings.show_subscription %}
+        <div class="bundle-buy-button__subscription mt-6">
+            <div class="bundle-subscription relative bg-white rounded-sm mb-3">
+                <label for="onetime-purchase_{{ block.id }}" 
+                    :class="{ 'bg-[#efefef]': !subscribe }"
+                    @click="subscribe = false"
+                    class="flex items-center rounded-tl-sm rounded-tr-sm relative border px-3 py-2 cursor-pointer focus:outline-none onetime-purchase-option bg-[#efefef]">
+                    <input type="radio" 
+                        name="purchase-option" 
+                        :checked="!subscribe"
+                        value="onetime" 
+                        id="onetime-purchase_{{ block.id }}" 
+                        class="h-4 w-4 mt-0.5 cursor-pointer text-black border-gray-600 focus:ring-black" 
+                        aria-labelledby="Onetime purchase" 
+                        aria-describedby="Onetime purchase option" 
+                        data-gtm-form-interact-field-id="1">
+
+                    <div class="ml-3 flex flex-col">
+                        <span class="block text-base font-semibold">
+                            {{ settings.onetime_title }}
+                        </span>
+                    </div>
+
+                    <span class="ml-auto font-semibold single-price">
+                        <span class="money" :class="bundle_compare_price > getOneTimePrice() ? 'text-red-700' : ''">
+                            <span x-text="Unick.formatMoney(getOneTimePrice())"></span>
+                        </span>
+                        <template x-if="bundle_compare_price > getOneTimePrice()">
+                            <s class="text-gray-500">
+                                <span x-text="Unick.formatMoney(bundle_compare_price)"></span>
+                            </s>
+                        </template>
+                    </span>
+
+                </label>
+
+                <label for="subscription-purchase_{{ block.id }}" 
+                    :class="{ 'bg-[#efefef]': subscribe }" 
+                    @click="subscribe = true"
+                    class="flex items-center flex-col rounded-bl-sm rounded-br-sm relative border px-3 py-2 cursor-pointer focus:outline-none subscription-purchase-option">
+                    
+                    <div class="flex justify-between items-center w-full">
+                        <input type="radio" name="purchase-option" id="subscription-purchase_{{ block.id }}" 
+                         class="h-4 w-4 mt-0.5 cursor-pointer text-black border-gray-600 focus:ring-black" aria-label="Subscription option">
+                        <div class="ml-3 flex flex-col">                   
+                            <span class="text-base font-semibold text-left subscription-discount-dynamic">
+                                {{ settings.subscription_title }}
+                            </span>
+
+                            <span class="text-sm font-medium text-left discount-text hidden">
+                                <p>Subscribe to get 25% off forever</p>
+                            </span>
+                        </div>
+                
+                        <span class="ml-auto font-semibold subscription-option text-right flex gap-2">
+                            <span class="has-bundle" :class="bundle_compare_price > getSubscriptionPrice() ? 'text-red-700' : ''">
+                                <span x-text="Unick.formatMoney(getSubscriptionPrice())"></span>
+                            </span>
+                            <s class="text-gray-500" x-show="bundle_compare_price > getSubscriptionPrice()">
+                                <span x-text="Unick.formatMoney(bundle_compare_price)"></span>
+                            </s>
+                        </span>
+            
+                    </div>
+            
+                    <div class="w-full">
+                        <div class="subscription-benefits p-5 w-full">
+                            <div class="grid grid-cols-2 gap-4">
+                                {% if settings.benefit1_icon != blank %}
+                                    <div class="flex gap-2 items-center">
+                                        {% render 'img-thumb', image: settings.benefit1_icon, class: 'object-contain w-8 h-8' %}
+
+                                        {% assign p_tags = product.tags | downcase %}
+                                        {% if p_tags contains "flag: 30% off" and p_tags contains "bundles" %}
+                                            <span class="text-sm">
+                                                {{ settings.benefit1_netsuite }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-sm">
+                                                {{ settings.benefit1 }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if settings.benefit2_icon != blank %}
+                                    <div class="flex gap-2 items-center">
+                                        {% render 'img-thumb', image: settings.benefit2_icon, class: 'object-contain w-8 h-8' %}
+                                        <span class="text-sm">
+                                            {{ settings.benefit2 }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                {% if settings.benefit3_icon != blank %}
+                                    <div class="flex gap-2 items-center">
+                                        {% render 'img-thumb', image: settings.benefit3_icon, class: 'object-contain w-8 h-8' %}
+                                        <span class="text-sm">
+                                            {{ settings.benefit3 }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                {% if settings.benefit4_icon != blank %}
+                                    <div class="flex gap-2 items-center">
+                                        {% render 'img-thumb', image: settings.benefit4_icon, class: 'object-contain w-8 h-8' %}
+                                        <span class="text-sm">
+                                            {{ settings.benefit4 }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                
+                        <div x-show="subscribe" class="subscription-selector-placeholder w-full" style="display: none;">
+                            <div class="subscription-select px-3 rounded-sm mt-3">
+                                <div x-show="subscribe" id="bundle-subscription-selector" style="display: none;"><div>
+                                    <label for="bundle-subscription-select" class="my-2 font-medium block move-this">
+                                        {{ settings.delivery_title }}
+                                    </label>
+
+                                    <select 
+                                        x-model="selected_selling_plan_index" 
+                                        id="bundle-subscription-select" 
+                                        class=" text-black mb-3 w-full focus:ring-black focus:outline-none focus:border-black"> 
+                                        <option value="0">Every 1 month</option>
+                                        <option value="1">Every 2 months</option>
+                                        <option value="2">Every 3 months</option>
+                                        <option value="3">Every 6 months</option>
+                                    </select>
+                                
+                                </div>
+                                {% if settings.subscription_message != blank %}
+                                    <div class="subscription-message text-sm pb-2 font-medium">
+                                        {{ settings.subscription_message }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </label>
+            </div>
+        </div>  
+    {% endif %}
+
+    <div class="bundles-wrapper flex flex-col gap-2 divide-y divide-gray-400 my-3">
+        {% for bundle_category in (1..4) %}
+            {% assign bundle_category_title = 'bundle_category_' | append: forloop.index | append: '_title' %}
+            {% assign bundle_category_product = 'bundle_category_' | append: forloop.index | append: '_products' %}
+            {% assign bundle_category_discount = 'bundle_category_' | append: forloop.index | append: '_discount' %}
+            {% assign category_index = forloop.index0 %}
+
+            {% if block.settings[bundle_category_title] != blank and block.settings[bundle_category_product] != blank %}
+                <div class="bundle-category pt-2">
+                    <div class="bundle-category__title text-sm">
+                        {{ block.settings[bundle_category_title] }}
+                    </div>
+                    <span class="bundle-item__title font-semibold leading-[1.2]" x-text="selected_items[{{category_index}}]?.title"></span>
+                    <div class="mt-1 w-full py-1 flex flex-wrap gap-3 buy-button-wrapper">
+                        {% for item in block.settings[bundle_category_product] %}
+                            {% assign item_price = item.first_available_variant.price %}
+                            {% assign discount_percentage = block.settings[bundle_category_discount] | default: 0 | times: 1 %}
+
+                            {% if discount_percentage > 0 %}
+                                {% assign discount_multiplier = 100 | minus: discount_percentage %}
+                                {% assign item_price = item_price | times: discount_multiplier | divided_by: 100 %}
+                                {% assign item_price = item_price | round: 2 %}
+                            {% endif %}
+
+                            <button 
+                                {% if forloop.first %}
+                                    x-init='$nextTick(() => {
+                                        setData({
+                                            "id": {{ item.id }},
+                                            "title": {{ item.title |  json }},
+                                            "variant_id": {{ item.first_available_variant.id }},
+                                            "price": {{ item_price }},
+                                            "selling_plan_allocations": [
+                                                {% for plan in item.first_available_variant.selling_plan_allocations %}
+                                                    {
+                                                        "id": {{ plan.selling_plan.id  }},
+                                                        "price": {{ plan.price_adjustments[0].price  }},
+                                                        "name": {{ plan.selling_plan.name | json }}
+                                                    }{% unless forloop.last %},{% endunless %}
+                                                {% endfor %}
+                                            ],
+                                            "url": "{{ item.url }}",
+                                            "image": "{{ item.featured_image | img_url: '200x' }}"
+                                        }, {{ category_index }});
+                                    })'
+                                {% endif %}
+                                class="border"
+                                :class="selected_items[{{ category_index }}]?.id == {{ item.id }} ? 'border-black' : ''"
+                                @click='setData({
+                                                "id": {{ item.id }},
+                                                "title": {{ item.title |  json }},
+                                                "variant_id": {{ item.first_available_variant.id }},
+                                                "price": {{ item_price }},
+                                                "selling_plan_allocations": [
+                                                    {% for plan in item.first_available_variant.selling_plan_allocations %}
+                                                        {
+                                                            "id": {{ plan.selling_plan.id  }},
+                                                            "price": {{ plan.price_adjustments[0].price  }},
+                                                            "name": {{ plan.selling_plan.name | json }}
+                                                        }{% unless forloop.last %},{% endunless %}
+                                                    {% endfor %}
+                                                ],
+                                                "url": "{{ item.url }}",
+                                                "image": "{{ item.featured_image | img_url: '200x' }}"
+                                                }, {{ category_index }})'
+                                type="button">
+                                <img src="{{ item.featured_image | img_url: '200x' }}" alt="{{ item.title }}" class="w-12 h-12" />
+                            </button>
+                        {% endfor %}    
+                    </div>
+
+                </div>
+            {% endif %}
+        
+        {% endfor %}
+    </div>
+
+    <div id="addToCartPlaceholder"></div>
+
+    <div class="bundle-buy-button__add-to-cart flex items-center gap-4">
+        {% if block.settings.show_qty %}
+            <div class="product-form__qty flex w-48">
+                <button @click="qty > 1 ? qty-- : qty = 1" class="quantity__button no-js-hidden text-center cursor-pointer p-1 border border-gray-600 w-4/12 rounded-l-sm" name="minus" type="button">
+                    &minus;
+                </button>
+                <input class="quantity__input text-center bg-white border-t border-b border-r-0 border-l-0 border-gray-600 w-4/12" type="text" name="quantity" aria-label="Qty*" x-model="qty" min="1" value="1">
+                <button @click="qty++" class="quantity__button no-js-hidden text-center cursor-pointer  p-1 border border-gray-600 w-4/12 rounded-r-sm" name="plus" type="button">
+                    &plus;
+                </button>
+            </div>
+        {% endif %}
+        <button type="button" 
+            @click="addToCart()"
+            x-ref="addToCartButton"
+            class="button  button--primary button-add-to-cart w-full font-bold">
+            {{ 'products.product.add_to_cart' | t }}
+        </button>
+
+    </div>
+
+</div>

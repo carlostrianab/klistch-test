@@ -1,0 +1,221 @@
+{% if block.settings.products != blank %}
+    <div class="bundle-together {{ block.settings.title | handleize }} {{ block.id }} border p-2 md:p-4 {% if block.settings.visually_hidden %} hidden {% endif %}" 
+        x-title="Bundle Together"
+        @discount-percentage.window="$nextTick(() => {
+            discount_percentage = $event.detail?.percentage || 0;
+        })"
+        x-init="$watch('selected', value => {
+
+            if (value.length != total_items) {
+                discount_percentage = 0;
+            }else{
+                discount_percentage = {{ block.settings.discount_percentage |  default: 0 | times: 1 }};
+            }
+
+             {% if settings.discount_table != blank %}
+                const cookieDiscount = Unick.getCookie('discount_code');
+                if(cookieDiscount){
+                    const discount = discount_table.find((item) => {
+                        return item.toLowerCase().includes(cookieDiscount.toLowerCase());
+                    });
+                    const discountValue = discount?.split(':')[1] || 0;
+                    discount_percentage += parseInt(discountValue);
+                }
+            {% endif %}
+        })"
+        x-data="{
+            {% if settings.discount_table != blank %}
+                discount_table: JSON.parse(JSON.stringify(`{{ settings.discount_table }}`)).split(','),
+            {% endif %}
+            renderPrice(price){
+                let total = price;
+                if(this.discount_percentage > 0){
+                    total = price - (price * (this.discount_percentage / 100));
+                }
+                return Unick.formatMoney(total);
+            },
+            selected: [],
+            fixed_product: {{ block.settings.fixed_bundle.first_available_variant.id |  default: false }},
+            discount_percentage: {{ block.settings.discount_percentage |  default: 0 | times: 1 }},
+            total_items: {{ block.settings.products.count }},
+            add(item) {
+                this.selected.push(item)
+            },
+            remove(id) {
+                this.selected = this.selected.filter(item => item.id !== id)
+            },
+            isInBundle(id) {
+                return this.selected.some(item => item.id === id)
+            },
+            priceBeforeDiscount(){
+                let total = 0;
+                this.selected.forEach(function (item) {
+                    total += item.price;
+                })
+                return total;
+            },
+
+            totalPrice(){
+                let total = 0;
+
+                this.selected.forEach(function (item) {
+                    total += item.price;
+                })
+
+                total = total - (total * (this.discount_percentage / 100));
+
+                let extraDiscount = 0;
+                 {% if settings.enable_tag_discount %}
+                    let discount = 0;
+                    this.selected.forEach(function (item) {
+                        item.tags.forEach(function (tag) {
+                            if(tag.includes('discount:') || tag.includes('Discount:') || tag.includes('discount: ') || tag.includes('Discount: ')){
+                                discount = tag.split(':')[1];
+                            }
+                        })
+                    })
+                    if(discount > 0){
+                        extraDiscount = total * (discount / 100);
+                    }
+                {% endif %}
+
+                return total - extraDiscount;
+
+            },
+
+            addToCart(){
+
+                let cartObj = [];
+                let bundleTitle = '{{ product.title | escape }}';
+                let bundleHandle = '{{ product.handle | escape }}';
+                let bundleCount = '{{ block.settings.products.count }}';
+                let bundleQty = 1;
+                let index = 0;
+                
+                this.selected.forEach(function (item) {
+                    cartObj.push({
+                        quantity: 1,
+                        id: item.variants[0].id,
+                        properties: {
+                            '_fbt_bundle': bundleTitle,
+                            '_fbt_bundle_handle': bundleHandle,
+                            '_fbt_bundle_count': bundleCount,
+                        }
+                    })
+                })
+
+                if(this.fixed_product && this.total_items == this.selected.length){
+                    cartObj = [];
+                    cartObj.push({
+                        quantity: 1,
+                        id: this.fixed_product,
+                    })
+                }
+
+                fetch(routes.cart_add_url + '.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        items: cartObj
+                    })
+                })
+                .then(response => {
+                    // Update cart with event dispatch
+                    this.$dispatch('update-cart', { cart: response });
+                    // Open cart after adding product
+                    this.$dispatch('toggle-cart-drawer');
+                });
+                
+            }
+        }">
+
+        {% if block.settings.title != blank %}
+            <h2 class="mb-4 font-bold">
+                {{ block.settings.title | escape }}
+            </h2>
+        {% endif %}
+
+        <div class="bundle-together-product " x-show="selected.length > 0">
+            <div class="flex flex-wrap gap-y-2">
+                <template x-for="(item, index) in selected" :key="index">
+                    <div class="flex items-center">
+                        <img :src="item.featured_image" height="58" width="58" :alt="item.title" class="border border-black w-14 md:w-[4.5rem]">
+                        <span class="mx-1 md:mx-2 text-base" x-show="index < selected.length - 1">+</span>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex items-center gap-1 text-center my-3 font-semibold">
+                <span class="">Total price: </span>
+                <span x-text="Unick.formatMoney(totalPrice());" :class="{ 'text-red-600': discount_percentage > 0 }"></span>
+                <s class="text-gray-700 " x-show="discount_percentage > 0" x-text="Unick.formatMoney(priceBeforeDiscount());"></s>
+            </div>
+
+            {% if block.settings.promo_text != blank %}
+                <style>
+                    .promo_text_{{ block.id }} * {
+                        color: {{ block.settings.promo_text_color }} !important;
+                    }
+                </style>
+                <div class="promo_text_{{ block.id }} prose mb-2">
+                    {{ block.settings.promo_text }}
+                </div>
+            {% endif %}
+
+            <button @click="addToCart()" type="button" class="button button--primary button-add-to-cart relative rounded-sm !font-bold">
+                {{ block.settings.button_text }}
+            </button>
+
+        </div>
+
+
+        <div class="bundle-together-product-list space-y-3 mt-4" 
+            x-data="{
+            }">
+            {% for item in block.settings.products %}
+                <div class="flex gap-3 items-center text-sm font-medium">
+                    <input type="checkbox" 
+                        aria-label="Add {{ item.title }} to bundle"
+                        id="{{ item.title | handleize }}"
+                        checked
+                        x-init="add({{ item | json | escape }}); "
+                        @change="isInBundle({{ item.id }}) ? remove({{ item.id }}) : add({{ item | json | escape }})"
+                        value="{{ item.first_available_variant.id }}"
+                        class="focus:ring-black h-4 w-4  border-gray-300 rounded text-[#ba7d75]">
+                        {{ item.title }} 
+                        <span class="no-underline ml-auto text-right min-w-28">
+
+                            {% assign has_discount = false %}
+                            {% for tag in item.tags %}
+                                {% if tag contains "discount:" %}
+                                    {% assign discount_percentage = tag | split: ':' | last | plus: 0 %}
+                                    {% assign discount_price = item.price | times: discount_percentage | divided_by: 100 %}
+                                    {% assign has_discount = true %}
+                                {% endif %}
+                            {% endfor %}
+
+
+                            {% if has_discount and settings.enable_tag_discount %}
+                                <div class="flex gap-2">
+                                    <span class="text-red-600">{{ item.price | minus: discount_price | money }}</span>
+                                    <s class="line-through">{{ item.price | money }}</s>
+                                </div>
+                            {% else %}
+                                <span :class="{ 'text-red-600': discount_percentage > 0 }" 
+                                    x-text="renderPrice({{ item.price }})">
+                                    {{ item.price | money }}
+                                </span>
+                                <s class="line-through" x-show="discount_percentage > 0">
+                                    {{ item.price | money }}
+                                </s>
+                            {% endif %}
+
+                        </span>
+                </div>
+            {% endfor %}
+        </div>
+    
+    </div>
+{% endif %}

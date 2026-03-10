@@ -1,0 +1,507 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "b098b13b-15c0-4532-879d-9e4c2d6cde63": {
+      "type": "image-banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify:\/\/shop_images\/HeroBanner-desktop-static-3200x1200px.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify:\/\/shop_images\/HeroBanner-mobile-static-1600x1400px_1.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 1,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540
+      }
+    },
+    "ceda7a35-055b-4054-a92e-18cb4417b5a7": {
+      "type": "rich-text",
+      "blocks": {
+        "template--15839347146933__ceda7a35-055b-4054-a92e-18cb4417b5a7-168788011091c5710b-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "United for a Cleaner Tomorrow",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 30,
+            "text_align": "text-center",
+            "font": "font-heading",
+            "font_weight": "font-normal",
+            "font_size_mobile": 30,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "template--15839347146933__ceda7a35-055b-4054-a92e-18cb4417b5a7-168788011091c5710b-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Here at Kitsch, creating exceptional beauty products is just the beginning. <strong>We're on a mission to make a difference<\/strong>. With 4ocean, we've found a partner who shares our commitment to a cleaner, healthier planet. <br\/><br\/><\/p><p>Through our partnership, <strong>for every shampoo or conditioner bar you purchase, 4ocean will pull the equivalent of 1 shampoo bottle worth of plastic from our oceans and coastlines<\/strong>. With billions of pounds of plastic entering the ocean each year, every bar makes a difference. <\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "template--15839347146933__ceda7a35-055b-4054-a92e-18cb4417b5a7-168788011091c5710b-0",
+        "template--15839347146933__ceda7a35-055b-4054-a92e-18cb4417b5a7-168788011091c5710b-1"
+      ],
+      "custom_css": [
+        "h2 {color: #1c3d60;}",
+        "@media (max-width: 576px) {.rich-text__blocks {padding-left: 1rem; padding-right: 1rem; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#e5f1f5",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "a41db907-b7fa-4005-8a82-0c44d9957253": {
+      "type": "image-grid",
+      "blocks": {
+        "af6087b3-a827-4373-9c1e-436b818522ea": {
+          "type": "image",
+          "settings": {
+            "title": "",
+            "image": "shopify:\/\/shop_images\/4ocean-Media-48-1080px.jpg",
+            "link": ""
+          }
+        },
+        "e40258b3-63ca-46eb-bc49-1ea69de69747": {
+          "type": "image",
+          "settings": {
+            "title": "",
+            "image": "shopify:\/\/shop_images\/Rectangle_4_7071e51f-283b-496b-9dca-9f5bed00951d.png",
+            "link": ""
+          }
+        },
+        "c57fe30c-3b3d-4085-aadb-2c0e7980998f": {
+          "type": "image",
+          "settings": {
+            "title": "",
+            "image": "shopify:\/\/shop_images\/4ocean-Media-27-1080px.jpg",
+            "link": ""
+          }
+        },
+        "1bf383c4-c78c-4e86-abdf-4a0fe5e667fd": {
+          "type": "image",
+          "settings": {
+            "title": "",
+            "image": "shopify:\/\/shop_images\/4ocean-Media-28-1080px.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "af6087b3-a827-4373-9c1e-436b818522ea",
+        "e40258b3-63ca-46eb-bc49-1ea69de69747",
+        "c57fe30c-3b3d-4085-aadb-2c0e7980998f",
+        "1bf383c4-c78c-4e86-abdf-4a0fe5e667fd"
+      ],
+      "custom_css": [
+        ".image-grid {background-color: #e5f1f5; padding-top: 0; padding-bottom: 0;}",
+        ".grid {gap: 0.3rem; max-width: 670px; margin: 0 auto;}"
+      ],
+      "settings": {
+        "full_width": true,
+        "title": "",
+        "grid_desktop": "lg:grid-cols-4",
+        "grid_tablet": "md:grid-cols-2",
+        "grid_mobile": "grid-cols-2",
+        "class": ""
+      }
+    },
+    "244bab9d-a77a-4ad7-845b-927bd06df942": {
+      "type": "rich-text",
+      "blocks": {
+        "c148ae5e-5e7c-46de-8f6c-40883c46b029": {
+          "type": "heading",
+          "settings": {
+            "heading": "Cleaner Oceans, Brighter Future",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 30,
+            "text_align": "text-center",
+            "font": "font-heading",
+            "font_weight": "font-normal",
+            "font_size_mobile": 30,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "a27af366-b4cc-4629-b4db-d3a27b9d2b9b": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Did you know? <br\/><\/strong><br\/>Over 18 billion pounds of plastic enter the ocean each year. By choosing Kitsch, you're actively contributing to reducing that number. <br\/><br\/>Every shampoo and conditioner purchase have a direct impact, enabling the <strong>removal of over 233,000 pounds of trash<\/strong> from the world’s oceans & coastlines. <br\/><br\/>With the support of individual consumers, Kitsch and 4ocean will <strong>remove the equivalent of over 1.5 million plastic shampoo bottles <\/strong>from the oceans, rivers, and coastlines through this Buy One\/Pull One campaign.<\/p><p><\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "c148ae5e-5e7c-46de-8f6c-40883c46b029",
+        "a27af366-b4cc-4629-b4db-d3a27b9d2b9b"
+      ],
+      "custom_css": [
+        "h2 {color: #1c3d60;}",
+        "@media (max-width: 576px) {.rich-text__blocks {padding-left: 1rem; padding-right: 1rem; }}"
+      ],
+      "settings": {
+        "container": "full-width",
+        "background_color": "#e5f1f5",
+        "text_color": "#000000",
+        "max_width": 540,
+        "padding_top": 32,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "video_xX6i4X": {
+      "type": "video",
+      "settings": {
+        "title": "",
+        "align_text": "text-center",
+        "font_size": 24,
+        "font_size_mobile": 18,
+        "bg_color": "#e5f1f5",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "video_url": "",
+        "custom_video": "https:\/\/cdn.shopify.com\/videos\/c\/o\/v\/794fc1461a394af290d8a808c271cb3a.mp4",
+        "autoplay": false,
+        "force_audio_play": false,
+        "enable_controls": true,
+        "loop": false,
+        "muted": false,
+        "video_width": 660,
+        "video_height": 460,
+        "video_height_mobile": 310
+      }
+    },
+    "e85d2f8a-84cf-422f-ad1f-3d189f461895": {
+      "type": "rich-text",
+      "blocks": {
+        "4fcb4b09-0b9a-4efa-b80b-395d33f1d251": {
+          "type": "heading",
+          "settings": {
+            "heading": " Your Favorite Bars",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 30,
+            "text_align": "text-center",
+            "font": "font-heading",
+            "font_weight": "font-normal",
+            "font_size_mobile": 30,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "5f259182-cc73-4432-be3a-4e25fbd6cea8": {
+          "type": "heading",
+          "settings": {
+            "heading": "Impacting More than Your Beauty Routine",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 30,
+            "text_align": "text-center",
+            "font": "font-heading",
+            "font_weight": "font-semibold",
+            "font_size_mobile": 30,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "4fcb4b09-0b9a-4efa-b80b-395d33f1d251",
+        "5f259182-cc73-4432-be3a-4e25fbd6cea8"
+      ],
+      "custom_css": [
+        "h2 {color: #1c3d60;}",
+        "@media (max-width: 576px) {.rich-text__blocks {padding-left: 1rem; padding-right: 1rem; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#e5f1f5",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 22,
+        "padding_bottom": 22,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "ae36582c-db7b-4741-b832-8004d5f183ba": {
+      "type": "image-banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify:\/\/shop_images\/image_1.png",
+        "max_height": 720,
+        "image_mobile": "shopify:\/\/shop_images\/mobile_text_below.png",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 1,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540
+      }
+    },
+    "4fa18ca4-fa1e-468b-b4ad-8ef622721604": {
+      "type": "rich-text",
+      "blocks": {
+        "e4770915-fed3-46b4-8700-5eda4dec6b0e": {
+          "type": "text",
+          "settings": {
+            "text": "<p>With our best-selling <strong>Bottle-Free Beauty® <\/strong>Bars<strong> <\/strong>we're making sustainability effortless. When you choose <strong>Kitsch<\/strong>, you're not just choosing high-quality beauty products – you're choosing a brand that takes on the burden of sustainability, for you. <br\/><br\/>We're committed to reducing plastic packaging, using recycled materials, and fostering partnerships like the one we have with <strong>4ocean<\/strong>. Every purchase you make contributes to our shared goal of cleaner oceans & coastlines, proving that even small decisions in your beauty routine can lead to big impacts around the world. <br\/><br\/>Transform your routine knowing each use is a step towards a more sustainable world.<\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "e4770915-fed3-46b4-8700-5eda4dec6b0e"
+      ],
+      "custom_css": [
+        "h2 {color: #1c3d60;}",
+        "@media (max-width: 576px) {.rich-text__blocks {padding-left: 1rem; padding-right: 1rem; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#e5f1f5",
+        "text_color": "#000000",
+        "max_width": 540,
+        "padding_top": 32,
+        "padding_bottom": 30,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "products_slider_Vqy9dQ": {
+      "type": "products-slider",
+      "settings": {
+        "container": "page-width",
+        "heading": "",
+        "sub_heading": "",
+        "heading_label": "",
+        "collection": "kitsch-x-4ocean",
+        "product_list": [],
+        "products_to_show": 9,
+        "show_view_all": false,
+        "button": "",
+        "button_link": "",
+        "image_ratio": "aspect-auto",
+        "show_secondary_image": false,
+        "image_loading": "lazy",
+        "show_vendor": false,
+        "show_add_to_cart": true,
+        "show_sold_count": false,
+        "show_rating": true,
+        "slider_mode": false,
+        "show_arrows": false,
+        "slider_desktop": 4,
+        "slider_tablet": 3,
+        "slider_mobile": 2,
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-2",
+        "grid_mobile": "grid-cols-1",
+        "font_size": 36,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 30,
+        "text_align_mobile": "text-left",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "3a2ee00e-797c-4c54-897f-4006f15ab1d5": {
+      "type": "rich-text",
+      "blocks": {
+        "18bcc1b2-78f7-4702-a4ff-ebee0dedf1aa": {
+          "type": "heading",
+          "settings": {
+            "heading": "Dive Deeper with Kitsch x 4ocean",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 30,
+            "text_align": "text-center",
+            "font": "font-heading",
+            "font_weight": "font-normal",
+            "font_size_mobile": 30,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "5c9462f2-6571-4257-91b7-b8c2d1254c3a": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Ready to Make Waves?<\/strong><br\/><br\/>We're just at the beginning of this journey and we'd love for you to join us. There's a myriad of ways to get involved and support our mission. <br\/><br\/>Share the news of our partnership, shop our sustainable <strong>Bottle-Free Beauty®<\/strong> Bars*, or simply spread the word about the importance of ocean conservation. Every action counts. <br\/><br\/><strong>Let's make waves together.<\/strong><\/p><p>*Nine shampoo\/conditioner bars equal one pound of plastic removed from the oceans, rivers, and coastlines of the world.<\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "18bcc1b2-78f7-4702-a4ff-ebee0dedf1aa",
+        "5c9462f2-6571-4257-91b7-b8c2d1254c3a"
+      ],
+      "custom_css": [
+        "h2 {color: #1c3d60;}",
+        "@media (max-width: 576px) {.rich-text__blocks {padding-left: 1rem; padding-right: 1rem; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#e5f1f5",
+        "text_color": "#000000",
+        "max_width": 540,
+        "padding_top": 44,
+        "padding_bottom": 24,
+        "margin_top": 24,
+        "margin_bottom": 0
+      }
+    },
+    "3f76ed72-9344-46ff-be11-2462e975514c": {
+      "type": "custom-liquid",
+      "custom_css": [
+        ".social_icons {background-color: #e5f1f5;}"
+      ],
+      "settings": {
+        "container": "full-width",
+        "custom_liquid": "<div class=\"social_icons flex justify-center gap-4 py-5\">\n  <a href=\"https:\/\/www.facebook.com\/mykitsch\">\n    <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0104\/6904\/8384\/files\/Social-facebook.png?v=1687893163\" alt=\"Facebook page\" class=\"w-12\">\n  <\/a>\n\n  <a href=\"https:\/\/www.pinterest.com.au\/MyKitsch\/\">\n    <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0104\/6904\/8384\/files\/Social-pinterest.png?v=1687893164\" alt=\"Pinterest page\" class=\"w-12\">\n  <\/a>\n\n  <a href=\"https:\/\/www.instagram.com\/mykitsch\">\n    <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0104\/6904\/8384\/files\/Social-instagram.png?v=1687893164\" alt=\"Instagram page\" class=\"w-12\">\n  <\/a>\n\n  <a href=\"https:\/\/www.tiktok.com\/@kitsch\">\n    <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0104\/6904\/8384\/files\/Social-tiktok.png?v=1687893164\" alt=\"Tiktok page\" class=\"w-12\">\n  <\/a>\n<\/div>",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "4f2a872e-5487-42a4-a6cd-383241fa292c": {
+      "type": "custom-liquid",
+      "custom_css": [
+        ".signup-form {max-width: 550px; margin: 0 auto;}",
+        ".signup-form button {padding-left: 2rem !important; padding-right: 2rem !important;}",
+        "@media (max-width: 576px) {.signup-form {padding-left: 0.5rem; padding-right: 0.5rem; }}"
+      ],
+      "settings": {
+        "container": "full-width",
+        "custom_liquid": "<div style=\"background-color: #f3f3f3;\">\n<div class=\"signup-form\">\n<div class=\"klaviyo-form-SqGK7Y\"><\/div>\n<\/div>\n<\/div>",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "53f9ac5e-d0a4-4c21-9d88-2abacb623dc7": {
+      "type": "image-banner",
+      "custom_css": [
+        "img {max-width: 440px; padding-top: 2rem;}",
+        ".banner__media {display: flex; justify-content: center;}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "image": "shopify:\/\/shop_images\/badge.png",
+        "max_height": 650,
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 1,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540
+      }
+    },
+    "a78b6aa6-0540-41a3-b690-fec8ab58b09a": {
+      "type": "custom-liquid",
+      "settings": {
+        "container": "full-width",
+        "custom_liquid": "<style>\nfooter.footer.bg-\\[\\#f0f0f0\\].mt-8{\n margin-top: 0;\n}\n<\/style>",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    }
+  },
+  "order": [
+    "main",
+    "b098b13b-15c0-4532-879d-9e4c2d6cde63",
+    "ceda7a35-055b-4054-a92e-18cb4417b5a7",
+    "a41db907-b7fa-4005-8a82-0c44d9957253",
+    "244bab9d-a77a-4ad7-845b-927bd06df942",
+    "video_xX6i4X",
+    "e85d2f8a-84cf-422f-ad1f-3d189f461895",
+    "ae36582c-db7b-4741-b832-8004d5f183ba",
+    "4fa18ca4-fa1e-468b-b4ad-8ef622721604",
+    "products_slider_Vqy9dQ",
+    "3a2ee00e-797c-4c54-897f-4006f15ab1d5",
+    "3f76ed72-9344-46ff-be11-2462e975514c",
+    "4f2a872e-5487-42a4-a6cd-383241fa292c",
+    "53f9ac5e-d0a4-4c21-9d88-2abacb623dc7",
+    "a78b6aa6-0540-41a3-b690-fec8ab58b09a"
+  ]
+}

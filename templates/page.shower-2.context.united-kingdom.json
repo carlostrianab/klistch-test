@@ -1,0 +1,67 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "page.shower-2.json",
+  "context": {
+    "market": "united-kingdom"
+  },
+  "sections": {
+    "image_banner_xW3Dq": {
+      "type": "image-banner",
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/25OFF_desktop_collection.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/25OFF_mobile_collection.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "video_url": null,
+        "video_url_mobile": null,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "header-90ee4aa8c1a0274457eb6de9f7daee3e": null,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "header-ab8e0dc470f436eb2a1dd1c4fd780a4a": null,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "header-e0fa4158645b3e7e6c8e82d63496dbeb": null,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "header-750b55d7b549c59cef92db082bfcfd96": null,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "header-debec87e222dee2fe918a95b5af8f1cc": null,
+        "visibility": ""
+      },
+      "blocks": {},
+      "block_order": [],
+      "name": "Image banner"
+    }
+  },
+  "order": [
+    "image_banner_xW3Dq",
+    "main",
+    "custom_liquid_xPHdbR",
+    "collection_tabs_vertical_gHEigd"
+  ]
+}

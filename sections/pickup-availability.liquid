@@ -1,0 +1,45 @@
+
+<div class="pickup-availability-container">
+  {%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+  {%- if pick_up_availabilities.size > 0 -%}
+    <!-- Availability summary -->
+    <div class="pickup-availability-information text-sm flex gap-x-2 items-start">
+      {%- assign closest_location = pick_up_availabilities.first -%}
+      {%- if closest_location.available -%}
+        {% render 'icon-checkmark', class: 'w-4 h-4 text-green-600 pt-1' %}
+      {%- else -%}
+        {% render 'icon-close', class: 'w-4 h-4 text-red-700 pt-1' %}
+      {%- endif -%}
+
+      <div class="pickup-availability-information-container space-y-1">
+        {%- if closest_location.available -%}
+          <p class="pickup-availability-information__title">
+            {{ 'products.product.pickup_availability.pick_up_available_at_html' | t: location_name: closest_location.location.name }}
+          </p>
+          <p class="pickup-availability-information__stock pickup-availability-small-text">
+            {{ closest_location.pick_up_time }}
+          </p>
+          <button @click="$dispatch('show-pickup-availability')" class="pickup-availability-information__button underline">
+            {%- if pick_up_availabilities.size == 1 -%}
+              {{ 'products.product.pickup_availability.view_store_info' | t }}
+            {%- else -%}
+              {{ 'products.product.pickup_availability.check_other_stores' | t }}
+            {%- endif -%}
+          </button>
+        {%- else -%}
+          <p class="pickup-availability-information__title">
+            {{ 'products.product.pickup_availability.general.pick_up_unavailable_at_html' | t: location_name: closest_location.location.name }}
+          </p>
+          {%- if pick_up_availabilities.size > 1 -%}
+            <button @click="$dispatch('show-pickup-availability')" class="pickup-availability-information__button underline">
+              {{ 'products.product.pickup_availability.check_other_stores' | t }}
+            </button>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+      
+    </div>
+  {%- endif -%}
+</div>
+
+

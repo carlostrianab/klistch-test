@@ -1,0 +1,187 @@
+{% layout none %}
+{% assign template.name = 'product' %}
+
+<div class="quick-shop-product p-6">
+  <div class="grid gap-8 md:grid-cols-2">
+    <!-- Product Media Gallery -->
+    <div class="product__media-wrapper relative">
+      <div x-title="ProductGallery" 
+        class="flex gap-4"
+        x-init="$nextTick(() => {
+          setTimeout(() => {
+            mainSliderInit();
+          }, 200);
+          
+          $watch('thumbHeight', (value) => {
+            $refs.product_thumb.style.height = value + 'px';
+            // mobile
+            if(window.innerWidth < 768){
+              $refs.ProductGallery.parentElement.parentElement.style.minHeight = value + 'px';
+            }
+            thumbSliderInit();
+          });
+
+          $refs.product_thumb.querySelectorAll('.keen-slider__slide').forEach((el) => {
+            el.classList.remove('!min-h-[116px]');
+          });
+        })"
+        @resize.window.debounce="thumbSliderInit();"
+        x-data="{
+          thumbHeight: 400,
+          thumbSliderInit(){
+            let product_thumb = new KeenSlider(this.$refs.product_thumb, {
+              vertical: true,
+              loop: true,
+              slides: {
+                perView: 10,
+                spacing: 16
+              },
+              created: () => {
+                $refs.product_thumb.classList.remove('gap-4');
+              }
+            },[UnickThumbnailPlugin(ProductGallery)]);
+          },
+
+          mainSliderInit(){
+            let ProductGallery = new KeenSlider(this.$refs.ProductGallery, {
+              loop: true,
+              {% if section.settings.smaller_gallery_on_mobile %}
+              slides: {
+                perView: 1.15,
+                spacing: 8
+              },
+              breakpoints: {
+                '(min-width: 760px)': {
+                  slides: {
+                    perView: 1,
+                    spacing: 0
+                  }
+                },
+              },
+              {% endif %}
+              created: () => {
+                document.querySelectorAll('.product-single__media').forEach((el) => {
+                  el.classList.remove('opacity-0');
+                })
+              },
+            }, [UnickNavigationPlugin]);
+
+            window.ProductGallery = ProductGallery;
+
+            let observer = new ResizeObserver((entries) => {
+              entries.forEach((entry) => {
+                this.thumbHeight = entry.contentRect.height;
+              });
+            });
+            observer.observe(this.$refs.ProductGallery.querySelector('img'));
+          }
+        }">
+        
+        <!-- Thumbnails (Desktop) -->
+        <div class="product-media-thumb w-1/12 hidden md:block overflow-hidden">
+          <div class="keen-slider flex flex-wrap overflow-hidden md:h-[480px] lg:h-[690px] gap-4" x-ref="product_thumb">
+            {% for media in product.media %}
+              <button class="keen-slider__slide relative !min-h-fit" type="button" 
+                aria-label="{%- if media.media_type == 'image' -%}{{ 'products.product.media.load_image' | t: index: forloop.index }}{%- elsif media.media_type == 'model' -%}{{ 'products.product.media.load_model' | t: index: forloop.index }}{%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}{{ 'products.product.media.load_video' | t: index: forloop.index }}{%- endif -%}">
+                {% render 'img-small', image: media, class: 'object-cover w-full h-full' %}
+                {% if media.media_type == 'video' or media.media_type == 'external_video' %}
+                  <span class="absolute inset-0 text-white flex justify-center items-center">
+                    {% render 'icon-play-circle', class: 'w-8 h-8' %}
+                  </span>
+                {% endif %}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Main Gallery -->
+        <div class="w-full md:w-11/12 overflow-hidden min-h-[315px] relative">
+          <div class="keen-slider flex overflow-hidden" x-ref="ProductGallery">
+            {% for media in product.media %}
+              <div class="keen-slider__slide flex-shrink-0 {% if section.settings.smaller_gallery_on_mobile %} relative !w-5/6 md:!w-full {% else %} !min-h-full !max-h-full !min-w-full !max-w-full {% endif %}">
+                {% assign media_class = 'object-cover' %}
+                {% render 'product-media', 
+                  media: media, 
+                  index: forloop.index0,
+                  media_class: media_class, 
+                  media_loop: true, 
+                  media_autoplay: true %}
+                
+                {% if forloop.first %}
+                  {% render 'product-flags', product_item: product, class: '' %}
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product__info space-y-4">
+      <h2 class="text-2xl font-medium">{{ product.title }}</h2>
+
+      <!-- Rating -->
+      <a href="{{ product.url }}?anchor=reviews" class="inline-flex items-center gap-2">
+        {% render 'review-snippet', product: product %}
+      </a>
+
+      <!-- Price -->
+      <div class="price-wrapper font-semibold text-xl" role="status" id="product-price-selector" data-price="{{ product.selected_or_first_available_variant.price }}">
+        {% render 'price', product: product, use_variant: true %}
+      </div>
+        
+
+      {% render 'add-to-cart'
+        product: product,
+        show_qty: true,
+        show_dynamic_checkout: false,
+        product_form_id: 'QuickShopForm',
+        shopify_attributes: '',
+        show_subscription: true,
+        show_bundle_items: false,
+        dynamic_price: false,
+        quick_shop: true,
+        extra_products: product.metafields.custom.bogo_bundle.value
+      %}
+
+      <!-- View Full Details -->
+      <a href="{{ product.url }}" class="block button font-bold w-full text-center text-sm view-details-button" style="border: 1px solid var(--button-primary-background-color);">
+        view full details
+      </a>
+      <!-- Product Features -->
+      <div class="space-y-2 mt-6">
+        <div class="product__excerpt rte text-base font-medium prose text-black">
+          {% if product.excerpt %}
+            {{ product.excerpt | strip_html | truncate: 180, '' }}
+          {% else %}
+            {% if product.metafields.custom.product_description != blank %}
+              {{ product.metafields.custom.product_description | metafield_tag }}
+            {% else %}
+              {{ product.description | split: "[Why you'll love this]"| first }}
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-product-json>
+  {
+    "handle": {{ product.handle | json }},
+    "title": {{ product.title | json }},
+    "featured_image": {{ product.featured_image | img_url: '100x' | json }},
+    "tags": {{ product.tags | json }},
+    "metafields": {
+      "my_fields": {
+        "alternative_colors": {
+          "value": {{ product.metafields.my_fields.alternative_colors.value | json }}
+        }
+      },
+      "custom": {
+        "swatch_image": {{ product.metafields.custom.swatch_image | json }}
+      }
+    }
+  }
+</script>

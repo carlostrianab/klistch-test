@@ -1,0 +1,7 @@
+{% if settings.show_collection_banner %}
+    <div 
+        style="color: {{ settings.collection_banner_text_color }}; background-color: {{ settings.collection_banner_bg_color }};"
+        class="w-full py-1 bg-[#b47d75] text-white text-center">
+        {{ settings.collection_banner_message }}
+    </div>
+{% endif %}

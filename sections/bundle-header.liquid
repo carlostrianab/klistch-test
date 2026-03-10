@@ -1,0 +1,373 @@
+{% capture defaultBag %}
+    {% for i in (1..section.settings.empty_placeholder) -%}
+        { id: {{forloop.index}}, title: 'item', image: null, status: 'demo' }{% unless forloop.last %}, {% endunless %}
+    {%- endfor %}
+{% endcapture %}
+
+<div class="bunlde-header" 
+    style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}"
+    x-title="Bundle header"
+    @add-bundle.window="$nextTick(() => {
+        if(counter == minProducts){
+            counter--;
+            addProductToBundle($event.detail);
+        }else{
+            addProductToBundle($event.detail);
+        }
+    })"
+    @scroll.window="$nextTick(() => {
+        // var st = window.pageYOffset || document.documentElement.scrollTop; or mobile
+        let AddToCart = document.querySelector('.bundle-header__cta-top');
+        if(AddToCart?.getBoundingClientRect().top < 33 || window.innerWidth < 768){
+            showSticky = true;
+        }else{
+            showSticky = false;
+        }
+
+    })"
+    x-init="$watch('selectedProducts', (value) => {
+        if(value.length > 0){
+            bundleItems = value.filter(item => item.status != 'demo');
+            bundleTotal = bundleItems.length;
+            if(bundleItems.length > 0){
+                bundle_price = bundleItems.reduce((acc, item) => acc + item.price, 0);
+            }
+        }
+    })"
+    x-data="{
+        bundleItems: [],
+        bundleTotal: 1,
+        showSticky: false,
+        bundle_price: 0,
+        mainProduct: {
+            id: {{ section.settings.main_product.first_available_variant.id }},
+            title: '{{ section.settings.main_product.title }}',
+            image: '{{ section.settings.main_product.featured_image | img_url: '300x' }}',
+            price: {{ section.settings.main_product.price }},
+            selling_plan_id: {{ section.settings.main_product.first_available_variant.selling_plan_allocations[0].selling_plan.id |  default: 0 }},
+        },
+        selectedProducts: [{{defaultBag}}],
+        counter: 0,
+        minProducts: {{ section.settings.empty_placeholder }},
+        addProductToBundle(product){
+            this.selectedProducts[this.counter] = product;
+            this.counter++;
+        },
+        removeProductFromBundle(product_id){
+            const index = this.selectedProducts.findIndex(p => p.id === product_id);
+            if(index > -1){ this.selectedProducts.splice(index, 1); }
+            this.counter--;
+            if(this.selectedProducts.length < this.minProducts){
+                this.selectedProducts.push({ id: this.counter, title: 'item', image: null, status: 'demo' });
+            }
+        },
+        addToCart(){
+            let dataArray = [];
+            // push main product to selected products
+
+            if(this.mainProduct.selling_plan_id != 0){
+                dataArray.push({
+                    id: parseInt(this.mainProduct.id),
+                    quantity: 1,
+                    properties: {
+                        '_bundle': true,
+                        '_bundle_title': document.title.split('–')[0],
+                        '_bundle_handle': '{{ section.settings.main_product.handle }}',
+                        '_bundle_price': this.bundle_price,
+                        '_bundle_count': {{ section.settings.empty_placeholder | times: 1 }},
+                    },
+                    selling_plan: parseInt(this.mainProduct.selling_plan_id)
+                });
+            }else{
+                dataArray.push({
+                    id: parseInt(this.mainProduct.id),
+                    quantity: 1,
+                    properties: {
+                        '_bundle': true,
+                        '_bundle_title': document.title.split('–')[0],
+                        '_bundle_handle': '{{ section.settings.main_product.handle }}',
+                        '_bundle_price': this.bundle_price,
+                        '_bundle_count': {{ section.settings.empty_placeholder | times: 1 }},
+                    }
+                });
+            }
+
+            this.selectedProducts.forEach((item, index) => {
+                if(item.status != 'demo'){
+                   if(item.selling_plan_id != 0){
+                        dataArray.push({
+                            id: parseInt(item.id),
+                            quantity: 1,
+                            properties: {
+                                '_bundle': true,
+                                '_bundle_title': document.title.split('–')[0],
+                                '_bundle_handle': '{{ section.settings.main_product.handle }}',
+                                '_bundle_price': this.bundle_price,
+                                '_bundle_count': {{ section.settings.empty_placeholder | times: 1 }},
+                                '_bundle_index': index
+                            },
+                            selling_plan: parseInt(item.selling_plan_id)
+                        });
+                   }else{
+                        dataArray.push({
+                            id: parseInt(item.id),
+                            quantity: 1,
+                            properties: {
+                                '_bundle': true,
+                                '_bundle_title': document.title.split('–')[0],
+                                '_bundle_handle': '{{ section.settings.main_product.handle }}',
+                                '_bundle_price': this.bundle_price,
+                                '_bundle_count': {{ section.settings.empty_placeholder | times: 1 }},
+                                '_bundle_index': index
+                            }
+                        });
+                   }
+                }
+            });
+
+
+            let data = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ items : dataArray })
+            };
+
+            fetch(routes.cart_add_url +'.js', data)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    return Promise.reject(response);
+                })
+                .then(response => {
+                    // Update cart with event dispatch
+                    this.$dispatch('cart-updated', { cart: response });
+                    // Open cart after adding product
+                    this.$dispatch('open-cart');
+                });
+            
+        }
+    }">
+
+    <div class="flex flex-col md:flex-row gap-6 justify-evenly items-center !py-10 page-width">
+        {% if section.settings.title != blank %}
+            <div class="bundle-header__title text-xl prose">
+                {{ section.settings.title }}
+            </div>
+        {% endif %}
+        <div class="bundle-header__product-wrap w-8/12 flex justify-center flex-wrap items-center gap-3">
+
+            <div class="flex gap-3 items-center">
+                {% if section.settings.main_product != blank %}
+                    <div class="bundle-header__main-product">
+    
+                        <div class="bundle-header__main-product-title font-bold text-sm mb-2 text-center">
+                            {{ section.settings.main_product_title |  default: section.settings.main_product.title }}
+                        </div>
+    
+                        {% render "img-small", image: section.settings.main_product.featured_image, class: "w-24 border" %}
+                        <div class="bundle-header__main-product-price flex pt-2 font-semibold text-center text-sm gap-2">
+                            {% if section.settings.free_product %}
+                                <span class="text-red-600">
+                                    {{ section.settings.main_product.price |  minus: section.settings.main_product.price | money }}
+                                </span>
+                                <s class="line-through">
+                                    {{ section.settings.main_product.price | money }}
+                                </s>
+                            {% else %}
+                                <span>
+                                    {{ section.settings.main_product.price | money }}
+                                </span>
+                            {% endif %}
+                        </div>
+    
+                    </div>
+                {% endif %}
+    
+                <span class="w-10 text-xl flex justify-center"> + </span>
+    
+                <div>
+                    <div class="font-bold text-sm mb-2  text-center"> select your items </div>
+                    <div class="flex gap-4 text-center">
+                        <template x-for="(item, index) in selectedProducts">
+                            <div class="bundle-header--item">
+                                <div class="bundle-header--placeholder" x-show="item.status == 'demo'">
+                                    <div class="bundle-header--placeholder-number w-24 h-24 flex items-center justify-center p-3 border border-black" x-text="++index"></div>
+                                    <div class="bundle-header--placeholder-text text-sm pt-2 font-semibold" x-text="'Item '+ index"></div>
+                                </div>
+        
+                                <div class="bundle-header--item-product w-24 relative" x-show="item.status != 'demo'" class="relative">
+                                    <div class="relative h-[28px] hidden">
+                                        <span x-text="item.title" class="bundle-header--item-product-title text-sm font-medium absolute bottom-0 left-0"></span>
+                                    </div>
+                                    <button @click="removeProductFromBundle(item.id)" class="absolute -top-2 -right-2 border rounded-full p-0.5 bg-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-remove"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                    <img :src="item.image" :alt="item.title" class="w-24 h-24 object-cover border border-black"/>
+                                    <div x-text="'Item '+ index" class="text-sm pt-2 font-semibold"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bundle-header__cta-top hidden md:block">
+
+                <span class="bundle-header__cta-text btn bg-[#484848] text-white block px-4 py-3" x-show="counter < minProducts">
+                    add bundle to cart
+                </span>
+        
+                <button class="bundle-header__cta-btn btn button--black uppercase" @click="addToCart()" type="button" x-show="counter >= minProducts" style="display: none">
+                    add bundle to cart
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div 
+        x-show="showSticky"
+        x-cloak
+        x-transition:enter="transform transition ease-in-out duration-500" 
+        x-transition:enter-start="translate-y-full opacity-0" 
+        x-transition:enter-end="translate-y-0 opacity-1" 
+        x-transition:leave="transform transition ease-in-out duration-500" 
+        x-transition:leave-start="translate-y-0" 
+        x-transition:leave-end="translate-y-full opacity-0" 
+        class="sticky-mobile-content fixed bottom-0 left-0 right-0 z-[10001] px-3 py-2" 
+        style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};">
+
+        <div class="page-width px-3">
+
+            {% if section.settings.sticky_bottom_bar_text != blank %}
+                <div class="bundle-header__title font-bold mb-2">
+                    {{ section.settings.sticky_bottom_bar_text }}
+                </div>
+            {% endif %}
+    
+            <div class="bundle-header__product-wrap w-full flex justify-between items-center gap-3">
+    
+                <div class="flex gap-3 items-center">
+                    {% if section.settings.main_product != blank %}
+                        <div class="bundle-header__main-product w-[51px] h-[51px] border border-black"> 
+                            {% render "img-small", image: section.settings.main_product.featured_image, class: "w-[51px]" %}
+                        </div>
+                    {% endif %}
+        
+                    <div class="flex gap-4 text-center">
+                        <template x-for="(item, index) in selectedProducts">
+                            <div class="bundle-header--item">
+                                <div class="bundle-header--placeholder" x-show="item.status == 'demo'">
+                                    <div class="bundle-header--placeholder-number w-[51px] h-[51px] flex items-center justify-center p-3 border border-black" x-text="++index"></div>
+                                </div>
+        
+                                <div class="bundle-header--item-product w-[51px] relative" x-show="item.status != 'demo'" class="relative">
+                                    <button @click="removeProductFromBundle(item.id)" class="absolute -top-2 -right-2 border rounded-full p-0.5 bg-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-remove"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                    <img :src="item.image" :alt="item.title" class="w-[51px] h-[51px] object-cover border border-black"/>
+    
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                   
+                </div>
+    
+                <div class="bundle-header__cta">
+                    <span class="bundle-header__cta-text btn bg-[#484848] text-white uppercase text-sm px-3 py-2 h-[51px] flex items-center font-bold text-center" x-show="counter < minProducts">
+                        add bundle to cart
+                    </span>
+            
+                    <button class="bundle-header__cta-btn btn button--black uppercase h-[51px] !px-3 flex items-center !font-bold " @click="addToCart()" type="button" x-show="counter >= minProducts" style="display: none">
+                        add bundle to cart
+                    </button>
+                </div>
+    
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bundle header",
+  "blocks": [
+    
+  ],
+  "settings": [
+    {
+        "type": "richtext",
+        "id": "title",
+        "label": "Title"
+    },
+    {
+        "type": "product",
+        "id": "main_product",
+        "label": "Main product",
+        "info": "This product will be displayed in the header"
+    },
+    {
+        "type": "text",
+        "id": "main_product_title",
+        "label": "Main product title",
+        "default": "Main product title"
+    },
+    {
+        "type": "checkbox",
+        "id": "free_product",
+        "label": "Free product",
+        "info": "Price will be crossed out"
+    },
+    {
+        "type": "range",
+        "id": "empty_placeholder",
+        "label": "Empty placeholder",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 2,
+        "info": "Empty placeholder for other items"
+    },
+    {
+        "type": "header",
+        "content": "Sticky bottom bar"
+    },
+    {
+        "type": "text",
+        "id": "sticky_bottom_bar_text",
+        "label": "Text",
+        "default": "Add bundle to cart"
+    },
+    {
+        "type": "header",
+        "content": "Styles"
+    },
+    {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color",
+        "default": "#f4f4f4"
+    },
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+        "name": "Bundle header"
+    }
+  ]
+}
+{% endschema %}

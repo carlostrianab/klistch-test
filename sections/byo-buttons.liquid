@@ -1,0 +1,166 @@
+
+<div class="byo-bundle page-width mx-auto">
+  <div class="flex lg:mt-10 gap-x-9">
+    <div class="w-full lg:w-8/12 space-y-8 mb-4">
+  
+      <div class="byo-bundle {{ section.settings.container }} mx-auto px-4" 
+        x-title="Bundle buttons"
+        x-data="{
+          selectedButton: [],
+          addBundle(ids){
+              let idArray = ids.split(',');
+              idArray.forEach(id => {
+                  document.getElementById('button-variant-' + id)?.click();
+              });
+              this.selectedButton.push(ids);
+          },
+          filterPromoProducts(ids){
+              // Check if this filter is already selected
+              const isSelected = this.selectedButton.includes(ids);
+              
+              if (isSelected) {
+                  // Remove from selected filters
+                  this.selectedButton = this.selectedButton.filter(item => item !== ids);
+              } else {
+                  // Add to selected filters
+                  this.selectedButton.push(ids);
+              }
+              
+              // Update product visibility
+              this.updateProductVisibility();
+          },
+          updateProductVisibility(){
+              if (this.selectedButton.length === 0) {
+                  // Show all products when no filters are selected
+                  document.querySelectorAll('.promo-product').forEach(product => {
+                      product.classList.remove('hidden');
+                  });
+              } else {
+                  // Hide all products first
+                  document.querySelectorAll('.promo-product').forEach(product => {
+                      product.classList.add('hidden');
+                  });
+                  
+                  // Show products that match any selected filter
+                  this.selectedButton.forEach(filterIds => {
+                      let idArray = filterIds.split(',');
+                      idArray.forEach(id => {
+                          document.getElementById('promo-product-' + id)?.classList.remove('hidden');
+                      });
+                  });
+              }
+          },
+        }"
+        x-init="$nextTick(() => {
+          
+        })">
+      
+          <div class="suggestions mt-8">
+      
+              {% if section.settings.suggestion_description != blank %}
+                  <div class="suggestions__description mb-4">
+                      {{ section.settings.suggestion_description }}
+                  </div>
+              {% endif %}
+      
+              <div class="suggestions__items flex gap-3 flex-wrap">
+              {% for block in section.blocks %}
+                  {% assign options = block.settings %}
+                  {% assign variant_array = nil %}
+                  {% for byo_product in options.products %}
+                      {% if byo_product.available %}
+                      {% assign variant_array = variant_array | append: byo_product.first_available_variant.id |  append: ',' %}   
+                      {% endif %}
+      
+                      {% if forloop.last %}
+                      {% assign variant_array = variant_array |  replace_last: ',', '' %}
+                      {% endif %}
+                  {% endfor %}
+      
+                  <button 
+                    class="border px-4 py-1 border-black w-[48%] md:w-auto text-sm rounded transition-all duration-200"
+                    :class="selectedButton.includes('{{ variant_array }}') ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'"
+                    @click="filterPromoProducts('{{ variant_array }}')">
+                      {{ options.title }}
+                  </button>
+      
+              {% endfor %}
+              </div>
+      
+          </div>
+      </div>
+  
+    </div>
+  
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Bundle Buttons",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "richtext",
+      "id": "suggestion_description",
+      "label": "Suggestion description",
+      "default": "<p>Not sure what to get? Some prefill your box copy here!</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Button text"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Buttons"
+    }
+  ]
+}
+{% endschema %}

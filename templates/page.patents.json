@@ -1,0 +1,415 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "multicolumn_8FkEfK": {
+      "type": "multicolumn",
+      "blocks": {
+        "text_with_image_FRhtPn": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/64280-RecycledPlastic-PuffyClawClip-1pc-Hair-Rosewood-1280x1280px_7a9ccb36-f415-495a-8e3a-8d6b2fb5b445.jpg",
+            "title": "Hair Clip",
+            "description": "<p>Patent No.: <a href=\"https://cdn.shopify.com/s/files/1/0104/6904/8384/files/D1046288.pdf?v=1728520775\" target=\"_blank\" title=\"https://cdn.shopify.com/s/files/1/0104/6904/8384/files/D1046288.pdf?v=1728520775\"><strong>US D1,046,288 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_EQ8Wwe": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/0596-beauty-cleanse-towel-scrunchies-blush-tan-1280x1280px_01c04eae-9da0-4dc7-a0a7-acdae8f8dd6f.jpg",
+            "title": "Towel Scrunchies",
+            "description": "<p><a href=\"https://patentimages.storage.googleapis.com/69/79/6c/a0a36851431c87/USD851833.pdf\">Patent No. : <strong>US D851,833 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_Ccc7LK": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/TDAVIS_Kitsch_1023255_60314d04-b783-4a1f-b239-0b6d3dd3fc2a.jpg",
+            "title": "Bar Bags",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/32/09/5d/02178c8b884c44/USD926471.pdf\" target=\"_blank\" title=\"https://patentimages.storage.googleapis.com/32/09/5d/02178c8b884c44/USD926471.pdf\"><strong>US D926,471 S</strong></a> </p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_3pJMji": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/7551-SelfDrainingShowerCaddy-BottleFreeBeauty-1280x1280px_b25ac9ac-2239-42b4-a982-60852ae4a834.jpg",
+            "title": "Shower Caddy",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/fc/24/64/a03d766330ad5a/USD1025647.pdf\" title=\"https://patentimages.storage.googleapis.com/fc/24/64/a03d766330ad5a/USD1025647.pdf\"><strong>US D1, 025, 647 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_LC6WpA": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/62361-TravelCase-BottleFreeBeauty-Terracotta-1280x1280px_1_2f4b3975-6d4f-47ec-a4d4-b95bacc47d7c.jpg",
+            "title": "Travel Case",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/07/c5/44/db34f8e74a5f53/USD1030351.pdf\" title=\"https://patentimages.storage.googleapis.com/07/c5/44/db34f8e74a5f53/USD1030351.pdf\"><strong>US D1, 030, 351 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_PcBGcE": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/4491-Cleanse-microfiber-hairTowel-blush-1280x1280px.jpg",
+            "title": "Hair Towel",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/11/c0/ad/df8a2063ab83e8/USD939812.pdf\" title=\"https://patentimages.storage.googleapis.com/11/c0/ad/df8a2063ab83e8/USD939812.pdf\"><strong>US D939,812 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_JgeYh9": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/61418-SatinLinedFlexiShowerCap-Cleanse-TerracottaChecker-2-1280x1280px_646f36f4-2586-4ee6-87ca-3c087131cbd5.jpg",
+            "title": "Shower Cap",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/8f/83/4f/bf0af88ea9765c/USD1033804.pdf\" title=\"https://patentimages.storage.googleapis.com/8f/83/4f/bf0af88ea9765c/USD1033804.pdf\"><strong>US D1,033,804 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_WQPWbX": {
+          "type": "text_with_image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/9067-Sleep-satin-glazey-blush-1280x1280px_9a3ea1d6-1461-4abe-ae4c-b3c851b993c8.jpg",
+            "title": "Glazey",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\" title=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\"><strong>US D990,098 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_Gg6XFt": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/9067-Sleep-satin-glazey-blush-1280x1280px_9a3ea1d6-1461-4abe-ae4c-b3c851b993c8.jpg",
+            "title": "Glazey",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/62/d9/99/a0ef42231c0c50/US20230346060A1.pdf\" title=\"https://patentimages.storage.googleapis.com/62/d9/99/a0ef42231c0c50/US20230346060A1.pdf\"><strong>US 2023/0346060 A1<br/></strong></a> <a href=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\" title=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\"><strong>US D990,098 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_3mYbYx": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/4475-KitschPro-ponyfull-black-pkg-1280x1280px_a9ae25ee-88d4-4381-b177-9d34b60cf926.jpg",
+            "title": "Ponyfull",
+            "description": "<p><a href=\"https://patentimages.storage.googleapis.com/25/a6/f6/27ab48bf9fb96c/USD893100.pdf\">Patent No.: <strong>US D893,100 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_7kcdf9": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/3553-SS19-aromatherapy-locket-brushed-1280x1280px_603196bd-349f-4f0a-8712-ded94fc5d6f3.jpg",
+            "title": "Locket",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/f4/09/62/5208ed30845085/USD859203.pdf\" title=\"https://patentimages.storage.googleapis.com/f4/09/62/5208ed30845085/USD859203.pdf\"><strong>US D859, 203 S </strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_tJjcpj": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/63832-SelfDrainingSoapDish-BottleFreeBeauty-Terracotta-1280x1280px-72dpi_1.webp",
+            "title": "Soap dish",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/df/de/dc/382e08cf14e279/USD1037702.pdf\" target=\"_blank\"><strong>US D1,037,702 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_LGymDr": {
+          "type": "text_with_image",
+          "settings": {
+            "image": "shopify://shop_images/64396-ShowerFilterAttachment-BottleFreeBeauty-Chrome-hero-1280x1280px.webp",
+            "title": "Shower filter",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/ad/d7/9f/a4875761d312b3/USD1072182S1.pdf\" target=\"_blank\" title=\"https://patentimages.storage.googleapis.com/ad/d7/9f/a4875761d312b3/USD1072182S1.pdf\"><strong>US D1,072,182 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_XPyfK8": {
+          "type": "text_with_image",
+          "disabled": true,
+          "settings": {
+            "title": "Hoodie",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\" title=\"https://patentimages.storage.googleapis.com/09/aa/31/9aaf9a9ce716ae/USD990098.pdf\"><strong>US D990, 098 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_PLGheJ": {
+          "type": "text_with_image",
+          "disabled": true,
+          "settings": {
+            "title": "Ponytail Volumizer",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/25/a6/f6/27ab48bf9fb96c/USD893100.pdf\" title=\"https://patentimages.storage.googleapis.com/25/a6/f6/27ab48bf9fb96c/USD893100.pdf\"><strong>US D893,100 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_with_image_9B3VpA": {
+          "type": "text_with_image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/drawstring-chiffon-scrunchie-blush-360227.jpg",
+            "title": "Drawstring Scrunchies",
+            "description": "<p>Patent No.: <a href=\"https://patentimages.storage.googleapis.com/c2/86/11/6c62ff3e977bf7/USD927781.pdf\" title=\"https://patentimages.storage.googleapis.com/c2/86/11/6c62ff3e977bf7/USD927781.pdf\"><strong>US D927,781 S</strong></a></p>",
+            "link_label": "",
+            "link": "",
+            "background_color": "#f3f3f3",
+            "text_color": "",
+            "text_align": "md:text-center",
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "text_with_image_FRhtPn",
+        "text_with_image_EQ8Wwe",
+        "text_with_image_Ccc7LK",
+        "text_with_image_3pJMji",
+        "text_with_image_LC6WpA",
+        "text_with_image_PcBGcE",
+        "text_with_image_JgeYh9",
+        "text_with_image_WQPWbX",
+        "text_with_image_Gg6XFt",
+        "text_with_image_3mYbYx",
+        "text_with_image_7kcdf9",
+        "text_with_image_tJjcpj",
+        "text_with_image_LGymDr",
+        "text_with_image_XPyfK8",
+        "text_with_image_PLGheJ",
+        "text_with_image_9B3VpA"
+      ],
+      "settings": {
+        "container": "container",
+        "heading": "Kitsch Patents",
+        "sub_heading": "",
+        "heading_label": "",
+        "grid_desktop": "lg:grid-cols-4",
+        "grid_tablet": "md:grid-cols-2",
+        "grid_mobile": "grid-cols-2",
+        "font_size": 36,
+        "text_align": "md:text-center",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 30,
+        "text_align_mobile": "text-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "rich_text_QGXYpy": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_aVGCGp": {
+          "type": "heading",
+          "settings": {
+            "heading": "",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-center",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_LRh98J": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Kitsch's <strong>Ponyful®,</strong> <strong>Towel Scrunchies, </strong>and <strong>Shampoo, Conditioner, & Body Wash Bags</strong> are patent protected.<br/>Kitsch's branding and pattern designs are copyright protected. All rights reserved.  </p>",
+            "text_font": "font-default",
+            "font_size": 14,
+            "text_align": "md:text-center",
+            "font_size_mobile": 14,
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "heading_aVGCGp",
+        "text_LRh98J"
+      ],
+      "settings": {
+        "container": "full-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "icon_with_text_ynqWj4": {
+      "type": "icon-with-text",
+      "blocks": {
+        "icon_TJcnF8": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/shipped_500x_9b7fec55-e190-4681-87ff-79841435d008.png",
+            "title": "FREE SHIPPING OVER $40",
+            "text": "<p>Express shipping options </p><p>available.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_yk78iB": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/refund_500x_3e26c823-39b2-45b2-b946-293e4fe3af5f.png",
+            "title": "90 DAY MONEY BACK GUARANTEE",
+            "text": "<p>If you don’t <strong>love it</strong>, return it within 90</p><p> days for a full refund.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_RVbcqg": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/plant-based_500x_cd478afb-1f3f-44e4-a9fc-3f98701a8cce.png",
+            "title": "100% VEGAN",
+            "text": "<p>Vegan and Cruelty-Free Satin </p><p>Pillowcases.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        }
+      },
+      "block_order": [
+        "icon_TJcnF8",
+        "icon_yk78iB",
+        "icon_RVbcqg"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "full-width",
+        "heading": "We’re confident in our products",
+        "classic_style": false,
+        "spaced_icons": true,
+        "align_text": "text-center",
+        "title_font_size": 14,
+        "image_size": "110x",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-1",
+        "grid_gap": "gap-1",
+        "font_size": 28,
+        "text_align": "md:text-center",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 16,
+        "text_align_mobile": "text-left",
+        "bg_color": "#e6d2c9",
+        "text_color": "",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    }
+  },
+  "order": [
+    "main",
+    "multicolumn_8FkEfK",
+    "rich_text_QGXYpy",
+    "icon_with_text_ynqWj4"
+  ]
+}

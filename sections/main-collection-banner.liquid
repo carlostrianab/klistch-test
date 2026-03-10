@@ -1,0 +1,387 @@
+<style>
+  #Collection-banner-{{ section.id }}{
+    padding-top: {{ section.settings.padding_top | append: 'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    {% if section.settings.image_position == 'background' %}
+      background-image: url({{ collection.image | image_url }});
+    {% endif %}
+  }
+</style>
+
+{% render 'collection-banner-red' %}
+
+{% comment %} Collection banner {% endcomment %}
+{% if section.settings.desktop_image != blank or section.settings.mobile_image != blank %}
+  <div class="collection-banner {{ section.settings.container }} mx-auto px-4">
+    {% if section.settings.custom_url != blank %}
+      <a href="{{ section.settings.custom_url }}">
+  {% endif %}
+  {% if section.settings.desktop_image != blank %}
+    {% assign desktop_class = ' w-full ' %}
+    {% if section.settings.mobile_image != blank %}
+      {% assign desktop_class = desktop_class | append: 'hidden md:block' %}
+    {% endif %}
+    {% render 'img-large', image: section.settings.desktop_image, class: desktop_class, loading: 'eager' %}
+  {% endif %}
+  {% if section.settings.mobile_image != blank %}
+    {% assign mobile_class = ' w-full ' %}
+    {% if section.settings.desktop_image != blank %}
+      {% assign mobile_class = mobile_class | append: 'md:hidden' %}
+    {% endif %}
+    {% render 'img-mobile', image: section.settings.mobile_image, class: mobile_class, loading: 'eager' %}
+  {% endif %}
+  {% if section.settings.custom_url != blank %}
+    </a>
+  {% endif %}
+  </div>
+{% endif %}
+
+<div id="Collection-banner-{{ section.id }}" class="collection-banner relative {{ section.settings.background_position }}">
+
+    {% render "breadcrumbs", class: "page-width" %}
+
+    {% if section.settings.overlay_image %}
+      <div class="dark-overly absolute inset-0" style="background-color: rgba({{ section.settings.overlay_color.red }}, {{ section.settings.overlay_color.green }}, {{ section.settings.overlay_color.blue }}, {{ section.settings.overlay_opacity }});"></div>
+    {% endif %}
+    <div class="{{ section.settings.container }} mx-auto px-4 relative">
+      <div class="collection-banner__wrapper md:flex gap-6 py-4
+        {{ section.settings.text_align }}
+        {{ section.settings.vertical_alignment }} 
+        {{ section.settings.horizontal_alignment }}
+        {% if section.settings.image_position == 'left' %} md:flex-row-reverse {% endif %}">
+        <div class="collection-banner__content">
+          <div class="collection-content-wrapper">
+          <h1 class="collection-banner__title text-2xl font-secondary font-bold">
+            <span class="sr-only">{{ 'sections.collection_template.title' | t }}: </span>
+            {{- collection.title | escape -}}
+          </h1>
+    
+          {%- if section.settings.show_collection_description -%}
+            <div class="collection-hero__description text-sm tracking-wide " x-cloak
+              x-data="{ show: false, maxLength: 25, text: '', content: '' }"
+              x-init="text = $el.firstElementChild.textContent.trim(); content = text.split(' ').slice(0, maxLength).join(' ')">
+                <div x-text="show ? text : content" class="prose">
+                  {{ collection.description }}
+                </div>
+
+                <button class="show-toggle-btn text-sm font-semibold block py-2 border-b border-black" @click="show = !show" x-show="text.split(' ').length > maxLength" x-text="show ? 'Read Less' : 'Read More'"></button>
+            </div>
+          {%- endif -%}
+        </div>
+          {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+          {% if sort_by != blank %}
+            {% if sort_by contains 'created-descending' %}
+              {% assign sort_by = 'sections.collection_template.sorting.date_descending' | t %}
+            {% endif %}
+          {% endif %}
+                  <div class="collection__sort enavi-collection-sort flex relative justify-end order-2 md:order-2" 
+          x-data="filter" x-init="sort = '{{ sort_by }}'">
+
+          {% render 'loader' %}
+
+          <div class="flex items-center justify-end gap-2">
+            
+            <details class="sort relative" x-data x-ref="details" @click.outside="$refs.details.removeAttribute('open')">
+              <summary class="sort-summary flex gap-1 cursor-pointer items-center">
+                <div class="font-medium text-sm">
+                    {{ 'products.facets.sort_by_label' | t }} <span class="selected-sortby">{{ sort_by | replace:'-',' ' }}</span>
+                </div>
+                <span class="arrow-icon rotate-90">
+                    {% render 'icon-chevron-right', class: "w-5" %}
+                </span>
+              </summary>
+              <div class="sort-display pb-3 absolute space-y-1 right-0 z-20 bg-white shadow p-3 min-w-44 rounded-sm">
+                <button type="button" 
+                    class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 {% if sort_by == 'best-selling' %}active-sort{% endif %}" 
+                  data-sort="best-selling"
+                    @click="sortBy('best-selling');document.querySelector('.selected-sortby').innerText='{{ 'sections.collection_template.sorting.best_selling' | t }}';"> 
+                    {{ 'sections.collection_template.sorting.best_selling' | t }}
+                 </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 {% if sort_by == 'Newest' %}active-sort{% endif %}" 
+                  data-sort="created-descending"
+                  @click="sortBy('created-descending');document.querySelector('.selected-sortby').innerText='{{ 'sections.collection_template.sorting.date_descending' | t }}';"> 
+                  {{ 'sections.collection_template.sorting.date_descending' | t }}
+                </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 {% if sort_by == 'price-ascending' %}active-sort{% endif %}" 
+                  data-sort="price-ascending"
+                  @click="sortBy('price-ascending');document.querySelector('.selected-sortby').innerText='{{ 'sections.collection_template.sorting.price_ascending' | t }}';"> 
+                  {{ 'sections.collection_template.sorting.price_ascending' | t }}
+                </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 {% if sort_by == 'price-descending' %}active-sort{% endif %}" 
+                  data-sort="price-descending"
+                  @click="sortBy('price-descending');document.querySelector('.selected-sortby').innerText='{{ 'sections.collection_template.sorting.price_descending' | t }}';"> 
+                  {{ 'sections.collection_template.sorting.price_descending' | t }}
+                </button>
+              </div>
+            </details>
+            
+          </div>
+
+          <select id="sort-by" x-model="sort" @change="sortBy(sort)" class="rounded-md text-body border-0 hidden">
+            {% for option in collection.sort_options %}
+              <option value="">
+                {{ 'products.facets.filter_sorting_title' | t }}
+              </option>
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        </div>
+
+        {%- if section.settings.show_collection_image and collection.image and section.settings.image_position != 'background' -%}
+          <div class="collection-banner__image md:w-1/2">
+            {% render 'img-large', image: collection.image %}
+          </div>
+        {%- endif -%}
+
+      </div>
+
+    </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add a description or image by editing your collection. [Learn more](https://help.shopify.com/manual/products/collections/collection-layout)"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "Show collection description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": false,
+      "label": "Show collection image",
+      "info": "For best results, use an image with a 16:9 aspect ratio. [Learn more](https://help.shopify.com/manual/shopify-admin/productivity-tools/image-editor#understanding-image-aspect-ratio)"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "right",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "background_position",
+      "label": "Background position",
+      "default": "bg-auto",
+      "options": [
+        {
+          "value": "bg-cover",
+          "label": "Cover"
+        },
+        {
+          "value": "bg-auto",
+          "label": "Auto"
+        },
+        {
+          "value": "bg-contain",
+          "label": "Contain"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_image",
+      "label": "Overlay",
+      "default": false,
+      "info": "This will darken the background image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Custom banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image here"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image here"
+    },
+    {
+      "type": "url",
+      "id": "custom_url",
+      "label": "Custom Banner link"
+    },
+    {
+      "type": "header",
+      "content": "Content alignment"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "options": [
+        {
+          "value": "items-center",
+          "label": "Center"
+        },
+        {
+          "value": "items-start",
+          "label": "Top"
+        },
+        {
+          "value": "items-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "items-start",
+      "label": "Vertical alignment"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "options": [
+        {
+          "value": "justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-start",
+          "label": "Left"
+        },
+        {
+          "value": "justify-end",
+          "label": "Right"
+        }
+      ],
+      "default": "justify-start",
+      "label": "Horizontal alignment"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

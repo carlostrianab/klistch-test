@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "container": "page-width",
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "image_position": "right",
+        "background_position": "bg-cover",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "vertical_alignment": "items-center",
+        "horizontal_alignment": "justify-start",
+        "text_align": "text-left",
+        "padding_top": 20,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#000000"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "custom_css": [
+        "@media only screen and (max-width: 728px) {.okeReviews {text-align: left; } .card__heading {font-size: 97%; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "products_per_page": 18,
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-2",
+        "grid_mobile": "grid-cols-2",
+        "gap": "md:gap-4",
+        "gap_mobile": "gap-2",
+        "image_ratio": "aspect-auto",
+        "show_secondary_image": true,
+        "show_add_to_cart": false,
+        "show_vendor": true,
+        "show_sold_count": true,
+        "show_rating": true,
+        "enable_filtering": false,
+        "enable_sorting": false,
+        "tag_filtering": true,
+        "pagination_type": "load_more",
+        "show_collection_description": true,
+        "price_style": "range",
+        "padding_top": 8,
+        "padding_bottom": 32
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product-grid"
+  ]
+}

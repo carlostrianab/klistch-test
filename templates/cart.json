@@ -1,0 +1,77 @@
+{
+  "sections": {
+    "cart-main": {
+      "type": "main-cart",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "savings": {
+          "type": "savings",
+          "settings": {}
+        },
+        "checkout_button": {
+          "type": "checkout_button",
+          "settings": {}
+        },
+        "continue_shopping": {
+          "type": "continue_shopping",
+          "settings": {
+            "continue_shopping_url": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "subtotal",
+        "savings",
+        "checkout_button",
+        "continue_shopping"
+      ],
+      "settings": {
+        "container": "container",
+        "cart_page_layout": "fullwidth",
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-medium",
+        "text_align_mobile": "text-left",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "container": "page-width",
+        "heading": "best sellers",
+        "sub_heading": "",
+        "heading_label": "",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "show_view_all": true,
+        "image_ratio": "square",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_add_to_cart": true,
+        "show_sold_count": false,
+        "show_rating": false,
+        "grid_desktop": "lg:grid-cols-4",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "enable_swipe_mobile": false,
+        "font_size": 36,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 30,
+        "text_align_mobile": "text-left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "cart-main",
+    "featured-collection"
+  ]
+}

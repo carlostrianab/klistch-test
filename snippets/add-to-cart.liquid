@@ -1,0 +1,141 @@
+{% assign p_tags = product.tags | join: ', ' %}
+{% assign isBundle = false %}
+
+{% if p_tags contains 'exclude_cart' %}
+    {% assign isBundle = true %}
+{% endif %}
+
+<div {{ shopify_attributes }} class="pb-4" 
+    data-isBundle="{{ isBundle }}"
+    x-init="productForm = $refs.product_form; isBundle = {{ isBundle }}"
+    @variant-updated.window="variant = $event.detail.variant; soldOut = !$event.detail.availibility;" 
+    x-data="addToCart({{ product.selected_or_first_available_variant | json | escape }}, {{ isBundle }})">
+
+    {%- form 'product', product, id: product_form_id, class: 'form product-form', novalidate: 'novalidate', data-type: 'add-to-cart-form', x-ref: 'product_form' -%}
+        <div class="product-form__buttons space-y-3 {% if show_dynamic_checkout %} has-express-checkout {% endif %}">
+
+       
+        <div class="subscription-wrapper py-2 {% unless show_subscription %} hidden {% endunless %}">
+            {% render 'subscription-form', product: product %}
+        </div>
+
+        {% comment %} 
+            exclude_cart tag is for bundle products
+        {% endcomment %}
+
+        {% if p_tags contains 'exclude_cart' %}
+            {% render '_bundle-form-data', product: product, p_tags: p_tags, show_bundle_items: show_bundle_items, dynamic_price: dynamic_price, fixed_bundle_discount: fixed_bundle_discount %}
+        {% else %}
+            <input type="hidden" name="id" x-model="variant.id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% endif %}
+
+        {% if extra_products != blank %}
+            {% for extra_item in extra_products %}
+                <input type="hidden" name="id" data-productid="{{ extra_item.id }}" class="extra-products" value="{{ extra_item.first_available_variant.id }}" />
+            {% endfor %}
+        {% endif %}
+            
+        {% assign defaultQTY = 1 %}
+        
+        <div id="addToCartPlaceholder"></div>
+
+        <div class="flex items-center gap-3">
+            {% if show_qty %}
+                <div class="product-form__qty flex w-48"
+                    {% unless quick_shop %}
+                        @quantity-pack-updated.window="$nextTick(() => {
+                            quantity = $event.detail.qty;
+                        })"
+                        x-init="$nextTick(() => {
+                            $watch('quantity', value => {
+                                $dispatch('quantity-updated', { qty: value });
+                            });
+                        });"
+                        @quantity-updated.window="$nextTick(() => {
+                            quantity = $event.detail.qty;
+                        })"
+                    {% endunless %}
+                    >
+                    <button  @click="quantity > 1 ? quantity-- : quantity = 1"
+                        class="quantity__button no-js-hidden text-center cursor-pointer p-1 border border-gray-600 w-4/12 rounded-l-sm" name="minus" type="button">
+                        <span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+                        &minus;
+                    </button>
+                    <input class="quantity__input text-center bg-white border-t border-b border-r-0 border-l-0 border-gray-600 w-4/12"
+                        type="text"
+                        name="quantity"
+                        aria-label="{{ 'products.product.quantity.label' | t }}"
+                        x-model="quantity"
+                        min="1"
+                        value="{{ defaultQTY }}">
+                    <button  @click="quantity++"
+                        class="quantity__button no-js-hidden text-center cursor-pointer  p-1 border border-gray-600 w-4/12 rounded-r-sm" name="plus" type="button">
+                        <span class="sr-only">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+                        &plus;
+                    </button>
+                </div>
+            {% else %}
+                <input type="hidden" x-ref="qty" @quantity-pack-updated.window="$refs.qty.value = $event.detail.qty" name="quantity" value="{{ defaultQTY }}">
+            {% endif %}
+
+            <template x-if="!soldOut">
+                <button name="add" 
+                    {% if settings.cart_type == 'drawer' %}
+                        @click="addToCart()"
+                        type="button"
+                        :disabled="soldOut"
+                    {% else %}
+                        type="submit"
+                    {% endif %}
+                    x-ref="add_to_cart_button" 
+                    class="product-form__submit button button--primary !flex items-center button-add-to-cart w-full font-bold">
+                        <span x-text="addToCartLabel">
+                        {%- if product.selected_or_first_available_variant.available -%}
+                            {{ 'products.product.add_to_cart' | t }}
+                        {%- else -%}
+                            {{ 'products.product.notify_me' | t }}
+                        {%- endif -%}
+                        </span>
+                </button>
+            </template>
+
+            <template x-if="soldOut">
+                <div class="w-full">
+                    <button type="button" class="button button--secondary w-full klaviyo-bis-trigger">
+                        {{ 'products.product.notify_me' | t }}
+                    </button>
+                </div>
+            </template>
+           
+        </div>
+
+        {% if show_qty %}
+            <div>
+                <div class="min-h-[26px]">
+                    <div id="product-price-selector"></div>
+                </div>
+                {% comment %} <span class="text-sm text-red-700 font-semibold">
+                    Arrives in time for Mother’s Day.
+                </span> {% endcomment %}
+            </div>            
+        {% endif %}
+
+        <div role="alert" x-show="error">
+            <span class="text-sm text-red-700 font-semibold" x-text="message"></span>
+        </div>
+    
+        {%- if show_dynamic_checkout and product.available -%}
+            <div class="express-checkout" x-show="variant.available">
+            {{ form | payment_button }}
+            </div>
+        {%- endif -%}
+
+        {% if settings.enable_shop_promise %}
+            <div class="mt-2">
+                <div class="delivery-promise__promise-container"></div>
+            </div>
+        {% endif %}
+        
+        </div>
+    {%- endform -%}
+</div>

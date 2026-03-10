@@ -1,0 +1,15 @@
+<div class="text-with-image p-4 {{ options.text_align }} {{ options.text_align_mobile }}" style="background-color: {{ options.background_color }}; color: {{ options.text_color }}">
+   {% if options.image != blank %}
+        <div class="image__block">
+            {% render 'img-medium', image: options.image %}
+        </div>
+   {% endif %}
+   <div class="text-with-image__content py-4 space-y-2">
+       {% if options.title != blank %}
+            <h4 class="title__block text-xl">{{ options.title }}</h4>
+       {% endif %}
+        {% if options.description != blank %}
+              <div class="text__block">{{ options.description }}</div>
+        {% endif %}
+   </div>
+</div>

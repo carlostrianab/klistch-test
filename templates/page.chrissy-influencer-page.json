@@ -1,0 +1,178 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "rich_text_B4B3Vf": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_7kMXmY": {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading text",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_RrEp6g": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Give customers details about the content on the template.<\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "md:text-left",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_j7QF6G": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "Primary button",
+            "primary_button_link": "",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start"
+          }
+        }
+      },
+      "block_order": [
+        "heading_7kMXmY",
+        "text_RrEp6g",
+        "buttons_j7QF6G"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "image_with_text_Wtanwp": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_QpgYjT": {
+          "type": "heading",
+          "settings": {
+            "heading": "Chrissy's Favorites",
+            "sub_heading": "<p>With over 2 Million followers on Tiktok and 1 Million on IG, Hair by Chrissy is a leading professional in the hair care space.    Shop her favorite styling accessories now!<\/p>",
+            "heading_label": "",
+            "font_size": 62,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_TgwfMg": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Purchased Kitsch in a store? Upload your receipt below to earn points! <\/p>",
+            "font_size": 16,
+            "letter_spacing": 0,
+            "text_align": "md:text-center",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "heading_QpgYjT",
+        "text_TgwfMg"
+      ],
+      "settings": {
+        "container": "full-width",
+        "image": "shopify:\/\/shop_images\/IMG_2474.jpg",
+        "image_link": "",
+        "image_padding": false,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 270,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 650,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": "rgba(0,0,0,0)"
+      }
+    },
+    "products_slider_9X74KQ": {
+      "type": "products-slider",
+      "settings": {
+        "container": "page-width",
+        "heading": "",
+        "sub_heading": "",
+        "heading_label": "",
+        "collection": "chrissys-favorites",
+        "product_list": [],
+        "products_to_show": 15,
+        "show_view_all": false,
+        "button": "",
+        "button_link": "",
+        "image_ratio": "aspect-auto",
+        "show_secondary_image": true,
+        "image_loading": "lazy",
+        "show_vendor": false,
+        "show_add_to_cart": true,
+        "show_sold_count": false,
+        "show_rating": true,
+        "slider_mode": false,
+        "show_arrows": true,
+        "slider_desktop": 2.5,
+        "slider_tablet": 3,
+        "slider_mobile": 2,
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "font_size": 36,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 30,
+        "text_align_mobile": "text-left",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_B4B3Vf",
+    "image_with_text_Wtanwp",
+    "products_slider_9X74KQ"
+  ]
+}

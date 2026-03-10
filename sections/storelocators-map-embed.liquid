@@ -1,0 +1,30 @@
+{% schema %}
+{
+  "name": "StoreLocators Map Embed",
+  "tag": "section",
+  "class": "storelocator",
+  "settings": [
+    {
+      "type": "text",
+      "id": "merchantId",
+      "label": "StoreLocators ID"
+    }
+  ],
+  "presets": [
+    {
+      "name": "StoreLocators Map Embed"
+    }
+  ]
+}
+{% endschema %}
+
+<script src="//cdn.storelocators.com/locator/js/main-stable.js?c=12" defer=""></script>
+<link rel="stylesheet" href="//cdn.storelocators.com/locator/css/main-stable.css?c=12">
+
+<script>
+  window.storeLocatorsConfig = {
+    customerId: '{{ section.settings.merchantId }}',
+
+  }
+</script>
+<div id="storelocators_root"></div>

@@ -1,0 +1,82 @@
+{% layout none %}
+<div class="quick-view-product">
+    <div class="flex gap-2 flex-col lg:flex-row">
+        <div class="lg:w-7/12">
+            {% render "img-medium", image: product.featured_image %}
+        </div>
+        
+        <div class="lg:w-5/12">
+            {% render '_product-review-stars', product: product, block: block, class: 'py-2' %}
+            <h3 class="product__title text-xl font-semibold md:pt-2 md:-mt-2">
+                {{ product.title | escape }}
+            </h3>
+            <div class="quick-view__reviews">
+                <span 
+                    class="stamped-product-reviews-badge" 
+                    data-id="{{ product.id }}"
+                    data-product-sku="{{ product.handle }}" 
+                    data-product-type="{{product.type}}" 
+                    data-product-title="{{product.title}}" 
+                    style="display:block;">
+                </span>
+            </div>
+
+            <div class="no-js-hidden font-bold product__price-wrapper">
+                {%- render 'price', product: product, use_variant: true, show_badges: false, price_class: 'text-base pt-2' -%}
+                <span class="text-base text-[#DC2625]">
+                {% if product.price < product.compare_at_price and product.available %}
+                    {{ 'products.product.savings' | t }}  {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% 
+                    <span class="money">
+                        {% assign compare_at = product.compare_at_price | minus: product.price %} 
+                        ({{ compare_at | money_with_currency }})
+                    </span>
+                {% endif %}
+                </span>
+            </div>
+
+            <div class="product__excerpt rte text-base font-medium prose text-black">
+                {% if product.excerpt %}
+                    {{ product.excerpt | strip_html | truncate: 180, '' }}
+                {% else %}
+                    {% if product.metafields.custom.product_description != blank %}
+                        {{ product.metafields.custom.product_description | metafield_tag }}
+                    {% else %}
+                        {{ product.description | split: "[Why you'll love this]"| first }}
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div>
+                <button type="button"
+                    x-init="$dispatch('data-subscription-price', { id: {{ product.first_available_variant.id }}, display_price })"
+                    @click="$dispatch('add-bundle', {
+                        id: {{ product.first_available_variant.id }},
+                        title: `{{ product.title }}`,
+                        price: {{ product.price | money_without_currency }},
+                        image: '{{ product | image_url: width: 500 }}',
+                        selling_plan_id: {{ product.first_available_variant.selling_plan_allocations[0].selling_plan.id | default: 0 }}
+                    });" 
+                    aria-label="add to bundle" 
+                    class="button button--black font-semibold w-full">
+                    add to bundle
+                </button>
+            </div>
+
+            <div class="shipping-and-return-info flex gap-x-6 justify-center items-center py-3 shipping-returns-usps">
+                <div class="flex gap-x-2 items-center text-xs">
+                    <img class="h-6" src="https://www.mykitsch.com/s/files/1/0104/6904/8384/files/fast.png?em-origin=cdn.shopify.com&amp;em-format=avif" alt="Free shipping" decoding="async">
+                    <span class="uppercase font-medium">
+                        SHIPS SAME OR NEXT DAY
+                    </span>
+                </div>
+                <div class="flex gap-x-2 items-center text-xs">
+                    <img class="h-6" src="https://www.mykitsch.com/s/files/1/0104/6904/8384/files/clock_2.png?v=1678241233&em-origin=cdn.shopify.com&em-format=avif" alt="Money back guarantee" decoding="async">
+                    <span class="uppercase font-medium">
+                        90 DAY RETURNS
+                    </span>
+                </div>
+            </div>
+              
+        </div>
+    </div>
+</div>

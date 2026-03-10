@@ -1,0 +1,314 @@
+<div class="absolute left-0 right-0 z-[110] h-full max-w-md"
+    x-title="Mobile menu"
+    x-data="{
+        showMenu: false,
+        offsetTop: 0,
+        activeLevels: { 
+            level1: null,
+            level2: null 
+        },
+        calculateOffsetTop(){
+            let findOffsetTop = document.querySelector('.main__header .header__container');
+            if (findOffsetTop) {
+                this.offsetTop = findOffsetTop.getBoundingClientRect().height;
+            }
+        }
+    }"
+    x-cloak
+    x-show="showMenu"
+    x-trap="showMenu"
+    @keyup.escape.window="showMenu = false; document.body.classList.remove('overflow-fixed'); $dispatch('close-mobile-menu')"
+    @toggle-mobile-menu.window="$nextTick(() => {
+        showMenu = !showMenu;
+        document.body.classList.toggle('overflow-fixed');
+        // Reset menu states when opening
+        if (showMenu) {
+            activeLevels.level1 = null;
+            activeLevels.level2 = null;
+        }
+    })"
+    :style="{ 'top': offsetTop + 'px' }"
+    @resize.window="calculateOffsetTop()"
+    x-init="calculateOffsetTop()"
+    role="dialog" aria-modal="true">
+
+    <div 
+        x-show="showMenu" 
+        @click="showMenu = false; $dispatch('close-mobile-menu')"
+        x-transition.opacity 
+        class="fixed inset-0 bg-[#0000004f] hidden md:block"></div>
+
+    <div class="absolute bg-gray-200 z-20 top-0 bottom-0 w-full h-[90dvh] overflow-scroll shadow-xl"
+        x-show="showMenu"
+        x-transition:enter="transform transition ease-in-out duration-400"
+        x-transition:enter-start="-translate-x-full opacity-0"
+        x-transition:enter-end="translate-x-0 opacity-1"
+        x-transition:leave="transform transition ease-in-out duration-400"
+        x-transition:leave-start="-translate-x-0"
+        x-transition:leave-end="-translate-x-full opacity-0">
+
+        {% comment %} Hidden aria label {% endcomment %}
+        <span aria-label="Mobile menu" class="sr-only">Mobile menu</span>
+
+        <div class="bg-white relative h-full border-b border-gray-600 max-h-[80dvh] md:max-h-[initial]">
+            <div class="mobile-menu h-full flex flex-col overflow-y-scroll pb-10 no-scrollbar mx-auto border-t border-black {{ section.settings.container }}">
+
+                {% assign mobile_menu = section.settings.menu %}
+                {% if section.settings.mobile_menu != blank %}
+                    {% assign mobile_menu = section.settings.mobile_menu %}
+                {% endif %}
+
+                {%- if mobile_menu != blank -%}
+                    <nav class="pt-2 px-4">
+                        <ul role="list" class="text-black divide-y divide-gray-200">
+                            {%- for link in mobile_menu.links -%}
+                                <li class="">
+                                    {%- if link.links != blank -%}
+                                        <noscript>
+                                            <a href="{{ link.url }}" class="header__menu-item block animate-link  font-medium {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+                                                <span>{{ link.title | escape }}</span>
+                                            </a>
+                                        </noscript>
+
+                                        {% liquid
+                                            assign has_sub_menu = false
+                                            if linklists[link.handle] != empty
+                                                assign has_sub_menu = true
+                                            endif
+                                        %}
+
+                                        {% if has_mega_menu %}
+                                            <!-- Mega menu handling remains unchanged -->
+                                        {% endif %}
+
+                                        {% if has_sub_menu %}
+                                            <div x-data="{}">
+                                                <div class="flex justify-between w-full" :class="{ 'menu-active': activeLevels.level1 === {{ forloop.index }} }">
+                                                    {% if link.url contains '#' %}
+                                                        <button type="button" @click.prevent="activeLevels.level1 = (activeLevels.level1 === {{ forloop.index }} ? null : {{ forloop.index }})"
+                                                                class="relative w-full text-base font-medium overflow-hidden flex justify-between py-3">
+                                                                <span>
+                                                                    {{ link.title | escape }}
+                                                                </span>
+                                                                {% render 'icon-chevron-right', class: "h-6 transform transition-transform duration-300 ml-auto" %}
+                                                        </button>
+                                                    {% else %}
+                                                        <a href="{{ link.url }}"
+                                                            class="w-1/2 py-3 text-base inline-flex items-center"
+                                                            {% if link.current %} aria-current="page"{% endif %}>
+                                                            {{ link.title | escape }}
+                                                        </a>
+                                                        <button type="button" @click.prevent="activeLevels.level1 = (activeLevels.level1 === {{ forloop.index }} ? null : {{ forloop.index }})"
+                                                                title="Toggle menu"
+                                                                class="w-1/2 text-right relative overflow-hidden">
+                                                                {% render 'icon-chevron-right', class: "h-6 transform transition-transform duration-300 ml-auto" %}
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+
+                                                <!-- LEVEL 2 CONTAINER -->
+                                                <div class="header__menu-dropdown bg-white overflow-hidden" 
+                                                     x-collapse
+                                                     x-show="activeLevels.level1 === {{ forloop.index }}">
+                                                    <ul class="pl-4 pb-2">
+                                                        {% for submenu in linklists[link.handle].links %}
+                                                            {% if submenu.title != 'megamenu' %}
+                                                                <li>
+                                                                    {%- if submenu.links != blank -%}
+                                                                        <!-- THIRD LEVEL HANDLING -->
+                                                                        <div x-data="{}">
+                                                                            <div class="flex justify-between w-full" :class="{ 'menu-active': activeLevels.level2 === {{ forloop.index }} }">
+                                                                                {% if submenu.url contains '#' %}
+                                                                                    <button type="button" @click.prevent="activeLevels.level2 = (activeLevels.level2 === {{ forloop.index }} ? null : {{ forloop.index }})"
+                                                                                            class="relative w-full text-sm font-medium overflow-hidden flex justify-between py-1.5">
+                                                                                            <span>
+                                                                                                {{ submenu.title | escape }}
+                                                                                            </span>
+                                                                                            {% render 'icon-chevron-right', class: "h-6 transform transition-transform duration-300 ml-auto" %}
+                                                                                    </button>
+                                                                                {% else %}
+                                                                                    <a href="{{ submenu.url }}"
+                                                                                        class="w-1/2 py-1.5 text-sm inline-flex items-center"
+                                                                                        {% if submenu.current %} aria-current="page"{% endif %}>
+                                                                                        {{ submenu.title | escape }}
+                                                                                    </a>
+                                                                                    <button type="button" @click.prevent="activeLevels.level2 = (activeLevels.level2 === {{ forloop.index }} ? null : {{ forloop.index }})"
+                                                                                            title="Toggle menu"
+                                                                                            class="w-1/2 text-right relative overflow-hidden">
+                                                                                            {% render 'icon-chevron-right', class: "h-6 transform transition-transform duration-300 ml-auto" %}
+                                                                                    </button>
+                                                                                {% endif %}
+                                                                            </div>
+
+                                                                            <!-- LEVEL 3 CONTAINER -->
+                                                                            <div class="header__menu-dropdown bg-white" 
+                                                                                 x-collapse
+                                                                                 x-show="activeLevels.level2 === {{ forloop.index }}">
+                                                                                <ul class="pl-4">
+                                                                                    {% for subsubmenu in submenu.links %}
+                                                                                        <li>
+                                                                                            <a href="{{ subsubmenu.url }}" class="w-full py-1.5 block text-sm">
+                                                                                                <span class="inline-flex items-center">
+                                                                                                    {{ subsubmenu.title }}
+                                                                                                </span>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                    {% endfor %}
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    {%- else -%}
+                                                                        <!-- Regular level 2 link -->
+                                                                        <a href="{{ submenu.url }}" class="w-full py-1.5 block text-sm">
+                                                                            <span class="inline-flex items-center">
+                                                                                {{ submenu.title }}
+                                                                            </span>
+                                                                        </a>
+                                                                    {%- endif -%}
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                    {%- else -%}
+                                        <!-- Regular top-level link -->
+                                        <a href="{{ link.url }}" data-handle="{{ link.title |  handleize }}" class="header__menu-item block animate-link  font-medium {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+                                            <span>
+                                            {{ link.title | escape }}
+                                            </span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {%- endfor -%}
+                        </ul>
+                    </nav>
+                {% endif %}
+
+                {% if section.settings.show_extra %}
+                    <div class="text-sm flex justify-between text-center mx-4 py-4 mb-3 border-b border-gray-200">
+
+                        {% if section.settings.extra1_title != blank %}
+                            <a href="{{ section.settings.extra1_link }}"
+                                class="px-2 flex items-center gap-2"
+                                title="{{ section.settings.extra1_title }} ">
+                                <div class="extra__icon w-8 mx-auto">
+                                    {{ section.settings.extra1_icon | image_url: width: 150 | image_tag: loading: 'lazy' }}
+                                </div>
+                                {{ section.settings.extra1_title }}
+                            </a>
+                        {% endif %}
+
+                        {% if section.settings.extra2_title != blank %}
+                            <a href="{{ section.settings.extra2_link }}"
+                                class="px-2 flex items-center gap-2"
+                                title="{{ section.settings.extra2_title }} ">
+                                <div class="extra__icon w-8 mx-auto">
+                                    {{ section.settings.extra2_icon | image_url: width: 150 | image_tag: loading: 'lazy' }}
+                                </div>
+                                {{ section.settings.extra2_title }}
+                            </a>
+                        {% endif %}
+
+                        {% if section.settings.extra3_title != blank %}
+                            <a href="{{ section.settings.extra3_link }}"
+                                class="px-2 flex items-center gap-2"
+                                title="{{ section.settings.extra3_title }} ">
+                                <div class="extra__icon w-8 mx-auto">
+                                    {{ section.settings.extra3_icon | image_url: width: 150 | image_tag: loading: 'lazy' }}
+                                </div>
+                                {{ section.settings.extra3_title }}
+                            </a>
+                        {% endif %}
+
+                        {% if section.settings.extra4_title != blank %}
+                            <a href="{{ section.settings.extra4_link }}"
+                                class="px-2 flex items-center gap-2"
+                                title="{{ section.settings.extra4_title }} ">
+                                <div class="extra__icon w-8 mx-auto">
+                                    {{ section.settings.extra4_icon | image_url: width: 150 | image_tag: loading: 'lazy' }}
+                                </div>
+                                {{ section.settings.extra4_title }}
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+
+                <div class="flex justify-between mx-4">
+                    {% if section.settings.enable_currency %}
+                        <div class="currency-selector relative flex justify-between px-4"
+                            x-data="{
+                                openCurrency: false,
+                                country_code: '{{ localization.country.iso_code }}',
+                                currencyFlag: 'https://cdn.shopify.com/s/files/1/0104/6904/8384/files/black-earth-currency.png',
+                                currencyLabel: '{{ localization.country.iso_code }}',
+                            }"
+                            x-init="$watch('country_code', (value) => {
+                                $refs.currencyForm.submit();
+                            })"
+                            @click.outside="openCurrency = false"
+                            >
+                            <button
+                                type="button"
+                                @click="openCurrency = !openCurrency"
+                                class="flex flex-col font-medium w-full gap-2">
+                                <span class="">You're shopping in</span>
+                                <div class="flex items-center">
+                                    <i class="rounded-full border w-6 h-6 bg-cover fi fi-{{ localization.country.iso_code | downcase | downcase }}"></i>
+                                    <span class="currency-selector__currency-name mx-2" x-text="currencyLabel">{{ cart.currency.iso_code }}</span>
+    
+                                    <svg class="w-4 h-4 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </div>
+    
+                            </button>
+    
+                            {% render 'currency-dropdown', highlighted_countries: section.settings.highlighted_countries, class: 'bottom-10' %}
+    
+                        </div>
+                    {% endif %}
+    
+                    {% if localization.available_languages.size > 1 %}
+                        <div class="flex flex-col gap-2 px-4">
+                            <span class="language-selector__title">Language:</span>
+                            <div class="language-selector language-selector__mobile relative text-sm mx-2 sm:block"
+                                x-init="$nextTick(() => {
+                                    $watch('language', (value) => {
+                                        $refs.HeaderLangauageForm.submit();
+                                    });
+                                })"
+                                x-data="{
+                                  openLanguage: false,
+                                  languageLabel: '{{ localization.language.iso_code | capitalize }}',
+                                  language: '{{ localization.language.iso_code | downcase }}',
+                                }"
+                                @click.outside="openLanguage = false">
+                                <button type="button" @click="openLanguage = !openLanguage" class="flex items-center gap-1 uppercase">
+                                  <span class="language-selector__language-name mt-1" x-text="languageLabel">
+                                    {{ localization.language.iso_code | capitalize }}
+                                  </span>
+                                  <span :class="{ 'transform rotate-180': openLanguage }" x-transition>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-chevron-down" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M6 9l6 6l6 -6" />
+                                    </svg>
+                                  </span>
+                                </button>
+    
+                                {% render 'language-selector-dropdown', class: 'bottom-10' %}
+                            </div>
+                        </div>
+    
+                    {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

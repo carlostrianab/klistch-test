@@ -1,0 +1,31 @@
+<div class="fixed inset-0 z-[110] h-full"
+    x-data="QuickView"
+    x-cloak
+    x-show="showQuickView"
+    x-trap="showQuickView"
+    @update-cart.window="updateQuickView()"
+    @keydown.escape.window="showQuickView = false"
+    @toggle-quick-view.window="$nextTick(() => {
+            fetchProduct($event.detail.handle);
+    })"
+    role="dialog" aria-modal="true">
+    <div class="absolute bg-gray-200 z-20 w-full top-0 bottom-0 right-0 md:max-w-md shadow-3xl"
+        x-show="showQuickView" @click.outside="showQuickView = false"
+        x-transition:enter="transform transition ease-in-out duration-400" 
+        x-transition:enter-start="translate-x-full opacity-0" 
+        x-transition:enter-end="translate-x-0 opacity-1" 
+        x-transition:leave="transform transition ease-in-out duration-400" 
+        x-transition:leave-start="translate-x-0" 
+        x-transition:leave-end="translate-x-full opacity-0">
+        
+        <div class="bg-white relative h-full ml-auto max-w-xs md:max-w-md">
+            <button type="button" class="close-button absolute top-4 right-4 is-focusable" @click="showQuickView = false" aria-label="{{ 'accessibility.close' | t }}">
+                {% render 'icon-close', class: "h-6" %}
+            </button>
+            <div class="modal__overlay fixed inset-0 bg-black/20 -z-10" x-transition.opacity @click="showQuickView = false"></div>
+            <div class="quick__view-content h-full no-scrollbar mx-auto" x-ref="quick_view_content">
+            </div>
+        </div>
+    </div>
+</div>
+  

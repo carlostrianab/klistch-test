@@ -1,0 +1,178 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "custom_liquid_7GrYka": {
+      "type": "custom-liquid",
+      "settings": {
+        "container": "page-width",
+        "custom_liquid": "<h1 style=\"font-weight: bold; font-size: 28px;\">Collabs<\/h1>",
+        "padding_top": 24,
+        "padding_bottom": 0
+      }
+    },
+    "collection_tabs_vertical_N4pQVR": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_P9tkfg": {
+          "type": "filter",
+          "settings": {
+            "title": "Hello Kitty",
+            "collection": "hello-kitty-x-kitsch",
+            "products_to_show": 12,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_n7HGji": {
+          "type": "filter",
+          "settings": {
+            "title": "Harry Potter™",
+            "collection": "harry-potter",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_XGCpap": {
+          "type": "filter",
+          "disabled": true,
+          "settings": {
+            "title": "Mickey and Minnie",
+            "collection": "kitsch-mickey-and-minnie",
+            "products_to_show": 14,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_tzhBRA": {
+          "type": "filter",
+          "settings": {
+            "title": "Disney",
+            "collection": "disney-x-kitsch",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_gbPHh3": {
+          "type": "filter",
+          "settings": {
+            "title": "Bridgerton",
+            "collection": "kitsch-x-bridgerton",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_wW34ix": {
+          "type": "filter",
+          "settings": {
+            "title": "Wonder Woman™",
+            "collection": "wonderwoman-x-kitsch",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_bU8E8q": {
+          "type": "filter",
+          "disabled": true,
+          "settings": {
+            "title": "Disney Princess™",
+            "collection": "disney-kitsch-collection",
+            "products_to_show": 12,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_ge4dCq": {
+          "type": "filter",
+          "settings": {
+            "title": "Wednesday™",
+            "collection": "wednesday-x-kitsch-collection",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_PRktPB": {
+          "type": "filter",
+          "settings": {
+            "title": "BT21™",
+            "collection": "bt21-x-kitsch-collection-1",
+            "products_to_show": 12,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_ma3fcz": {
+          "type": "filter",
+          "settings": {
+            "title": "elf",
+            "collection": "elf-x-kitsch-collection",
+            "products_to_show": 12,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_P9tkfg",
+        "filter_n7HGji",
+        "filter_XGCpap",
+        "filter_tzhBRA",
+        "filter_gbPHh3",
+        "filter_wW34ix",
+        "filter_bU8E8q",
+        "filter_ge4dCq",
+        "filter_PRktPB",
+        "filter_ma3fcz"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": false,
+        "subscription_toggle_title": "Save 30% w\/ Auto-ship",
+        "subscription_toggle_active_title": "Shopping Auto-ship",
+        "subscription_toggle_perks": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+        "filter_title": "Collection",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_liquid_7GrYka",
+    "collection_tabs_vertical_N4pQVR"
+  ]
+}

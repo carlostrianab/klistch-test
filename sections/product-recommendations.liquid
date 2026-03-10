@@ -1,0 +1,385 @@
+
+<style>
+  #Product-recommendations-{{ section.id }}{
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+</style>
+
+<div id="Product-recommendations-{{ section.id }}" class="{{ section.settings.container }} mx-auto px-4 {% if section.settings.enable_swipe_mobile %} mobile-pr-0 {% endif %}">
+  <div class="product-recommendations"
+    x-ref="recommendations" 
+    x-title="ProductRecommendation" 
+    x-data="{
+      url: `{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}`,
+      getProducts(){
+        fetch(this.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('.product-recommendations');
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.$refs.recommendations.innerHTML = recommendations.innerHTML;
+
+              setTimeout(() => {
+                KeenSlider(this.$refs.slider, {
+                  loop: true,
+                  slides: {
+                    spacing: 12,
+                    perView: {{ section.settings.grid_desktop }},
+                  },
+                  breakpoints: {
+                    '(max-width: 768px)': {
+                      slides: {
+                        spacing: 12,
+                        perView: {{ section.settings.grid_tablet }},
+                      }
+                    },
+                    '(max-width: 500px)': {
+                      slides: {
+                        spacing: 12,
+                        perView: {{ section.settings.grid_mobile }},
+                      }
+                    },
+                  },
+                }, [UnickNavigationPlugin]);
+
+              }, 100);
+
+            }
+
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+    }" x-init="$nextTick(() => { getProducts(); });">
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      {%- unless section.settings.heading == blank -%}
+        <div class="my-4">
+          {% render 'heading', options: section.settings, id: section.id %}
+        </div>
+      {%- endunless -%}
+      <ul x-ref="slider" class="keen-slider" role="list">
+        {%- for recommendation in recommendations.products -%}
+            <li class="featured-colection__item keen-slider__slide w-full" {{ block.shopify_attributes }}>
+              {% render 'card-product',
+                    card_product: recommendation,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    show_sold_count: section.settings.show_sold_count,
+                    image_ratio: section.settings.image_ratio,
+                    enable_gallery: false,
+              %}
+            </li>
+        {%- endfor -%}
+      </ul>
+
+    {% endif %}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Dynamic recommendations use order and product information to change and improve over time. [Learn more](https://help.shopify.com/themes/development/recommended-products)"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Collections",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "sub_heading",
+      "label": "Sub heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_label",
+      "label": "Label",
+      "info": "This text will show above the heading as a label"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3,
+      "label": "Maximum products to show"
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "aspect-auto",
+          "label": "Auto"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-portrait",
+          "label": "Portrait"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_count",
+      "default": false,
+      "label": "Show product sold count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#featured-collection-show-product-rating)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_variants",
+      "default": true,
+      "label": "Show color variants",
+      "info": "To display based on metafields and meta objects"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": 4,
+      "min": 0.5,
+      "max": 8,
+      "step": 0.5
+    },
+    {
+      "type": "range",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": 3,
+      "min": 0.5,
+      "max": 8,
+      "step": 0.5
+    },
+    {
+      "type": "range",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": 2,
+      "min": 0.5,
+      "max": 8,
+      "step": 0.5
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_swipe_mobile",
+      "label": "Enable swipe on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Heading styles"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 100,
+      "step": 2,
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "default": "md:text-left",
+      "options": [
+        {
+          "value": "md:text-left",
+          "label": "Left"
+        },
+        {
+          "value": "md:text-center",
+          "label": "Center"
+        },
+        {
+          "value": "md:text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "Font family",
+      "default": "font-heading",
+      "options": [
+        {
+          "value": "font-primary",
+          "label": "Primary"
+        },
+        {
+          "value": "font-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "font-heading",
+          "label": "Heading"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "default": "font-bold",
+      "options": [
+        {
+          "value": "font-bold",
+          "label": "Bold"
+        },
+        {
+          "value": "font-semibold",
+          "label": "Semibold"
+        },
+        {
+          "value": "font-medium",
+          "label": "Medium"
+        },
+        {
+          "value": "font-normal",
+          "label": "Normal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Mobile styles"
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "text_align_mobile",
+      "label": "Text align",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    }
+  ]
+}
+{% endschema %}

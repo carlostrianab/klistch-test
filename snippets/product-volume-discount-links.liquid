@@ -1,0 +1,142 @@
+{% if block.settings.title != blank and block.settings.product1 != blank %}
+    <div class="product-volume-discount-links p-2 rounded bg-gray-100 my-3">
+            <div class="font-semibold text-lg mb-2">{{ block.settings.title }}</div>
+    
+
+        <ul class="bg-white rounded-md border divide-y">
+            {% if block.settings.product1 != blank %}
+                <li>
+                    {% if product.handle == block.settings.product1.handle %}
+                        <span 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product1.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product1_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product1_flag }}
+                            </span>
+                        </span>
+                    {% else %}
+                        <a href="{{ block.settings.product1.url }}"
+                            aria-label="{{ block.settings.product1.title }}" 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product1.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product1_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product1_flag }}
+                            </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            {% if block.settings.product2 != blank %}
+                <li>
+                    {% if product.handle == block.settings.product2.handle %}
+                        <span 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product2.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product2_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product2_flag }}
+                            </span>
+                        </span>
+                    {% else %}
+                        <a href="{{ block.settings.product2.url }}" 
+                            aria-label="{{ block.settings.product2.title }}" 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product2.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product2_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product2_flag }}
+                            </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            {% if block.settings.product3 != blank %}
+                <li>
+                    {% if product.handle == block.settings.product3.handle %}
+                        <span 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product3.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product3_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product3_flag }}
+                            </span>
+                        </span>
+                    {% else %}
+                        <a href="{{ block.settings.product3.url }}" 
+                            aria-label="{{ block.settings.product3.title }}" 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product3.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product3_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product3_flag }}
+                            </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+            {% if block.settings.product4 != blank %}
+                <li>
+                    {% if product.handle == block.settings.product4.handle %}
+                        <span 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product4.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product4_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product4_flag }}
+                            </span>
+                        </span>
+                    {% else %}
+                        <a href="{{ block.settings.product4.url }}" 
+                            aria-label="{{ block.settings.product4.title }}" 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product4.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product4_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product4_flag }}
+                            </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+            {% if block.settings.product5 != blank %}
+                <li>
+                    {% if product.handle == block.settings.product5.handle %}
+                        <span 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product5.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product5_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product5_flag }}
+                            </span>
+                        </span>
+                    {% else %}
+                        <a href="{{ block.settings.product5.url }}" 
+                            aria-label="{{ block.settings.product5.title }}" 
+                            class="px-4 py-2 flex font-semibold justify-between gap-2 items-center {% if product.handle == block.settings.product5.handle %} opacity-55 {% endif %}">
+                            <span>
+                                {{ block.settings.product5_label }}
+                            </span>
+                            <span class="py-1 px-3 bg-black text-white rounded-full leading-normal text-sm">
+                                {{ block.settings.product5_flag }}
+                            </span>
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+            </ul>
+    </div>
+{% endif %}

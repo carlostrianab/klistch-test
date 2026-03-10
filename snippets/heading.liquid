@@ -1,0 +1,28 @@
+
+<div class="{{ options.text_align }} {{ options.text_align_mobile }} w-full">
+    <style>
+        #Heading_{{ id }}{
+            font-size: {{ options.font_size | append: 'px' }};
+        }
+
+        @media (max-width: 768px) {
+            #Heading_{{ id }}{
+                font-size: {{ options.font_size_mobile | append: 'px' }};
+            }
+        }
+    </style>
+    
+    {% if options.heading_label != blank %}
+        {% render '_label', text: options.heading_label, class: 'mb-2' %}
+    {% endif %}
+
+    <h2 id="Heading_{{ id }}" class="block__heading leading-[normal]  {{ options.font_weight }} "{{ block.shopify_attributes }}>
+        <span class="{{ options.font }} ">{{ options.heading | escape }}</span>
+    </h2>
+
+    {% if options.sub_heading != blank %}
+        <div class="heading__subheading mt-1">
+            {{ options.sub_heading }}
+        </div>
+    {% endif %}
+</div>

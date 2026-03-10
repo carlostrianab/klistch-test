@@ -1,0 +1,59 @@
+<div class="map">
+    <div class="map__wrapper {{ section.settings.container }} mx-auto px-4">
+        {% if section.settings.map_content != blank %}
+            {{ section.settings.map_content }}
+        {% endif %}
+    </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Map",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "html",
+      "id": "map_content",
+      "label": "Map Content",
+      "info": "Generate map content from [here](https://www.embedgooglemap.net), and paste into the field above."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Map"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,7 @@
+<div class="{{ class }}">
+  {% if block.settings.product != blank %}
+    {% render 'okendo-reviews-product-rating-summary', product: block.settings.product %}
+  {% else %}
+    {% render 'okendo-reviews-product-rating-summary', product: product %}
+  {% endif %}
+</div>

@@ -1,0 +1,272 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_jQQTE8": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_gBzq7D": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "heading": "Image banner",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-bold",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_6N9BPP": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Give customers details about the banner image(s) or content on the template.</p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-left",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_gmmAAx": {
+          "type": "buttons",
+          "disabled": true,
+          "settings": {
+            "primary_button": "Primary button",
+            "primary_button_link": "",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start"
+          }
+        }
+      },
+      "block_order": [
+        "heading_gBzq7D",
+        "text_6N9BPP",
+        "buttons_gmmAAx"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_2.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "image_with_text_UeJtj3": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_NDRx3C": {
+          "type": "heading",
+          "settings": {
+            "heading": "the shower filter",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 50,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-medium",
+            "font_size_mobile": 36,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_HQRgJk": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>for healthier hair & skin</strong></p>",
+            "font_size": 18,
+            "letter_spacing": 0,
+            "text_align": "md:text-center",
+            "font_weight": "font-normal",
+            "font_size_mobile": 12,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "heading_NDRx3C",
+        "text_HQRgJk"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "full-width",
+        "image": "shopify://shop_images/collection_showerfilter_desktop2.jpg",
+        "image_mobile": "shopify://shop_images/collection_showerfilter_mobile.jpg",
+        "image_link": "",
+        "image_padding": false,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": "#ffe6d8"
+      }
+    },
+    "collection_tabs_vertical_JgekpR": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_e4qJhM": {
+          "type": "filter",
+          "settings": {
+            "title": "Best Sellers",
+            "collection": "bottle-free-best-sellers",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_n7icdW": {
+          "type": "filter",
+          "settings": {
+            "title": "Shampoo",
+            "collection": "shampoo",
+            "products_to_show": 9,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_x9XD3X": {
+          "type": "filter",
+          "settings": {
+            "title": "Conditioner",
+            "collection": "conditioner",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_gkF4dP": {
+          "type": "filter",
+          "settings": {
+            "title": "Body Care",
+            "collection": "body-care",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_AbimHY": {
+          "type": "filter",
+          "settings": {
+            "title": "Bundles",
+            "collection": "shower-filter-bundles",
+            "products_to_show": 5,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_NMeLfG": {
+          "type": "filter",
+          "settings": {
+            "title": "Accessories",
+            "collection": "bottle-free-accessories",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_e4qJhM",
+        "filter_n7icdW",
+        "filter_x9XD3X",
+        "filter_gkF4dP",
+        "filter_AbimHY",
+        "filter_NMeLfG"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": false,
+        "subscription_toggle_title": "Save 30% w/ Auto-ship",
+        "subscription_toggle_active_title": "Shopping Auto-ship",
+        "subscription_toggle_perks": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+        "filter_title": "Collection",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-1",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "image_banner_jQQTE8",
+    "main",
+    "image_with_text_UeJtj3",
+    "collection_tabs_vertical_JgekpR"
+  ]
+}

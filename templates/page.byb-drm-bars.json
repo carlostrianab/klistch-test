@@ -1,0 +1,227 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "byo_buttons_teGGFV": {
+      "type": "byo-buttons",
+      "blocks": {
+        "button_r8GYf4": {
+          "type": "button",
+          "settings": {
+            "title": "Hair Loss",
+            "products": [
+              "rice-water-protein-shampoo-bar-strengthening",
+              "rice-water-protein-conditioner-bar-strengthening",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_qWMeN8": {
+          "type": "button",
+          "settings": {
+            "title": "Flat & Dull Hair",
+            "products": [
+              "rosemary-biotin-volumizing-solid-shampoo",
+              "rosemary-biotin-volumizing-solid-conditioner",
+              "bond-repair-solid-treatment",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_wUz3Hf": {
+          "type": "button",
+          "settings": {
+            "title": "Damaged Hair",
+            "products": [
+              "nourishing-shampoo-bar",
+              "castor-oil-solid-conditioner",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_yTxqp7": {
+          "type": "button",
+          "settings": {
+            "title": "Frizzy Hair",
+            "products": [
+              "nourishing-shampoo-bar",
+              "deep-moisturizing-conditioner-bar",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "hair-wax-stick",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_UVf38H": {
+          "type": "button",
+          "settings": {
+            "title": "Dandruff",
+            "products": [
+              "clarifying-shampoo-bar",
+              "castor-oil-solid-conditioner",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_jtYzmH": {
+          "type": "button",
+          "settings": {
+            "title": "Dry Hair",
+            "products": [
+              "nourishing-shampoo-bar",
+              "deep-moisturizing-conditioner-bar",
+              "bond-repair-solid-treatment",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        },
+        "button_Ak9rf4": {
+          "type": "button",
+          "settings": {
+            "title": "Brassy Hair",
+            "products": [
+              "purple-toning-solid-shampoo",
+              "purple-toning-solid-conditioner",
+              "bond-repair-solid-treatment",
+              "moisturizing-argan-milk-leave-in-conditioner",
+              "self-draining-soap-dish-black",
+              "bottle-free-beauty-bar-bag-blush",
+              "rpet-bottle-free-beauty-bar-conditioner-bag-black"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "button_r8GYf4",
+        "button_qWMeN8",
+        "button_wUz3Hf",
+        "button_yTxqp7",
+        "button_UVf38H",
+        "button_jtYzmH",
+        "button_Ak9rf4"
+      ],
+      "settings": {
+        "container": "page-width",
+        "suggestion_description": "<p><strong>Take out the guesswork.</strong> Grab a bundle customized for your hair concerns.</p>"
+      }
+    },
+    "byo_bundle_rbjkXe": {
+      "type": "byo-bundle",
+      "blocks": {
+        "package_KJQThG": {
+          "type": "package",
+          "settings": {
+            "title": "Shampoo",
+            "products": [
+              "rice-water-protein-shampoo-bar-strengthening",
+              "repairing-argan-oil-shampoo-bar",
+              "rosemary-biotin-volumizing-solid-shampoo",
+              "nourishing-shampoo-bar",
+              "clarifying-shampoo-bar",
+              "purple-toning-solid-shampoo",
+              "ultra-sensitive-shampoo-body-wash-bar",
+              "coconut-oil-deep-moisturizing-solid-shampoo-bar"
+            ]
+          }
+        },
+        "package_TVUhJq": {
+          "type": "package",
+          "settings": {
+            "title": "Conditioner",
+            "products": [
+              "rice-water-protein-conditioner-bar-strengthening",
+              "repairing-argan-oil-conditioner-bar",
+              "rosemary-biotin-volumizing-solid-conditioner",
+              "castor-oil-solid-conditioner",
+              "deep-moisturizing-conditioner-bar",
+              "purple-toning-solid-conditioner",
+              "nourishing-conditioner-bar",
+              "ultra-sensitive-solid-conditioner-shave-bar"
+            ]
+          }
+        },
+        "package_E3aicA": {
+          "type": "package",
+          "settings": {
+            "title": "Body Wash",
+            "products": [
+              "charcoal-detoxifying-body-wash-bar",
+              "shea-butter-solid-body-wash",
+              "sugar-exfoliating-body-scrub-bar",
+              "kojic-acid-face-and-body-bar",
+              "cleansing-tart-cherry-body-wash",
+              "shave-butter-gender-neutral-packaging",
+              "solid-shave-butter"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "package_KJQThG",
+        "package_TVUhJq",
+        "package_E3aicA"
+      ],
+      "custom_css": [
+        ".promo-product-title {font-size: 85%; line-height: 1.25;}",
+        ".promo-product-description {padding: 0 5px;}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_suggestions": false,
+        "suggestion_description": "<p>Filter by type</p>",
+        "sidebar_title": "Build Your Own Bundle",
+        "sidebar_sub_title": "<p>20% off 3 products<br/>25% off 4 products<br/>30% off 5+ products </p>",
+        "empty_placeholder": 6,
+        "min_limit": 3,
+        "discount_percentage": "20",
+        "tier_2_limit": 4,
+        "tier_2_discount_percentage": "25",
+        "tier_3_limit": 5,
+        "tier_3_discount_percentage": "30",
+        "footer_checkout_text": "Checkout",
+        "discount_code": "",
+        "checkout_behavior": "checkout",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "byo_buttons_teGGFV",
+    "byo_bundle_rbjkXe"
+  ]
+}

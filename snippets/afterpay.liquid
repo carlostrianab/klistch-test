@@ -1,0 +1,40 @@
+<!-- BEGIN AFTERPAY_PRESENT -->
+<script src="{{ 'afterpay.js' | asset_url }}" defer="defer"></script>
+{% assign productPrice = product.price %}
+
+{% for tag in product.tags %}
+  {% if tag contains "discount:" %}
+      {% assign discount_percentage = tag | split: ':' | last | plus: 0 %}
+      {% assign discount_price = product.price | times: discount_percentage | divided_by: 100 %}
+      {% assign discount_price = product.price | minus: discount_price %}
+      {% assign productPrice = discount_price %}
+  {% endif %}
+{% endfor %}
+
+<script>
+ let amount = 0, priceSelector = "", locale = 'en_US';
+ let afterpayLogoColor = "color"; // ['black', 'white', or 'color']
+ let showUpperLimit = false;
+ let currentObserver = { activated: true, isDecimalPrice: true };
+ let minMaxThreshold = { min: 1000, max: 100000 };
+ {% case template.name %} 
+    {% when "product" %}
+        amount = {{ productPrice | json}};    
+        priceSelector= "#product-price-selector"
+        currentObserver = null;
+    {% when "cart" %}     
+        amount = {{cart.total_price | json}};
+        priceSelector = ".cart__cost-summary"
+        currentObserver.observerTarget = ".cart__form";
+        currentObserver.targetPriceSelector = ".cart__cost-summary";
+    {% when "product" or "cart" %}
+       const apConfig = {
+          afterpayLogoColor, priceSelector,
+          locale, amount, showUpperLimit, minMaxThreshold,
+          mutationObserver: currentObserver
+        };
+       window.addEventListener("load", function(){
+         new presentAfterpay(apConfig).init();
+       })
+  {%endcase%}
+</script>

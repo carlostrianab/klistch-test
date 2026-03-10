@@ -1,0 +1,292 @@
+<style>
+  #section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+</style>
+
+<div id="section-{{ section.id }}">
+  <div class="video-section {% unless section.settings.full_width %} page-width{% endunless %}">
+      <style>
+        .section__title--{{ section.id }}{
+          font-size: {{ section.settings.font_size  | append: 'px !important' }} ;
+        }
+  
+        .video-wrapper,
+        .section__video--{{ section.id }}{
+            height: {{ section.settings.video_height  | append: 'px' }};
+            max-width: {{ section.settings.video_width | append: 'px' }};
+            margin: 0 auto;
+        }
+  
+        @media (max-width: 640px) {
+          .section__title--{{ section.id }}{
+            font-size: {{ section.settings.font_size_mobile | append: 'px !important' }};
+          }
+          .video-wrapper,
+          .section__video--{{ section.id }}{
+              height: {{ section.settings.video_height_mobile | append: 'px' }};
+              margin: 0 auto;
+          }
+        }
+  
+      </style>
+      {% if section.settings.title != blank %}
+      <h2 class="section__title--{{ section.id }} {{ section.settings.align_text }} font--secondary mb-6" 
+        style="font-size: {{ section.settings.font_size }}px">
+        {{ section.settings.title | escape }}
+      </h2>
+    {% endif %}
+  
+    <div class="relative video-wrapper" 
+      x-data="{ playing: false, muted: true }"
+      {% if section.settings.force_audio_play %}
+        x-init="$nextTick(() => {
+          setTimeout(() => {
+            $refs.video.muted = false;
+          }, 1000);
+        });"
+      {% endif %}
+      >
+      {% if section.settings.video_url != blank or  section.settings.custom_video != blank %}
+        {%- if section.settings.video_url.type == 'youtube' and section.settings.custom_video == blank -%}
+          <iframe src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?enablejsapi=1"
+                 class="section__video--{{ section.id }} js-youtube w-full h-full mx-auto" 
+                 allow="autoplay; encrypted-media" 
+                 allowfullscreen title="{{ section.settings.description | escape }}"></iframe>
+        {%- else -%}
+        {% unless section.settings.autoplay %}
+            <button title="Play video"
+              x-show="!playing"
+              class="absolute transform left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full z-10 text-black" @click="$refs.video.play(); playing = true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            </button>
+          {% endunless %}
+  
+          <button 
+            class="absolute z-10 bottom-4 right-4 bg-white p-1 rounded-full"
+            x-cloak
+            @click="$refs.video.muted = !$refs.video.muted; muted = !muted " type="button">
+              <svg x-show="!muted" xmlns="http://www.w3.org/2000/svg" class="icon icon-sound" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M15 8a5 5 0 0 1 0 8" />
+                <path d="M17.7 5a9 9 0 0 1 0 14" />
+                <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
+              </svg>
+              <svg x-show="muted" xmlns="http://www.w3.org/2000/svg" class="icon icon-nosound" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
+                <path d="M16 10l4 4m0 -4l-4 4" />
+              </svg>
+          </button>
+  
+          <video 
+            x-ref="video"
+            class="section__video--{{ section.id }} w-full h-full mx-auto relative"
+            {% if section.settings.autoplay %}
+              autoplay playsinline muted="true"
+            {% endif %}
+            {% if section.settings.enable_controls %}
+              controls
+            {% endif %}
+            {% if section.settings.loop %}
+              loop
+            {% endif %}
+            {% if section.settings.muted %}
+              muted
+            {% endif %}
+            {% if section.settings.poster != blank %}
+              poster="{{ section.settings.poster | img_url: 'master' }}"
+            {% endif %}
+            src="{{ section.settings.custom_video }}" >
+            your browser does not support the video tag
+          </video>
+        {%- endif -%}
+  
+      {% endif %}
+    </div>
+  
+  
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": "section",
+  "class": "spaced-section spaced-section--full-width",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Video",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Align text",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size (mobile)",
+      "unit": "px",
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc",
+      "label": "t:sections.video.settings.video_url.label",
+      "placeholder": "t:sections.video.settings.video_url.placeholder",
+      "info": "t:sections.video.settings.video_url.info"
+    },
+    {
+      "type": "text",
+      "id": "custom_video",
+      "label": "Custom video",
+      "info": "Paste Shopify hosted video link here"
+    },
+    {
+      "type": "header",
+      "content": "video settings",
+      "info": "Some options applies to only Shopify hosted vidoes"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto play",
+      "default": false,
+      "info": "Autoplay will mute the video for browser privacy"
+    },
+    {
+      "type": "checkbox",
+      "id": "force_audio_play",
+      "label": "Force audio play",
+      "default": false,
+      "info": "This will force audio play for the video"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_controls",
+      "label": "Enable controls",
+      "default": true,
+      "info": "Enable controls will show the play/pause button"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": false,
+      "info": "Loop will play the video again and again"
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muted",
+      "default": false,
+      "info": "Muted will mute the video"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Poster",
+      "info": "Poster will show a preview of the video before it starts playing"
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "label": "Width",
+      "unit": "px",
+      "min": 200,
+      "max": 1600,
+      "step": 20,
+      "default": 660
+    },
+    {
+      "type": "range",
+      "id": "video_height",
+      "label": "Height",
+      "unit": "px",
+      "min": 200,
+      "max": 1600,
+      "step": 20,
+      "default": 660
+    },
+    {
+      "type": "range",
+      "id": "video_height_mobile",
+      "label": "Height (mobile)",
+      "unit": "px",
+      "min": 100,
+      "max": 1000,
+      "step": 10,
+      "default": 660
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+  {% endschema %}

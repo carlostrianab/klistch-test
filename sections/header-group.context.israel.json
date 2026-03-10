@@ -1,0 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "parent": "header-group.json",
+  "context": {
+    "market": "israel"
+  },
+  "sections": {
+    "announcement-bar": {
+      "settings": {},
+      "blocks": {
+        "announcement_CJhhXW": {
+          "settings": {
+            "text": "<p><strong>Shipping to Israel: Possible Delays in Some Areas. </strong><a href=\"https://www.dhl.de/en/privatkunden/information/aktuelles.html#isr\" target=\"_blank\"><span style=\"text-decoration:underline\"><strong>Info Here. </strong></span></a></p>"
+          }
+        }
+      }
+    }
+  }
+}

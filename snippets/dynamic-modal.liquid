@@ -1,0 +1,39 @@
+
+{% comment %} You can teleport data to this modal and show it. It will display over other elements {% endcomment %}
+<div x-data="{ open: false }" x-title="Dynamic modal" class="flex justify-center">
+    <!-- Modal -->
+    <div
+        x-show="open"
+        @dynamic-modal.window="open = true"
+        style="display: none"
+        x-on:keydown.escape.prevent.stop="open = false"
+        role="dialog"
+        aria-modal="true"
+        x-id="['modal-title']"
+        :aria-labelledby="$id('modal-title')"
+        class="fixed inset-0 z-[200] overflow-y-auto"
+    >
+        <!-- Overlay -->
+        <div x-show="open" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50"></div>
+
+        <!-- Panel -->
+        <div
+            x-show="open" x-transition
+            x-on:click="open = false"
+            class="relative flex min-h-screen items-center justify-center p-4">
+            <div x-on:click.stop
+                x-trap.noscroll.inert="open"
+                class="relative w-full max-w-2xl overflow-y-auto bg-white p-8 shadow-lg">
+                <button type="button" aria-label="Close modal" x-on:click="open = false" class="top-1 absolute right-1 p-1">
+                    <span class="sr-only">Close</span>
+                    {% render 'icon-close', class: 'w-8' %}
+                </button>
+               
+                <div id="dynamic-modal-content">
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

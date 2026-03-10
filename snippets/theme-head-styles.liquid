@@ -1,0 +1,131 @@
+<link rel="preload" href="{{ 'SophilliaRegular.woff2' | asset_url }}" as="font" type="font/woff2" crossorigin>
+
+<style>
+  @font-face {
+      font-family: 'Sophillia';
+      src: url("{{ 'SophilliaRegular.woff2' | asset_url }}") format('woff2'),
+          url("{{ 'SophilliaRegular.woff' | asset_url }}") format('woff');
+      font-style: normal;
+      font-display: swap;
+  }
+</style>
+
+{%- liquid
+    assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+    assign body_font_medium = settings.type_body_semi_bold | font_modify: 'weight', '500'
+    assign body_font_semi_bold = settings.type_body_semi_bold | font_modify: 'weight', '600'
+    assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+    assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+
+  %}
+
+  {% style %}
+
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ body_font_bold | font_face: font_display: 'swap' }}
+    {{ body_font_medium | font_face: font_display: 'swap' }}
+    {{ body_font_italic | font_face: font_display: 'swap' }}
+    {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+
+    :root {
+
+      --page-width: {{ settings.page_width }}px;
+      --large-width: 992px;
+      --medium-width: 768px;
+      --small-width: 576px;
+
+      --font-primary-family: {{ settings.primary_font.family }};
+      --font-secondary-family: {{ settings.secondary_font.family }};
+      {% if settings.sophillia_replacement != blank %}
+        --font-sophillia-family: {{ settings.sophillia_replacement.family }};
+      {% else %}
+        --font-sophillia-family: 'Sophillia', sans-serif;
+      {% endif %}
+
+      --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+      --font-body-style: {{ settings.type_body_font.style }};
+      --font-body-weight: {{ settings.type_body_font.weight }};
+      --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
+
+      --body-font-size: {{ settings.body_font_size }}px;
+
+      --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+      --font-heading-style: {{ settings.type_header_font.style }};
+      --font-heading-weight: {{ settings.type_header_font.weight }};
+
+      --body-color: {{ settings.body_color }};
+      --primary-color: {{ settings.primary_color }};
+      --border-color: {{ settings.border_color }};
+      --link-color: {{ settings.link_color }};
+
+      --button-primary-background-color: {{ settings.button_primary_background_color }};
+      --button-primary-text-color: {{ settings.button_primary_text_color }};
+      --button-secondary-background-color: {{ settings.button_secondary_background_color }};
+      --button-secondary-text-color: {{ settings.button_secondary_text_color }};
+      --button-outline-dark: {{ settings.outline_dark_button_color }};
+      --button-outline-light: {{ settings.outline_light_button_color }};
+
+      --button-height: 42px;
+      
+
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    html {
+      box-sizing: border-box;
+      height: 100%;
+    }
+    html,body{
+      scroll-behavior: smooth;
+    }
+    body {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-columns: 100%;
+      min-height: 100%;
+      margin: 0;
+      font-size: var(--body-font-size);
+      font-family: var(--font-body-family);
+      font-style: var(--font-body-style);
+      font-weight: var(--font-body-weight);
+      color: var(--body-color);
+    }
+
+    [x-cloak] { display: none !important; }
+
+    /* Okendo custom styles */
+    .okeReviews[data-oke-container] .oke-w-reviewer-verified-icon:before, div.okeReviews .oke-w-reviewer-verified-icon:before,
+    .okeReviews[data-oke-container] .oke-w-reviewer-verified, div.okeReviews .oke-w-reviewer-verified{
+      color: #B25F2E !important;
+    }
+    .okeReviews[data-oke-container] .oke-w-reviewerRecommendation--yes:before, div.okeReviews .oke-w-reviewerRecommendation--yes:before{
+      background-color: #B25F2E !important;
+    }
+    .oke-tag,.oke-w-reviewsSummary{ display: none !important; }
+   .product__info .oke-sr-count{
+      border-bottom: 1px solid black;
+    }
+    /* Mobile */
+    @media (max-width: 576px) {
+      .has_expedited_enabled{
+        left: 44.7778% !important;
+      }
+    }
+    
+  {% endstyle %}
+
+{%- unless settings.type_body_font.system? -%}
+  <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+{%- endunless -%}
+
+{%- unless settings.type_header_font.system? -%}
+  <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+{%- endunless -%}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css" media="print" onload="this.media='all'">
+
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css"></noscript>

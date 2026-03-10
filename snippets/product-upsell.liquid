@@ -1,0 +1,46 @@
+{% if block.settings.products != blank %}
+<style>
+    .product-upsell .card__heading,
+    .product-upsell .card__price{
+        font-size: {{ block.settings.title_size | append: 'px' }};
+    }
+
+    {% if block.settings.cross_out_price %}
+        .product-upsell .price__regular{
+            text-decoration: line-through !important;
+        }
+        .product-upsell .price__sale .price-item--last{
+            display: none;
+        }
+    {% endif %}
+</style>
+{% if block.settings.above_atc %}
+    <div x-data>
+        <template x-teleport="#addToCartPlaceholder">
+{% endif %}
+        <div class="product-upsell py-2 {% if block.settings.visually_hidden %} hidden {% endif %}">
+            {% if block.settings.title != blank %}
+                <h2 class="mb-3 font-semibold">
+                    {{ block.settings.title | escape }}
+                </h2>
+            {% endif %}
+            <div class="grid gap-2 {{ block.settings.mobile_grid }} {{ block.settings.desktop_grid }}">
+                {% for item in block.settings.products %}
+                {% render 'card-product',
+                    card_product: item,
+                    show_secondary_image: true,
+                    hide_flags: block.settings.hide_flags,
+                    hide_price: block.settings.hide_price,
+                    title_prefix: block.settings.title_prefix,
+                    prefix_color: block.settings.prefix_color,
+                    disable_link: true,
+                    show_atc: true %}
+                {% endfor %}
+            </div>
+        </div>
+{% if block.settings.above_atc %}
+    </template>
+</div>
+{% endif %}
+
+{% endif %}

@@ -1,0 +1,45 @@
+{% liquid
+    assign sellingPlanGroups = item.product.selling_plan_groups | where: 'app_id', 'SKIO'
+    assign sellingPlanAllocation = item.variant.selling_plan_allocations | first 
+%}
+
+<div class="mb-2 cart-recharge-accelerator w-full">
+    <div x-show="!isSubscribed">
+      <button type="button" class="p-2 w-full border border-black font-medium text-sm" @click="toggleSubscription({{ forloop.index }}, qty, {{ sellingPlanAllocation.selling_plan.id  }})">
+            {% assign subscription_discount_percent = sellingPlanGroups[0].selling_plans[0].price_adjustments[0].value %}
+      {% if subscription_discount_percent == 0 %}
+        {% assign regular_price = item.variant.compare_at_price %}
+        {% assign sale_price = item.variant.price %}
+
+        {% if regular_price > sale_price and regular_price > 0 %}
+          {% assign discount_percent = regular_price | minus: sale_price | times: 100 | divided_by: regular_price %}
+          {% assign subscription_discount_percent = discount_percent | round %}
+        {% else %}
+          {% assign subscription_discount_percent = 30 %}
+        {% endif %}
+      {% endif %}
+
+      Subscribe to get {{ subscription_discount_percent }}{% if sellingPlanGroups[0].selling_plans[0].price_adjustments[0].value_type == 'percentage' or subscription_discount_percent != 0 %}%{% endif %} off forever
+      </button>
+    </div>
+
+    {% if item.selling_plan_allocation.price > 0 %}
+      <div class="flex flex-col" x-cloak>
+        <div class="w-full z-10 md:min-w-[250px] bg-white">
+          <select aria-label="Change subscription" class="w-full text-sm" @change="toggleSubscription({{ forloop.index }}, qty, $event.target.selectedOptions[0].value)">
+            <optgroup label="Pay full price">
+                <option value="0">One-time only</option>
+            </optgroup>
+            <optgroup label="Subscribe & Save {{ sellingPlanAllocation.selling_plan.price_adjustments[0].value }}%">
+                <template x-for="plan in Object.entries(selling_plan_groups.find(spg => spg.id == {{ sellingPlanAllocation.selling_plan_group_id | json | escape }}).selling_plans)
+                    .sort((a, b) => a[1].name.localeCompare(b[1].name))
+                    .map(([key, value]) => value)">
+                    <option :selected="plan.id == {{ item.selling_plan_allocation.selling_plan.id }}" :value="plan.id" x-text="'Delivery ' + plan.name"></option>
+                </template>
+            </optgroup>
+
+          </select>
+        </div>
+      </div>
+    {% endif %}
+</div>

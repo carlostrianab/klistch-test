@@ -1,0 +1,31 @@
+{% if block.settings.collection != blank %}
+    {% assign image = block.settings.collection.featured_image %}
+    {% if block.settings.image != blank %}
+        {% assign image = block.settings.image %}
+    {% endif %}
+    {% if block.settings.link_image %}
+        <a href="{{ block.settings.button_link }}" class="block h-full" aria-label="{{ block.settings.button }}">
+    {% endif %}
+        <div  class="collection-block object-fill bg-cover min-h-[330px] h-full min-w-[220px] relative">
+            {% render 'img-medium', image: image, class: "object-cover min-h-[330px] h-full min-w-[220px]" %}
+            {% if block.settings.secondary_image != blank %}
+                {% comment %} Display on hover {% endcomment %}
+                {% render 'img-medium', image: block.settings.secondary_image, class: 'object-cover h-full min-h-[330px] min-w-[220px] absolute top-0 left-0 opacity-0 hover:opacity-100 transition duration-300 ease-in-out' %}
+            {% endif %}
+            {% if block.settings.button != blank %}
+                {% if block.settings.link_image %}
+                    <button type="button" class="absolute bottom-4 left-4 px-4 py-2 font-medium rounded-sm" style="background-color: {{ block.settings.button_bg }}; color: {{ block.settings.button_color }}">
+                        {{ block.settings.button }}
+                    </button>
+                {% else %}
+                    <a class="" href="{{ block.settings.button_link }}">
+                        {{ block.settings.button }}
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% if block.settings.link_image %}
+        </a>
+    {% endif %}
+
+{% endif %}

@@ -1,0 +1,231 @@
+{% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+
+{% assign hasFilter = false %}
+{%- for filter in collection.filters -%}
+  {%- for filter_value in filter.active_values -%}
+      {% assign hasFilter = true %}
+  {% endfor %}
+{% endfor %}
+
+<div class="filter__wrapper md:mr-8" x-cloak
+    x-data="filter"
+    x-init="$nextTick(() => {
+      sort = '{{ sort_by }}';
+    })"
+    {% if mobile_filter %}
+    @submit-filter.window.debounce="$nextTick(() => { updateFilter() })"
+    {% else %}
+    @filter-updated.window.debounce="$nextTick(() => { updateFilter() })"
+    {% endif %}
+    >
+
+    {% render 'loader' %}
+
+    <form class="filter-form flex flex-col md:flex-row gap-2 md:items-center max-h-[50dvh] overflow-scroll md:overflow-visible" x-ref="filter_form">
+        {%- for filter in collection.filters -%}
+          <details class="filter-group relative border-b md:border-b-0 pb-2 md:pb-0" x-data x-ref="details" @click.outside="$refs.details?.removeAttribute('open')">
+            <summary class="filter-group-summary flex justify-between md:justify-start gap-1 cursor-pointer">
+              <div>
+                <span class="font-medium text-sm">{{ filter.label }}</span>
+                {%- if filter.active_values.size > 0 -%}
+                  <span class="text-sm ml-2">({{ filter.active_values.size }})</span>
+                {%- endif -%}
+              </div>
+              <span class="arrow-icon rotate-90">
+                  {% render 'icon-chevron-right', class: "w-5" %}
+              </span>
+            </summary>
+            <div class="filter-group-display pb-3 md:absolute z-20 bg-white md:shadow py-3 md:px-3 min-w-52 rounded-sm md:max-h-72 md:overflow-scroll">
+
+              <div class="filter-group-display__header flex justify-between items-center">
+                {%- if filter.active_values.size > 0 -%}
+                  <span class="filter-group-display__header-selected text-sm">{{ 'products.facets.filters_selected.one' | t: count: filter.active_values.size }}</span>
+                  <a href="{{ filter.url_to_remove }}" class="underline text-gray-600 text-sm mb-2">
+                    {{ 'products.facets.reset' | t }}
+                  </a>
+                {%- endif -%}
+              </div>
+              
+              {%- case filter.type -%}
+                {%- when 'boolean' or 'list' -%}
+                  <ul class="filter-group-display__list">
+                    {%- for filter_value in filter.values -%}
+                      <li class="filter-group-display__list-item text-sm py-2 flex justify-between {% if filter_value.active %} font-semibold {% endif %}
+                        {% if filter_value.count == 0 and filter_value.active == false -%} opacity-60 {%- endif %}">
+                        <label class="flex items-center cursor-pointer " for="Filter-{{ mobile_filter }}-{{ filter.label | handleize }}-{{ forloop.index }}">
+                          <input type="checkbox"
+                            class="mr-2 accent-black rounded-sm"
+                            {% unless mobile_filter %}
+                            @change="$dispatch('filter-updated')"
+                            {% endunless %}
+                            name="{{ filter_value.param_name }}"
+                            value="{{ filter_value.value }}"
+                            id="Filter-{{ mobile_filter }}-{{ filter.label | handleize }}-{{ forloop.index }}"
+                            {% if filter_value.active -%}checked{%- endif %}
+                            {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
+                          >
+                          {{ filter_value.label }}
+                        </label>
+                      <span>{{ filter_value.count }}</span>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  <noscript>
+                    <div class="filter-group-display__submit my-2 flex justify-end">
+                      <button type="submit" class="bg-primary text-white py-1 px-5 text-sm rounded-sm">
+                        {{ 'products.facets.apply' | t }}
+                      </button>
+                    </div>
+                  </noscript>
+
+                  {%- when 'price_range' -%}
+
+                  {% liquid
+                    assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+                    assign uses_comma_decimals = false
+                    assign min_value = filter.min_value.value 
+                    assign max_value = filter.max_value.value
+                    if currencies_using_comma_decimals contains cart.currency.iso_code
+                      assign uses_comma_decimals = true
+                      assign min_value = min_value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                      assign max_value = max_value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                    else
+                      assign min_value = min_value | money_without_currency | replace: ',', ''
+                      assign max_value = max_value | money_without_currency | replace: ',', ''
+                    endif
+
+                    assign defaultMax = filter.range_max | money_without_currency | replace: ',', ''
+                  %}
+                  <div x-title="price range" x-data="{ 
+                      minValue: {{ min_value | default: 0 | money_without_currency | replace: '.', '' | replace: ',', '.' }}, 
+                      maxValue: {{ max_value | default: defaultMax }}
+                    }">
+
+                    {% if section.settings.price_style == 'range' %}
+                      <div class="price__range relative text-sm">
+                        <div class="flex my-6">
+                          <input type="range" 
+                            {%- if filter.min_value.value -%}
+                              value="{{ min_value }}"
+                            {% else %}
+                              value="0"
+                            {%- endif -%}
+                            {%- if uses_comma_decimals -%}
+                              max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                            {%- else -%}
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                            {% endif %}
+                            x-model="minValue"
+                            {% unless mobile_filter %}
+                            @change.debounce="$dispatch('filter-updated')"
+                            {% endunless %}
+                            class="price__range-min w-full appearance-none">
+
+                          <input type="range" 
+                            {%- if filter.max_value.value -%}
+                              value="{{ max_value }}"
+                            {% else %}
+                              value="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                            {%- endif -%}
+                            {%- if uses_comma_decimals -%}
+                              placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                              max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                            {%- else -%}
+                              placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                            {% endif %}
+                            x-model="maxValue"
+                            {% unless mobile_filter %}
+                            @change.debounce="$dispatch('filter-updated')"
+                            {% endunless %}
+                            class="price__range-max w-full appearance-none">
+                        </div>
+                      </div>
+                    {% endif %}
+  
+                    <div class="filter-group-display__price-range my-2 flex-wrap lg:flex-nowrap flex justify-between gap-3">
+                      <div class="filter-group-display__price-range-from">
+  
+                        <label class="block text-body text-sm mb-1" for="Filter-{{ mobile_filter }}-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                        <div class="flex items-center gap-1"> 
+                          <span>{{ cart.currency.symbol }}</span>
+                          <input 
+                              name="{{ filter.min_value.param_name }}"
+                              id="Filter-{{ mobile_filter }}-{{ filter.label | escape }}-GTE"
+                              x-model="minValue"
+                              class="rounded-md px-1 py-1 text-sm"
+                              {% unless mobile_filter %}
+                              @change="$dispatch('filter-updated')"
+                              {% endunless %}
+                              {%- if filter.min_value.value -%}
+                                {%- if uses_comma_decimals -%}value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                              {%- endif -%}
+                              type="number"
+                              placeholder="0"
+                              min="0"
+                              {%- if uses_comma_decimals -%}max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"{% endif %}
+                            >
+                        </div>
+        
+                      </div>
+  
+                      <div class="filter-group-display__price-range-to">
+                        <label class="block text-body text-sm mb-1" for="Filter-{{ mobile_filter }}-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                        <div class="flex items-center gap-1">
+                          <span>{{ cart.currency.symbol }}</span>
+                          <input name="{{ filter.max_value.param_name }}" 
+                              id="Filter-{{ mobile_filter }}-{{ filter.label | escape }}-LTE"
+                              x-model="maxValue"
+                              class="rounded-md px-1 py-1 text-sm"
+                              {% unless mobile_filter %}
+                              @change="$dispatch('filter-updated')"
+                              {% endunless %}
+                              {%- if filter.max_value.value -%}{%- if uses_comma_decimals -%}value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"{%- else -%}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}
+                              {%- endif -%}
+                              type="number"
+                              min="0"
+                              {%- if uses_comma_decimals -%}
+                                placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                                max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                              {%- else -%}
+                                placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              {% endif %}
+                            >
+                        </div>
+      
+                      </div>
+                    </div>
+  
+                    <noscript>
+                      <div class="filter-group-display__submit flex justify-end">
+                        <button type="submit" class="bg-primary text-white py-1 px-5 text-sm rounded-sm"> {{ 'products.facets.apply' | t }} </button>
+                      </div>
+                    </noscript>
+
+                  </div>
+
+              {%- endcase -%}
+            </div>
+
+          </details>
+          {% unless forloop.last %}
+            <div class="hidden md:block">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+                <path d="M8 2.5L8 14.5" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {% endunless %}
+        {%- endfor -%}
+
+        {% if hasFilter %}
+            <button type="button" @click="updateFilter('sort_by={{ collection.sort_by }}')" class="gap-2 items-center font-medium text-sm hidden md:flex">
+              Clear all
+              {% render 'icon-close', class: 'w-4 h-4' %}
+            </button>
+        {% endif %}
+        {% comment %} Clear filters {% endcomment %}
+
+
+    </form>
+</div>

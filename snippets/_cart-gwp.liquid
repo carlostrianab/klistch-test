@@ -1,0 +1,50 @@
+{% assign count_gwp_in_cart = cart | item_count_for_variant: settings.gwp_product.first_available_variant.id %}
+{% assign count_product_based_gwp_in_cart = cart | item_count_for_variant: settings.eligible_product.first_available_variant.id %}
+
+<div class="cart-gwp"
+    x-title="Cart GWP"
+    x-init='$nextTick(() => {
+        cart_total = {{ cart.total_price }};
+        gwp_product = {
+            id: {{ settings.gwp_product.id }},
+            title: {{ settings.gwp_product.title | json }},
+            is_available: {{ settings.gwp_product.available }},
+            variants: {{ settings.gwp_product.variants | json }},
+            price: {{ settings.gwp_product.price }},
+        };
+
+        {% comment %} If product based GWP is enabled {% endcomment %}
+        {% if settings.eligible_product != blank and settings.eligible_product.available %}
+            enable_product_based_gwp = true;
+        {% endif %}
+
+        {% if count_product_based_gwp_in_cart > 0 %}
+            is_product_based_gwp_in_cart = true;
+        {% endif %}
+
+        {% comment %} If threshold based GWP is enabled {% endcomment %}
+
+        {% if settings.eligible_threshold != blank %}
+            enable_threshold_based_gwp = true;
+            enable_product_based_gwp = false;
+            gwp_threshold = {{ settings.eligible_threshold | times: 100 }};
+        {% endif %}
+
+        {% if settings.gwp_discount_code != blank %}
+            enable_discount_based_gwp = true;
+            eligible_discount_code = {{ settings.gwp_discount_code | json }};
+        {% endif %}
+
+        {% for discount_application in cart.cart_level_discount_applications %}
+            cart_discount_code.push({{ discount_application.title | json }});
+        {% endfor %}
+        
+        {% if count_gwp_in_cart > 0 %}
+            is_gwp_in_cart = true;
+        {% else %}
+            is_gwp_in_cart = false;
+        {% endif %}
+    });'
+    x-data="CartGWP()">
+
+</div>

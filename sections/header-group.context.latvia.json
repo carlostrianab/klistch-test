@@ -1,0 +1,23 @@
+{
+  "parent": "header-group.json",
+  "context": {
+    "market": "latvia"
+  },
+  "sections": {
+    "announcement-bar": {
+      "settings": {},
+      "blocks": {
+        "announcement_CJhhXW": {
+          "settings": {
+            "text": "<p><strong>🇱🇻 FREE DELIVERY IN LATVIA 🇱🇻<\/strong><\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_CJhhXW",
+        "announcement_RHRr9B",
+        "announcement_HdfMnN"
+      ]
+    }
+  }
+}

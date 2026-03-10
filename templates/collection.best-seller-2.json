@@ -1,0 +1,100 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_XFKbra": {
+      "type": "image-banner",
+      "name": "Image banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_1_4_copy.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83_8_copy.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "container": "page-width",
+        "show_collection_description": false,
+        "show_collection_image": false,
+        "image_position": "right",
+        "background_position": "bg-cover",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "custom_url": "",
+        "vertical_alignment": "items-center",
+        "horizontal_alignment": "justify-start",
+        "text_align": "text-left",
+        "padding_top": 20,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#000000"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "container": "page-width",
+        "products_per_page": 18,
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-2",
+        "grid_mobile": "grid-cols-2",
+        "gap": "md:gap-4",
+        "gap_mobile": "gap-2",
+        "image_ratio": "aspect-auto",
+        "show_secondary_image": true,
+        "show_add_to_cart": false,
+        "show_vendor": true,
+        "show_sold_count": false,
+        "show_rating": true,
+        "compact_reviews": false,
+        "enable_filtering": false,
+        "enable_sorting": false,
+        "tag_filtering": true,
+        "pagination_type": "load_more",
+        "show_collection_description": true,
+        "price_style": "range",
+        "padding_top": 8,
+        "padding_bottom": 32
+      }
+    }
+  },
+  "order": [
+    "image_banner_XFKbra",
+    "banner",
+    "product-grid"
+  ]
+}

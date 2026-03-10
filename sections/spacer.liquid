@@ -1,0 +1,94 @@
+<div class="space-section {{ section.settings.container }} mx-auto px-4" 
+    style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+    <hr class="w-full" style="
+            height: {{ section.settings.border_width }}px;
+            background-color: {{ section.settings.border_color }};
+            border-color: {{ section.settings.border_color }};">
+</div>
+
+{% schema %}
+{
+  "name": "Spacer",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "unit": "px",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0.5
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#3A3A3A"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer"
+    }
+  ]
+}
+{% endschema %}

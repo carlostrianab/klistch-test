@@ -1,0 +1,32 @@
+
+{% assign featured_image = options.collection.featured_image %}
+{% if options.alternative_image != blank %}
+  {% assign featured_image = options.alternative_image %}
+{% endif %}
+
+<a {% if options.collection == blank %} role="link" aria-disabled="true"{% else %} href="{{ options.collection.url }}"{% endif %}>
+  <div class="card h-full relative overflow-hidden {% if options.hover_animation %} scale-animation {% endif %}">
+    {% if options.overlay_image %}
+      <div class="dark-overly absolute inset-0 bg-black/20"></div>
+    {% endif %}
+    <div class="card__inner h-full">
+      {%- if featured_image -%}
+        <div class="card__media h-full">
+            {% render 'img-medium', image: featured_image, class: 'h-full object-cover' %}
+        </div>
+      {% else %}
+        {{ 'collection-1' | placeholder_svg_tag }}
+      {%- endif -%}
+  
+      <h3 class="card__heading absolute flex items-center justify-center inset-0 text-2xl {{ options.font }}" style="color: {{ options.text_color }}">
+          {%- if options.collection.title != blank -%}
+            {{- options.collection.title | escape -}}
+          {%- else -%}
+            {{ 'onboarding.collection_title' | t }}
+          {%- endif -%}
+      </h3>
+  
+    </div>
+  </div>
+</a>
+

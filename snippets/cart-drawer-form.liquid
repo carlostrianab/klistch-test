@@ -1,0 +1,458 @@
+
+<form action="{{ routes.cart_url }}" method="post" class="h-full relative">
+
+    <header class="flex justify-between items-center py-3 bg-white px-4" x-ref="cart_header">
+        <h3 class="w-full"
+            x-init="$watch('cart_item_count', value => {
+               $dispatch('cart-count-updated', cart_item_count);
+            })"
+            x-data="{
+                cart_item_count: {{ cart.item_count }}
+            }">
+            {{ 'sections.cart.title' | t }}
+            {% if cart.item_count > 0 %}
+                <span x-text="'(' + cart_item_count + ')'">({{ cart.item_count | json }})</span>
+            {% endif %}
+        </h3>
+
+        {% if context != 'cart-page' %}
+            <button type="button" class="close-button" @click="showCart = false" aria-label="{{ 'accessibility.close' | t }}">
+                {% render 'icon-close', class: "h-6" %}
+            </button>
+        {% endif %}
+    </header>
+
+    {% render 'loader', class: 'absolute !text-white' %}
+
+    {% if settings.volume_discount_tier != blank %}
+        {% assign volumeSectionID = settings.volume_discount_tier | remove_first: 'shopify-section-'  %}
+        {% render '_load-section', section_id: volumeSectionID %}
+    {% endif %}
+
+    {% if context != 'cart-page' %}
+        {% render 'cart-free-shipping' %}
+    {% endif %}
+
+
+    {% if settings.enable_gwp and settings.gwp_product != blank and settings.gwp_slider_products == blank %}
+        {% if settings.gwp_usa_only %}
+            {% if cart.currency.iso_code == 'USD' %}
+                {% render '_cart-gwp' %}
+            {% endif %}
+        {% else %}
+            {% render '_cart-gwp' %}
+        {% endif %}
+    {% endif %}
+
+    {% if cart.item_count > 0 %}
+        {% assign firstItem = nil %}
+        {% assign excludeFromRecommended = nil %}
+        {% assign items_list = '' %}
+        <div class="
+            {% if context == 'cart-page' %}
+                w-full md:flex
+            {% else %}
+            flex flex-col pb-44 h-full overflow-y-scroll no-scrollbar border-b {% endif %}
+            font-medium cart-items  " x-ref="cart_items">
+
+            <div class="cart__items divide-y px-4 w-full mb-2">
+                {% assign compare_at_price_total_saving = 0 %}
+                {% for item in cart.items %}
+
+                    {% assign items_list = items_list | append: item.id | append: ':' |  append: item.quantity | append: ',' %}
+
+                    {% if forloop.first %} {% assign firstItem = item %} {% endif %}
+                    {% assign excludeFromRecommended = excludeFromRecommended | append: item.product.id | append: ',' %}
+
+
+                    <div x-init="message = (inventory == qty) ? `{{ 'sections.cart.last_product' | t }}` : '';"
+                        x-data="{
+                            message: '',
+                            inventory: {{ item.variant.inventory_quantity }},
+                            qty: {{ item.quantity }},
+                            selling_plan_groups: {{ item.product.selling_plan_groups | where: 'app_id', 'SKIO' | json | escape }},
+                            isSubscribed: {% if item.selling_plan_allocation.price > 0 %} true {% else %} false {% endif %},
+                        }">
+
+                        <div class="cart__items-item relative flex flex-col gap-2 justify-between items-center
+                        {% if  item.product.selling_plan_groups.size > 0  %} pt-4  {% else %} py-3  {% endif %}">
+
+                            <div class="cart__items-product-info flex gap-3 w-full items-start md:items-stretch">
+                                {% assign media_class = ' cart__items-item--image w-24 h-24 md:w-32 md:h-32 aspect-square object-cover ' %}
+                                {% if item.image %}
+                                    {{ item.image | image_url: width: 600 | image_tag: class: media_class , loading: 'lazy' }}
+                                {% else %}
+                                    {% render 'placeholder', class: media_class %}
+                                {% endif %}
+                                <div class="space-y flex-1">
+                                    <div class="w-full pr-8">
+                                        {% if settings.show_vendor %}
+                                            <div class="cart__item-vendor text-xs uppercase text-gray-500">
+                                                {{ item.vendor }}
+                                            </div>
+                                        {% endif %}
+
+                                        <a href="{{ item.url }}" title="{{ item.product.title }}" class="cart__item-title text-base font-semibold">
+                                            {{ item.product.title }}
+                                        </a>
+
+                                        {% if item.variant.title != 'Default Title' and item.variant.title != 'No Color / OS' and item.variant.title != 'NC / OS' %}
+                                            {% unless item.variant.title contains 'NC' %}
+                                                <div class="w-full flex-none text-sm font-normal text-gray-500 mt-2">{{ item.variant.title }}</div>
+                                            {% endunless %}
+                                        {% endif %}
+
+                                        <!-- show shopify cart line item -->
+                                        <div class="cart__items-properties hidden">
+                                            {% if item.properties %}
+                                                {% for p in item.properties %}
+                                                    {% assign first_character = p.first | slice: 0 %}
+                                                    {% unless p.last == blank or first_character == '_' %}
+                                                            {% if p.last != blank %}
+                                                                <div class="cart__items-properties__item">
+                                                                {{ p.first }}: {{ p.last }}
+                                                                </div>
+                                                            {% endif %}
+                                                    {% endunless %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    {% if item.product.metafields.okendo.summaryData.reviewCount > 0 %}
+                                        <div data-oke-star-rating {{ product_data_attribute }}>
+                                            {{ item.product.metafields.okendo.StarRatingSnippet }}
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="flex justify-between items-center gap-2 pt-2">
+
+                                        <div class="cart__qty flex gap-3  {% if item.product.tags contains 'hide-qty-cart' or item.price < 1 %} !hidden {% endif %}">
+                                            <label class="sr-only" for="quantity_selector_{{ forloop.index }}">
+                                                {{ 'sections.cart.quantity_label' | t }}
+                                            </label>
+
+                                            <select x-cloak
+                                                class="border text-sm max-w-[100px]"
+                                                id="quantity_selector_{{ forloop.index }}"
+                                                @change="updateQuantity({{ forloop.index }}, $event.target.value)"
+                                                x-model="qty" name="quantity" id="quantity_selector">
+                                                {% for index in (0..10) %}
+                                                    <option value="{{ index }}">{{ index }}</option>
+                                                {% endfor %}
+                                                {% if item.quantity > 10 %}
+                                                    <option value="{{ item.quantity }}" selected>{{ item.quantity }}</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+
+                                        {% assign subscription_discount_amount = item.selling_plan_allocation.selling_plan.price_adjustments[0].value %}
+
+                                        <div class="cart__items-price flex flex-col items-end text-base font-medium" data-size="{{ item.discount_allocations.size }}">
+                                            {% if item.line_level_discount_allocations.size > 0 and item.discount_allocations[0].amount > 0 %}
+                                                <div class="cart__prices flex gap-2">
+                                                    <span class="cart__prices-money cart__prices-sale text-red-600">
+                                                        {% if item.line_price < 1 %}
+                                                            {{ 'sections.cart.free' | t }}
+                                                        {% else %}
+                                                            {{ item.line_price | money }}
+                                                        {% endif %}
+                                                    </span>
+                                                    <s class="cart__prices-compare-at text-gray-700">
+                                                        {% if item.product.compare_at_price > item.original_line_price %}
+                                                            {{ item.product.compare_at_price | money }}
+                                                        {% else %}
+                                                            {{ item.original_line_price | money }}
+                                                        {% endif %}
+                                                    </s>
+                                                </div>
+                                                {% for discount_allocation in item.line_level_discount_allocations %}
+                                                    <div class="cart__discount-title text-red-700 text-sm font-semibold">
+                                                        <i>{{ discount_allocation.discount_application.title }}</i>
+                                                    </div>
+                                                {% endfor %}
+                                            {% else %}
+                                                <div class="cart__prices">
+                                                    <span class="cart__prices-money {% if item.product.compare_at_price > item.price %} text-red-700 cart__prices-sale {% endif %}">
+                                                        {{ item.line_price | money }}
+                                                    </span>
+                                                    {% if item.product.compare_at_price > item.price %}
+                                                        {% if item.total_discount == 0 %}
+                                                            {% assign compare_at_price_saving = item.product.compare_at_price | times: item.quantity | minus: item.line_price %}
+                                                            {% assign compare_at_price_total_saving = compare_at_price_total_saving | plus: compare_at_price_saving %}
+                                                        {% endif %}
+                                                        <s class="cart__prices-comapre-at">
+                                                            {{ item.product.compare_at_price | times: item.quantity | money }}
+                                                        </s>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
+
+                                            {% if item.selling_plan_allocation.price > 0 and subscription_discount_amount > 0 %}
+                                                {% if item.selling_plan_allocation.selling_plan.price_adjustments[0].value_type == 'percentage' %}
+                                                    {% assign subscription_discount_amount = subscription_discount_amount |  append: '%' %}
+                                                {% else %}
+                                                    {% assign subscription_discount_amount = subscription_discount_amount |  prepend: '$' %}
+                                                {% endif %}
+                                                <div class="cart__subscription">
+                                                    <span class="cart__subscription-discount text-red-700 text-sm font-semibold">
+                                                        {{ settings.cart_subscription_discount |  replace: '$x', subscription_discount_amount }} 
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                            <span class="cart__message text-sm italic opacity-70" x-show="message != ''" x-text="message"></span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {% if item.product.selling_plan_groups.size > 0 and item.price > 0 %}
+                                {% render '_cart-subscriptions', item: item, forloop: forloop %}
+                            {% endif %}
+
+                            {% assign removable_gwp = false %}
+                            {% if settings.gwp_removable and item.product.id == settings.gwp_product.id %}
+                                {% assign removable_gwp = true %}
+                            {% endif %}
+
+                            <button type="button" class="cart__items-item--remove absolute top-2 right-1 ml-4 md:ml-8"
+                                title="remove {{ item.product.title }}"
+                                @click="loading = true; updateQuantity({{ forloop.index }},0);  {% if removable_gwp %} gwp_user_removed() {% endif %}">
+                                {% render 'icon-trash', class: 'w-4' %}
+                            </button>
+
+                        </div>
+
+                        {% comment %} Bundle items {% endcomment %}
+                        {% if item.item_components.size > 0 %}
+                            <div class="cart__items-bundle ml-6 pl-4 border-l border-gray-600">
+                                {% for component in item.item_components %}
+                                    <div class="cart__items-bundle-item flex gap-2 items-center py-2">
+                                        <div class="cart__items-bundle-item--image w-14 h-14 aspect-square object-cover">
+                                            {% if component.image %}
+                                                {{ component.image | image_url: width: 300 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+                                            {% else %}
+                                                {% render 'placeholder', class: 'w-full h-full object-cover' %}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <a href="{{ component.url }}" class="cart__items-bundle-item--title text-sm font-normal">
+                                                {{ component.quantity }} x  {{ component.product.title }}
+                                            </a>
+                                            {% if component.product.metafields.okendo.summaryData.reviewCount > 0 %}
+                                                <div data-oke-star-rating {{ product_data_attribute }}>
+                                                    {{ component.product.metafields.okendo.StarRatingSnippet }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+            </div>
+
+            {% assign show_free_gifts = false %}
+
+            {% assign gift_threshold = settings.eligible_threshold | times: 100 %}
+            {% if cart.total_price >= gift_threshold %}
+                {% assign show_free_gifts = true %}
+            {% endif %}
+
+            {% if settings.gwp_usa_only and cart.currency.iso_code != 'USD' %}
+                {% assign show_free_gifts = false %}
+            {% endif %}
+
+            {% if settings.enable_gwp and settings.gwp_slider_products != blank and show_free_gifts %}
+                <div class="cart-free-gift-slider border-t p-2 bg-gray-100">
+                    {% if settings.gwp_title != blank %}
+                        <p class="text-lg mb-3 font-semibold text-center [&>strong]:text-red-600"> {{ settings.gwp_title }} </p>
+                    {% endif %}
+
+                    {% assign find_gifts_in_cart = nil %}
+
+                    {% for gift in settings.gwp_slider_products %}
+                        {% assign gift_in_cart = cart | line_items_for: gift %}
+                        {% if gift_in_cart != blank %}
+                            {% assign find_gifts_in_cart = find_gifts_in_cart | append: gift.first_available_variant.id |  append: ',' %}
+                        {% endif %}
+                    {% endfor %}
+                    {% assign find_gifts_in_cart = find_gifts_in_cart |  remove_last: ',' %}
+                    <div class="grid grid-cols-3 gap-2 relative no-scrollbar">
+                        {% for gift in settings.gwp_slider_products %}
+                            {% assign gift_in_cart = cart | item_count_for_variant: gift.first_available_variant.id %}
+                            {% if gift.available %}
+                                <button
+                                    type="button"
+                                    {% if find_gifts_in_cart != blank %}
+                                        @click="switchAddToCart(`{{ find_gifts_in_cart |  default: '' }}`,`{{ gift.first_available_variant.id }}`)"
+                                    {% else %}
+                                        @click="addToCart({{ gift.first_available_variant.id }}, 1)"
+                                    {% endif %}
+                                    class="bg-[#e9eaec] border {% if gift_in_cart > 0 %} border-black {% else %} border-transparent {% endif %}">
+                                    {% render 'img-thumb', image: gift.featured_image, class: 'w-full' %}
+                                    <div class="p-1 leading-none">
+                                        <span class="text-[10px] leading-none">{{ gift.title }}</span>
+                                        <div class="free-gift-price-wrap flex mt-2 justify-center">
+                                            <span class="text-[#DC2625] text-[10px] font-semibold">
+                                                {{ 0 | money }}
+                                            </span>
+
+                                            <s class="text-gray-500 text-[10px] ml-1">
+                                                {{ gift.price | money }}
+                                            </s>
+                                        </div>
+                                    </div>
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.enable_cart_recommendations and context != 'cart-page' %}
+                {% render '_cart-recommendations', firstItem: firstItem, excludeFromRecommended: excludeFromRecommended %}
+            {% endif %}
+
+            <div class="cart-summary w-full
+                {% if context == 'cart-page' %} md:max-w-md md:border-l md:pl-4 {% else %} absolute z-10 bottom-0 border-t-2 border-gray-500 bg-white{% endif %}" x-ref="cart_summary">
+
+                {% if settings.enable_checkout_status %}
+                    <div class="checking-out-status text-center py-1" style="background-color: {{ settings.status_bg_color }}">
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#257c86] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#43A047]"></span>
+                            </span>
+                            {% assign min = settings.status_min_number %}
+                            {% assign max = settings.status_max_number %}
+                            {% assign diff = max | minus: min %}
+                            {% assign randomNumber = "now" | date: "%N" | modulo: diff | plus: min %}
+                            {% if settings.checkout_status_title != blank %}
+                                <span>
+                                    {{ settings.checkout_status_title |  replace: '$x', randomNumber }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="p-4 space-y-2">
+                    {% if context == 'cart-page' %}
+                        {% render 'cart-free-shipping' %}
+                    {% endif %}
+
+                    {% assign new_total_discount = cart.total_discount %}
+                    {% if compare_at_price_total_saving > 0 %}
+                        {% assign new_total_discount = new_total_discount | plus: compare_at_price_total_saving %}
+                    {% endif %}
+
+                    {% if settings.show_cart_savings and new_total_discount > 0 %}
+                        <div class="cart__footer-savings flex justify-between text-red-700" data-compare="{{ compare_at_price_total_saving }}">
+                            <span> {{ 'sections.cart.saving' | t }}</span>
+                            <span>{{ new_total_discount | money_with_currency }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="cart__footer-subtotal flex justify-between">
+                        <span> {{ 'sections.cart.subtotal' | t }} </span>
+                        <span x-text="Unick.formatMoney(total_price)">{{ cart.total_price | money_with_currency }}</span>
+                    </div>
+
+                    {% if settings.show_cart_discount and cart.total_discount > 0 %}
+                        {% for discount_application in cart.cart_level_discount_applications %}
+                            <div class="cart__footer-total-discounts flex justify-between" x-ref="cart_footer_discount">
+                                <span class="text-green-700"
+                                    x-init="$nextTick(() => {
+                                        // const discount_code = '{{ discount_application.title }}';
+                                        // if(discount_code != '') {
+                                            // Unick.setCookie('discount_code', discount_code, 1);
+                                        // }
+                                    })">
+                                    {{ 'sections.cart.discount_message_html' | t: title: discount_application.title }}
+                                </span>
+                                <div class="flex items-center gap-1">
+                                    <span>-{{ discount_application.total_allocated_amount | money_with_currency }}</span>
+                                    {% if settings.enable_discount_remover %}
+                                        <button
+                                            type="button"
+                                            aria-label="{{ 'sections.cart.remove_discount' | t: title: discount_application.title }}"
+                                            @click="loading = true;
+                                                fetch('{{ routes.root }}/discount/empty-discount').then((res) => {
+                                                    loading = false;
+                                                    $dispatch('discount-removed');
+                                                    Unick.eraseCookie('discount_code');
+
+                                                    setTimeout(() => {
+                                                        $dispatch('update-cart');
+                                                    }, 2000);
+
+                                                    $refs.cart_footer_discount.style.display = 'none';
+                                                })">
+                                                {% render 'icon-trash', class: ' w-4 w-4 '%}
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <button name="checkout" type="submit"
+                        @click="loadingCheckout = true;"
+                        class="button button--primary w-full font-semibold mt-4"
+                        id="checkout_button_new">
+                        <svg x-show="loadingCheckout" class="icon-spinner animate-spin w-4 text-black mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span x-show="!loadingCheckout" class="mx-2">
+                            {% render 'icon-cart', class: 'w-4 text-black' %}
+                        </span>
+                        <span x-text="(!loadingCheckout) ? `{{ 'sections.cart.checkout' | t }}` : `{{ 'sections.cart.checkout_loading' | t }}`">
+                            {{ 'sections.cart.checkout' | t }}
+                        </span>
+                    </button>
+
+                    {% if settings.enable_shop_pay %}
+                        <div class="payment flex mt-3 justify-center flex-col">
+                            <a href="{{ routes.cart_url }}/{{ items_list |  remove_last: ','}}?payment=shop_pay"
+                                class="bg-[#5930f4] text-white py-3 px-4 flex justify-center">
+                                {% render "icon-shop-pay", class: 'w-24'%}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {%- if settings.show_dynamic_checkout and  additional_checkout_buttons -%}
+                        <div class="cart__dynamic-checkout-buttons additional-checkout-buttons my-3">
+                            {{ content_for_additional_checkout_buttons }}
+                        </div>
+                    {%- endif -%}
+                    {% if settings.continue_shopping_url != blank %}
+                        <a href="{{ settings.continue_shopping_url }}" type="button" class="underline text-center block">
+                            {{ 'general.continue_shopping' | t }}
+                        </a>
+                    {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="empty-cart pt-4 text-center px-4 {% if context == 'cart-page' %} w-full {% else %} md:max-w-md {% endif %}">
+            {% render 'icon-bag', class: 'mx-auto w-8 h-8' %}
+            <h4 class="text-lg heading-font py-2 !font-bold"> {{ 'general.cart.cart_empty_title_html' | t }} </h4>
+            <button x-data @click="$dispatch('toggle-cart-drawer')" type="button" class="md:max-w-md inline-block mx-auto px-8 py-2 text-sm text-center  w-full font-medium">
+                {{ 'general.continue_shopping' | t }}
+            </button>
+            {% render 'empty-cart-btns', context: context %}
+        </div>
+    {% endif %}
+</form>

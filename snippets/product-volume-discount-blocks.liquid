@@ -1,0 +1,62 @@
+{% if block.settings.product1 != blank or block.settings.product2 != blank or block.settings.product3 != blank or block.settings.product4 != blank or block.settings.product5 != blank %}
+    <div class="product-volume-discount-blocks mb-3 !mt-6">
+        <ul class="bg-white grid grid-cols-3 gap-2">
+
+        {% for i in (1..5) %}
+            {% assign product_name = 'product' | append: i %}
+            {% assign product_label = 'product' | append: i | append: '_label' %}
+            {% assign product_price = 'product' | append: i | append: '_price' %}
+            {% assign product_price_strikethrough = 'product' | append: i | append: '_price_strikethrough' %}
+            {% if block.settings[product_name] != blank %}
+                <li>
+                    {% if product.handle == block.settings[product_name].handle %}
+                        <div class="relative px-4 py-2 border h-full flex flex-col text-center justify-center rounded-sm gap-1 items-center {% if product.handle == block.settings[product_name].handle %} bg-gray-100 border-black {% endif %}">
+                            <span class="font-medium">
+                                {{ block.settings[product_label] }}
+                            </span>
+                            <span class="font-normal text-sm">
+                                {{ block.settings[product_price] }}
+                            </span>
+
+                            {% if block.settings.most_popular_position == forloop.index %}
+                                <span class="quantity-pack__flag text-center absolute font-medium text-[#e53935] -top-4 left-1/2 transform -translate-x-1/2 text-sm bg-white border border-gray-400 w-full max-w-[calc(100%-1rem)] rounded-md">
+                                    {{ 'products.product.volume_discount.popular_text' | t }}
+                                </span>
+                            {% endif %}
+                            {% if block.settings[product_price_strikethrough] != blank %}
+                                <s class="line-through text-sm">
+                                    {{ block.settings[product_price_strikethrough] }}
+                                </s>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <a href="{{ block.settings[product_name].url }}"
+                            aria-label="{{ block.settings[product_name].title }}" 
+                            class="relative px-4 py-2 border h-full flex flex-col justify-center text-center rounded-sm gap-1 items-center hover:bg-gray-100 hover:border-black">
+                            <span class="font-medium">
+                                {{ block.settings[product_label] }}
+                            </span>
+                            <span class="font-normal text-sm">
+                                {{ block.settings[product_price] }}
+                            </span>
+                            {% if block.settings.most_popular_position == forloop.index %}
+                                <span class="quantity-pack__flag text-center absolute font-medium text-[#e53935] -top-4 left-1/2 transform -translate-x-1/2 text-sm bg-white border border-gray-400 w-full max-w-[calc(100%-1rem)] rounded-md">
+                                    {{ 'products.product.volume_discount.popular_text' | t }}
+                                </span>
+                            {% endif %}
+                            {% if block.settings[product_price_strikethrough] != blank %}
+                                <s class="line-through text-sm">
+                                    {{ block.settings[product_price_strikethrough] }}
+                                </s>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            
+
+        {% endfor %}
+
+        </ul>
+    </div>
+{% endif %}

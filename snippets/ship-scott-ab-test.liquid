@@ -1,0 +1,42 @@
+<script>
+    // Alpine.js code
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('shippingThreshold', {
+            threshold: {{ settings.free_shipping_threshold | times: 100 }},
+            thresholdAmount: {{ settings.free_shipping_threshold }},
+            free_shipping_eligible: false,
+        })
+    });
+
+    // ShipScout code
+    // window._shipScout = window._shipScout || [];
+    // _shipScout.push(function (response) {
+
+    //     //apply any exchange rates to currency if necessary
+    //     var thresholdCents = (window.Shopify && Shopify.currency && Shopify.currency.rate) ? response.freeShippingThresholdCents * Shopify.currency.rate : response.freeShippingThresholdCents;
+    //     var flatrateCents = (window.Shopify && Shopify.currency && Shopify.currency.rate) ? response.shippingPriceCents * Shopify.currency.rate : response.shippingPriceCents;
+    //     var thresholdDollars = thresholdCents / 100;
+        
+    //     //format currency
+    //     var currencyFormat = ShipScoutGetCurrency();
+        
+    //     //get threshold amount with currency symbol
+    //     var thresholdAmount = ShipScoutFormatMoney(thresholdCents, currencyFormat);
+    //     Alpine.store('shippingThreshold').threshold = thresholdCents;
+    //     Alpine.store('shippingThreshold').thresholdAmount = thresholdAmount;
+
+    //     //get flat rate amount with currency symbol
+    //     var flatrateAmount = ShipScoutFormatMoney(flatrateCents, currencyFormat);
+
+    //     //==== insert your code below to dynamically update elements ====//
+
+    //     //example updating an element on the page dynamically with the threshold amount
+    //     if(thresholdCents > 0){
+    //         var el = document.getElementById("shopify-section-footer-trust");
+    //         el.querySelector('.icons .icon:last-child .icon__title').textContent = `FREE U.S. SHIPPING OVER ${thresholdAmount}`;
+    //         el.querySelector('.icons .icon:last-child .icon__text p').textContent = `Free U.S. shipping: Orders over ${thresholdAmount} qualify for complimentary shipping.`;
+    //     }
+        
+        
+    // });
+</script>

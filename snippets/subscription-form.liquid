@@ -1,0 +1,509 @@
+
+{% assign variant = product.selected_or_first_available_variant %}
+{% assign selling_plan_groups = product.selling_plan_groups | where: 'app_id', 'SKIO' %}
+{% assign selling_plan_group_ids = selling_plan_groups | map: 'id' %}
+{% assign subscription_discount_percentage = nil %}
+{% assign subscription_discount_amount = 0 %}
+
+{% assign hasBundle = false %}
+{% assign bundleVariantPrice = 0 %}
+{% assign get_subscription_bundle_variant_discount = 0 %}
+{% assign count_subscription_products = 0 %}
+
+{% if product.metafields.custom.bundle_items %}
+    {% for item in product.metafields.custom.bundle_items.value %}
+        {% assign sub_variant = item.selected_or_first_available_variant %}
+        {% if sub_variant.selling_plan_allocations.size > 0 %}
+            {% assign hasBundle = true %}
+            {% assign subscription_discount_percentage = item.selling_plan_groups[0].selling_plans[0].price_adjustments[0].value %}
+            {% assign bundleVariantPrice = bundleVariantPrice | plus: sub_variant.price %}
+            {% assign count_subscription_products = count_subscription_products | plus: 1 %}
+            {% assign get_subscription_bundle_variant_discount = sub_variant.selling_plan_allocations[0].selling_plan.price_adjustments[0].value %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if hasBundle %}
+    {% assign subscription_discount = product.price | times: get_subscription_bundle_variant_discount | divided_by: 100 %}
+{% else %}
+    {% assign subscription_discount = final_price | times: subscription_discount_percentage | divided_by: 100 %}
+{% endif %}
+
+{% if get_subscription_bundle_variant_discount > 0 %}
+    {% assign subscription_bundle_variant_discount = get_subscription_bundle_variant_discount %}
+{% endif %}
+
+
+{% if variant.selling_plan_allocations.size > 0 %}
+    {% comment %} {% assign subscription_discount = variant.selling_plan_allocations[0] %} {% endcomment %}
+    {% assign subscription_discount_percentage = selling_plan_groups[0].selling_plans[0].price_adjustments[0].value %}
+    {% assign subscription_discount_amount = variant.price | minus: variant.selling_plan_allocations[0].price %}
+    {% assign subscription_discount =  subscription_discount_percentage | times: variant.price | divided_by: 100 %}
+{% endif %}
+
+{% assign has_discount = false %}
+
+{% for tag in product.tags %}
+  {% if tag contains "discount:" and settings.enable_tag_discount %}
+      {% assign discount_percentage = tag | split: ':' | last | plus: 0 %}
+      {% assign discount_price = product.price | times: discount_percentage | divided_by: 100 %}
+      {% assign has_discount = true %}
+  {% endif %}
+{% endfor %}
+
+
+{% assign final_price = variant.price %}
+
+{% capture subscription_picker %}
+    <label for="onetime-purchase_{{ variant.id }}"
+        :class="{ 'bg-[#efefef]': subscription_active == 'onetime' }"
+        class="flex items-center rounded-tl-sm rounded-tr-sm relative border px-3 py-2 cursor-pointer focus:outline-none onetime-purchase-option">
+        <input type="radio" 
+                name="purchase-option" 
+                value="onetime"
+                id="onetime-purchase_{{ variant.id }}"
+                x-model="subscription_active" 
+                class="h-4 w-4 mt-0.5 cursor-pointer text-black border-gray-600 focus:ring-black" 
+                aria-labelledby="Onetime purchase" 
+                aria-describedby="Onetime purchase option">
+
+                <div class="ml-3 flex flex-col">
+                    <span class="block text-base font-semibold">
+                        {{ settings.onetime_title }}
+                    </span>
+                    {% if settings.onetime_subtitle != blank %}
+                        <span class="block text-sm font-medium">
+                            {{ settings.onetime_subtitle }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <span class="ml-auto font-semibold single-price">
+                    <span class="money ">
+                        {% if has_discount %}
+                            <span class="{% if variant.compare_at_price > variant.price %} text-red-700 {% endif %}">
+                                {{ final_price |  minus: discount_price | money }} 
+                            </span>
+                            <s class="text-gray-500">
+                                {% if product.compare_at_price > product.price %}
+                                    {% assign the_original_price = product.compare_at_price  %}
+                                {% else %}
+                                    {% assign the_original_price = product.price %}
+                                {% endif %}
+                                {{ the_original_price | money }}
+                            </s>
+                        {% else %}
+                            <span x-html="renderPrice">
+                                {{ final_price | money }}
+                            </span>
+                        {% endif %}
+                        </span>
+
+                    {% if variant.compare_at_price > variant.price and has_discount == false %}
+                        <s class="text-gray-500">
+                            {{ variant.compare_at_price | money }}
+                        </s>
+                    {% endif %}
+                </span>
+
+    </label>
+
+    <label for="subscription-purchase_{{ variant.id }}"
+        :class="{ 'bg-[#efefef]': subscription_active == 'subscription' }"
+        class="flex items-center flex-col rounded-bl-sm rounded-br-sm relative border px-3 py-2 cursor-pointer focus:outline-none subscription-purchase-option">
+        
+        <div class="flex justify-between items-center w-full">
+            <input type="radio" 
+                    name="purchase-option" 
+                    value="subscription"
+                    id="subscription-purchase_{{ variant.id }}"
+                    x-model="subscription_active" 
+                    class="h-4 w-4 mt-0.5 cursor-pointer text-black border-gray-600 focus:ring-black" 
+                    aria-label="Subscription option">
+            <div class="ml-3 flex flex-col">
+                {% if settings.most_popular_title != blank %}
+                    <span class="block text-sm font-semibold text-[#29742d] text-left">
+                        {{ settings.most_popular_title}}
+                    </span>                
+                {% endif %}
+              {% comment %}
+                {% if subscription_discount_percentage %}
+                    <span class="text-base font-medium text-left subscription-discount-dynamic">
+                        {{ 'products.product.subscription_discount' | t: discount: subscription_discount_percentage }}
+                    </span>
+                {% endif %}
+          
+    
+                {% if settings.subscription_title != blank %}
+                    <span class="text-base font-semibold text-left sr-only">
+                        {{ settings.subscription_title }}
+                    </span>
+                {% endif %}
+               {% endcomment %}
+    
+               {% if settings.subscription_title != blank %}
+                    <span class="text-base font-semibold text-left subscription-discount-dynamic">
+                        {{ settings.subscription_title }}
+                    </span>
+                {% endif %}
+                {% if settings.subscription_subtitle != blank %}
+                    <span class="text-sm font-medium text-left discount-text hidden">
+                        {{ settings.subscription_subtitle | replace: '[discount]', subscription_discount_percentage }}
+                    </span>
+                {% endif %}
+    
+            </div>
+    
+            <span class="ml-auto font-semibold subscription-option text-right flex gap-2" 
+                x-init="$nextTick(() => { 
+                    {% assign newOriginalPrice = variant.price %}
+                    {% if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                        {% assign newOriginalPrice = variant.compare_at_price %}
+                    {% endif %}
+    
+                    if(subscribe){
+                        dispatch('price-update', { id: {{ product.id }}, new_price: {{ final_price | minus: subscription_discount }}, new_orignal_price: {{ newOriginalPrice }} });
+                    }
+                })" 
+                data-sub-discount="{{ subscription_discount }}">
+                {% if hasBundle %}
+                    <input type="hidden" class="subscription-discount" value="{{ subscription_discount_percentage }}%">
+                    <span x-ref="subscription_price" x-html="renderSubscriptionPrice"
+                    data-final-price="{{ final_price }}" class="has-bundle {% if variant.compare_at_price > variant.price %} text-red-700 {% endif %}">
+                        {{ final_price | minus: subscription_discount | money }}
+                    </span>
+                    
+                    {% if variant.compare_at_price > variant.price %}
+                        <s class="text-gray-500">
+                            {{ variant.compare_at_price | money }}
+                        </s>
+                    {% endif %}
+                {% else %}
+                
+                    <span class="{% if variant.compare_at_price > variant.selling_plan_allocations[0].price or subscription_discount_amount > 0 %} text-red-700 {% endif %}">
+                        {{ final_price | minus: subscription_discount_amount | money }}
+                    </span>
+                    {% if variant.compare_at_price > variant.selling_plan_allocations[0].price or subscription_discount > 0 %}
+                        <s class="text-gray-500 other">
+                            {{ variant.compare_at_price |  default: variant.price | money }}
+                        </s>
+                    {% endif %}
+                {% endif %}
+            </span>
+
+        </div>
+
+        <div class="w-full">
+            <div class="subscription-benefits p-5 w-full">
+                <div class="grid grid-cols-2 gap-4">
+                    {% if settings.benefit1_icon != blank %}
+                        <div class="flex gap-2 items-center">
+                            {% render 'img-thumb', image: settings.benefit1_icon, class: 'object-contain w-8 h-8' %}
+                            {% assign p_tags = product.tags | downcase %}
+                            {% if p_tags contains "flag: 30% off" and p_tags contains "bundles" %}
+                                <span class="text-sm">
+                                    {{ settings.benefit1_netsuite }}
+                                </span>
+                            {% else %}
+                                <span class="text-sm">
+                                    {{ settings.benefit1 }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if settings.benefit2_icon != blank %}
+                        <div class="flex gap-2 items-center">
+                            {% render 'img-thumb', image: settings.benefit2_icon, class: 'object-contain w-8 h-8' %}
+                            <span class="text-sm">
+                                {{ settings.benefit2 }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    {% if settings.benefit3_icon != blank %}
+                        <div class="flex gap-2 items-center">
+                            {% render 'img-thumb', image: settings.benefit3_icon, class: 'object-contain w-8 h-8' %}
+                            <span class="text-sm">
+                                {{ settings.benefit3 }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    {% if settings.benefit4_icon != blank %}
+                        <div class="flex gap-2 items-center">
+                            {% render 'img-thumb', image: settings.benefit4_icon, class: 'object-contain w-8 h-8' %}
+                            <span class="text-sm">
+                                {{ settings.benefit4 }}
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+    
+            <div x-show="subscribe" class="subscription-selector-placeholder w-full">
+                <div class="subscription-select px-3 rounded-sm mt-3">
+
+                    {% unless hasBundle %}
+                        <label for="subscription-select" class="my-2 font-medium block text-left">{{ settings.delivery_title }}</label>
+                        <select id="subscription-select"
+                            :name="subscribe ? 'selling_plan' : ''"
+                            @change="handleSubscriptionChange($event.target.value)"
+                            class=" text-black mb-3 w-full focus:ring-black focus:outline-none focus:border-black"> 
+                            {% for allocation in variant.selling_plan_allocations %}
+                                {% if selling_plan_group_ids contains allocation.selling_plan_group_id %}
+                                    {% if cart.currency.iso_code == "USD" %}
+                                        <option {% if forloop.index0 == settings.selected_delivery_period %} selected {% endif %} value="{{ allocation.selling_plan.id }}">
+                                        {{ allocation.selling_plan.name }}
+                                        </option>
+                                    {% else %}
+                                        <option {% if forloop.index0 == 0 %} selected {% endif %} value="{{ allocation.selling_plan.id }}">
+                                        {{ allocation.selling_plan.name }}
+                                        </option>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    {% endunless %}
+
+                    <div x-show="subscribe" id="bundle-subscription-selector"></div>
+    
+                    {% if product.metafields.my_fields.bundle_subscription_message != blank or settings.subscription_message != blank %}
+                        <div class="subscription-message text-sm pb-2 font-medium hidden" hidden>
+                            {{ settings.subscription_message }}
+                            {% if product.metafields.my_fields.bundle_subscription_message != blank  %}
+                                {{ product.metafields.my_fields.bundle_subscription_message }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+    </label>
+{% endcapture %}
+
+{% if product.metafields.custom.bundle_items != blank and hasBundle %}
+    {% assign plans_option = nil %}
+    {% for item in product.metafields.custom.bundle_items.value %}
+        {% assign bunde_subscription_product = item %}
+        {% comment %} 
+            Filter to only get SKIO's selling plan groups
+        {% endcomment %}
+        {%- assign selling_plan_groups = bunde_subscription_product.selling_plan_groups | where: 'app_id', 'SKIO' -%}
+        {%- assign selling_plan_group_ids = selling_plan_groups | map: 'id' -%}
+        {% if selling_plan_groups.size > 0 %}
+            <select class="subscription-select-hidden hidden" data-id="{{ bunde_subscription_product.selected_or_first_available_variant.id }}">
+            {% for variant in bunde_subscription_product.variants %}
+                {% assign plans_option = variant.selling_plan_allocations %}
+                {% for allocation in variant.selling_plan_allocations %}
+                    {% if selling_plan_group_ids contains allocation.selling_plan_group_id %}
+                        <option {% if forloop.first %} selected {% endif %} value="{{ allocation.selling_plan.id }}">
+                            {{ allocation.selling_plan.name }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+
+            {% endfor %}
+            </select>
+        {% endif %}
+    {% endfor %}
+
+    <div class="bundle-subscription relative bg-white rounded-sm mb-3"
+        @select-subscription.window="$nextTick(() => {
+            subscribe = true;
+            subscription_active = 'subscription';
+        })"
+        
+        x-init="
+            {% if cart.currency.iso_code == "USD" %}
+                handleSubscriptionChange({{ settings.selected_delivery_period }});
+            {% else %}
+                handleSubscriptionChange(0);
+            {% endif %}
+            
+            {% if settings.default_selected == 'subscription' %}
+                subscribe = true;
+                displayPrice = {{ final_price | minus: subscription_discount }};
+            {% else %}
+                subscribe = false;
+                displayPrice = {{ final_price }}
+            {% endif %}
+
+             {% assign newOriginalPrice = variant.price %}
+            {% if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                {% assign newOriginalPrice = variant.compare_at_price %}
+            {% endif %}
+
+            if(subscribe){
+                $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ newOriginalPrice }} });
+            }
+
+            $watch('subscription_active', value => {
+
+                if(value == 'onetime') {
+                    subscribe = false;
+                    {% if has_discount %}
+                         // displayPrice = final_price - discount_price;
+                    {% else %}
+                        displayPrice = final_price;
+                    {% endif %}
+                }else{
+                    subscribe = true;
+                    displayPrice = subscription_price;
+                }
+
+                {% assign newOriginalPrice = variant.price %}
+                {% if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                    {% assign newOriginalPrice = variant.compare_at_price %}
+                {% endif %}
+
+                $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ newOriginalPrice }} });
+                
+            })"
+
+        @discounted-price.window="$nextTick(() => {
+            if($event.detail.id == {{ product.id }}) { 
+                    final_price = $event.detail.new_price;
+                }
+            })"
+        x-title="Subscription Form"
+        @bundle-price-update.window="$nextTick(() => {
+            if($event.detail.id == {{ product.id }}) { 
+                // final_price = $event.detail.new_price;
+            }
+        })"
+        @set-onetime-price.window="$nextTick(() => {
+            if($event.detail.id == {{ product.id }}) {
+                final_price = $event.detail.new_price;
+            }
+        })"
+        @set-subscription-price.window="$nextTick(() => {
+            if($event.detail.id == {{ product.id }}) {
+                subscription_price = $event.detail.new_price;
+               $refs.subscription_price.innerText = Unick.formatMoney($event.detail.new_price);
+            }
+        })"
+        x-data="{ 
+            subscription_discount: {{ subscription_discount }},
+            discount_price: {{ discount_price |  default: 0 }},
+            subscription_active: '{{ settings.default_selected }}',
+            final_price: {{ final_price }},
+            subscription_price: {{ final_price | minus: subscription_discount | default: 0 }},
+            renderPrice() {
+                return Unick.formatMoney(this.final_price);
+            },
+            renderSubscriptionPrice() {
+                return Unick.formatMoney(this.subscription_price);
+            }
+        }">
+
+        {{ subscription_picker }}
+
+        <div class="subscription-select px-3 border rounded-sm mt-3 w-full bg-[#efefef]" 
+            x-cloak x-show="subscription_active == 'subscription' ">
+
+            <template x-teleport="#bundle-subscription-selector">
+                <div>
+                    <label for="bundle-subscription-select" class="my-2 font-medium block move-this">{{ settings.delivery_title }}</label>
+                    <select id="bundle-subscription-select" 
+                        @change="handleSubscriptionChange($event.target.value)"
+                        class=" text-black mb-3 w-full focus:ring-black focus:outline-none focus:border-black"> 
+                        {% for allocation in plans_option %}
+                            <option :selected="{{ forloop.index0 }} == selected_delivery" value="{{ forloop.index0 }}">
+                                {{ allocation.selling_plan.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if product.metafields.my_fields.bundle_subscription_message != blank or settings.subscription_message != blank %}
+                        <div class="subscription-message text-sm pb-2 font-medium hidden">
+                            {{ settings.subscription_message }}
+                          {% if product.metafields.my_fields.bundle_subscription_message != blank  %}
+                            {{ product.metafields.my_fields.bundle_subscription_message }}
+                          {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </template>
+     
+        </div>
+
+    </div>     
+
+{% endif %}
+
+{% if selling_plan_groups.size > 0 and hasBundle == false %}
+    <div class="subscription-form"
+        @select-subscription.window="$nextTick(() => {
+            subscribe = true;
+            subscription_active = 'subscription';
+        })"
+        @toggle-subscription.window="$nextTick(() => {
+            if($event.detail == 'subscription') {
+                subscribe = true;
+                subscription_active = 'subscription';
+            }else{
+                subscribe = false;
+                subscription_active = 'onetime';
+            }
+        })"
+        x-init="$nextTick(() => {
+            {% if settings.default_selected == 'subscription' %}
+                subscribe = true;
+                displayPrice = {{ final_price | minus: subscription_discount }};
+            {% else %}
+                subscribe = false;
+                displayPrice = {{ final_price }};
+            {% endif %}
+
+            {% assign newOriginalPrice = variant.price %}
+            {% if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                {% assign newOriginalPrice = variant.compare_at_price %}
+            {% endif %}
+
+            if(subscribe){
+                $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ newOriginalPrice }} });
+            }
+
+            $watch('subscription_active', value => {
+            
+                if(value == 'onetime') {
+                    subscribe = false;
+                    {% if has_discount %}
+                        displayPrice = final_price - discount_price;
+                    {% else %}
+                        displayPrice = final_price;
+                    {% endif %}
+                }else{
+                    subscribe = true;
+                    displayPrice = {{ final_price }} - subscription_discount;
+                }
+                
+                {% assign newOriginalPrice = variant.price %}
+                {% if variant.compare_at_price and variant.compare_at_price > variant.price %}
+                    {% assign newOriginalPrice = variant.compare_at_price %}
+                {% endif %}
+
+                $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ newOriginalPrice }} });
+                
+            });
+
+        });"
+        @discounted-price.window="$nextTick(() => {
+        if($event.detail.id == {{ product.id }}) { 
+                final_price = $event.detail.new_price;
+            }
+        })"
+        x-title="Subscription Form"
+        x-data="{ 
+            subscription_discount: {{ subscription_discount }},
+            discount_price: {{ discount_price |  default: 0 }},
+            subscription_active: '{{ settings.default_selected }}',
+            final_price: {{ final_price }},
+            renderPrice() {
+                return Unick.formatMoney(this.final_price);
+            }
+        }">
+        {{ subscription_picker }}
+
+    </div>
+{% endif %}

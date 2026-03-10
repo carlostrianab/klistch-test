@@ -1,0 +1,180 @@
+{% liquid
+    assign standard_threshold = settings.free_shipping_threshold | times: 100 | round
+    assign free_gift_threshold = settings.free_gift_threshold | times: 100 | round
+    assign expedited_threshold = settings.expedited_shipping_threshold | times: 100 | round
+    assign enable_free_gift = settings.enable_free_gift
+    assign expedited_enabled = settings.enable_expedited_shipping
+    assign cart_total = cart.total_price | round
+%}
+
+<style>
+    .threshold-wrapper:last-child {
+        right: 0 !important;
+        left: initial !important;
+    }
+</style>
+
+{% if cart.currency.iso_code == 'USD' %}
+    <div x-title="Shipping Progress Bar" 
+         class="text-center text-sm py-2 px-4 md:px-4 border-b"
+         x-data="{
+             total_price: {{ cart_total | default: 0 }},
+             threshold_standard: {{ standard_threshold | default: 3500 }},
+             free_gift_threshold: {{ free_gift_threshold | default: 5000 }},
+             threshold_expedited: {{ expedited_threshold | default: 6000 }},
+             enable_free_gift: {{ enable_free_gift | json }},
+             expedited_enabled: {{ expedited_enabled | json }},
+             progress_percentage: 0,
+             thresholds: [],
+             positions: {},
+             next_threshold: null,
+             standard_message_before: `{{ settings.free_shipping_before }}`,
+             standard_message_after: `{{ settings.free_shipping_after }}`,
+             free_gift_message_before: `{{ settings.free_gift_before }}`,
+             free_gift_message_after: `{{ settings.free_gift_after }}`,
+             expedited_message_before: `{{ settings.expedited_shipping_before }}`,
+             expedited_message_after: `{{ settings.expedited_shipping_after }}`,
+             remaining_standard: '0',
+             remaining_free_gift: '0',
+             remaining_expedited: '0',
+
+           calculateProgress() {
+                this.total_price = parseFloat(this.total_price) || 0;
+
+                // Step 1: Define enabled thresholds
+                this.thresholds = ['standard'];
+                if (this.enable_free_gift) this.thresholds.push('free_gift');
+                if (this.expedited_enabled) this.thresholds.push('expedited');
+
+                // Step 2: Assign fixed positions
+                const n = this.thresholds.length;
+                this.positions = {};
+                this.thresholds.forEach((th, index) => {
+                    this.positions[th] = ((index + 1) / n) * 100;
+                });
+
+                // Step 3: Determine the next threshold
+                if (this.total_price < this.threshold_standard) {
+                    this.next_threshold = 'standard';
+                } else if (this.enable_free_gift && this.total_price < this.free_gift_threshold) {
+                    this.next_threshold = 'free_gift';
+                } else if (this.expedited_enabled && this.total_price < this.threshold_expedited) {
+                    this.next_threshold = 'expedited';
+                } else {
+                    this.next_threshold = null;
+                }
+
+                // Helper function to get the correct threshold value
+                const getThresholdValue = (th) => {
+                    if (th === 'free_gift') return this.free_gift_threshold;
+                    return this[`threshold_${th}`];
+                };
+
+                // Step 4: Calculate progress percentage
+                if (this.next_threshold) {
+                    const index = this.thresholds.indexOf(this.next_threshold);
+                    const prev_index = index - 1;
+                    const prev_threshold = prev_index >= 0 ? this.thresholds[prev_index] : null;
+                    const prev_value = prev_threshold ? getThresholdValue(prev_threshold) : 0;
+                    const current_value = getThresholdValue(this.next_threshold);
+                    const segment_progress = (this.total_price - prev_value) / (current_value - prev_value);
+                    const start_percentage = prev_threshold ? this.positions[prev_threshold] : 0;
+                    const end_percentage = this.positions[this.next_threshold];
+
+                    this.progress_percentage = start_percentage + segment_progress * (end_percentage - start_percentage);
+                } else {
+                    this.progress_percentage = 100;
+                }
+
+                // Step 5: Update remaining amounts
+                this.remaining_standard = Unick.marketMoney(Math.max(this.threshold_standard - this.total_price, 0) / 100);
+                this.remaining_free_gift = this.enable_free_gift ? Unick.marketMoney(Math.max(this.free_gift_threshold - this.total_price, 0) / 100) : '0';
+                this.remaining_expedited = this.expedited_enabled ? Unick.marketMoney(Math.max(this.threshold_expedited - this.total_price, 0) / 100) : '0';
+            }
+         }"
+         x-init="calculateProgress()"
+         @total-price-updated.window="$nextTick(() => { total_price = $event.detail.total_price; calculateProgress(); })">
+        
+        <div class="relative w-full h-2 bg-gray-200 rounded-full mt-2 mb-8">
+            <!-- Progress Bar -->
+            <div class="absolute h-full transition-all duration-300"
+                 style="background-color: {{ settings.progress_bar_color }};"
+                 :style="{ width: progress_percentage + '%' }">
+            </div>
+
+            <!-- Standard Shipping Icon -->
+            <div class="absolute top-1/2 transform -translate-y-1/3 threshold-wrapper"
+                 :style="{ left: positions.standard + '%' }">
+                <div :class="{'text-green-700': total_price >= threshold_standard }"
+                     class="w-8 h-8 bg-white border rounded-full border-gray-300 flex items-center justify-center mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                        <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                        <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                        <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                    </svg>
+                </div>
+                <p class="text-xs" x-text="Unick.marketMoney(threshold_standard / 100)"></p>
+            </div>
+
+            <!-- Free Gift Icon -->
+            <template x-if="enable_free_gift">
+                <div class="absolute top-1/2 transform -translate-y-1/3 threshold-wrapper"
+                     :style="{ left: positions.free_gift + '%' }">
+                    <div :class="{'text-green-700': total_price >= free_gift_threshold }"
+                         class="w-8 h-8 bg-white border rounded-full border-gray-300 flex items-center justify-center mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <rect x="3" y="8" width="18" height="12" rx="2"></rect>
+                            <path d="M3 12h18"></path>
+                            <path d="M12 8v12"></path>
+                            <path d="M7 3c0 2.761 2.239 5 5 5s5-2.239 5-5"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs" x-text="Unick.marketMoney(free_gift_threshold / 100)"></p>
+                </div>
+            </template>
+
+            <!-- Expedited Shipping Icon -->
+            <template x-if="expedited_enabled">
+                <div class="absolute top-1/2 transform -translate-y-1/3 threshold-wrapper"
+                     :style="{ left: positions.expedited + '%' }">
+                    <div :class="{'text-green-700': total_price >= threshold_expedited }"
+                         class="w-8 h-8 bg-white border rounded-full border-gray-300 flex items-center justify-center ml-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <path d="M5 17h-2v-4m-1 -8h11v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs" x-text="Unick.marketMoney(threshold_expedited / 100)"></p>
+                </div>
+            </template>
+        </div>
+
+        <!-- Messages -->
+        <div class="space-y-1">
+
+            <!-- 1. Display the 'achieved' message for the highest threshold met -->
+            <template x-if="total_price >= threshold_standard">
+                <p class="text-sm font-medium"
+                   x-html="
+                      (expedited_enabled && total_price >= threshold_expedited) ? expedited_message_after :
+                      (enable_free_gift && total_price >= free_gift_threshold) ? free_gift_message_after :
+                      standard_message_after
+                   ">
+                </p>
+            </template>
+
+            <!-- 2. Display the 'next goal' message (only if there is a next goal) -->
+            <template x-if="next_threshold === 'standard'">
+                <p class="text-sm" x-html="standard_message_before.replace('$x', remaining_standard)"></p>
+            </template>
+            <template x-if="next_threshold === 'free_gift'">
+                 <p class="text-sm" x-html="free_gift_message_before.replace('$x', remaining_free_gift)"></p>
+            </template>
+            <template x-if="next_threshold === 'expedited'">
+                <p class="text-sm" x-html="expedited_message_before.replace('$x', remaining_expedited)"></p>
+            </template>
+
+        </div>
+    </div>
+{% endif %}

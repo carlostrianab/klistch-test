@@ -1,0 +1,416 @@
+
+<style>
+    #Collection-list-{{ section.id }}{
+        padding-top: {{ section.settings.padding_top | append: 'px' }};
+        padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+    }
+</style>
+<div id="Collection-list-{{ section.id }}" class="{{ section.settings.class }} collection__list {{ section.settings.container }} mx-auto px-4 {% if section.settings.enable_swipe_mobile %} mobile-pr-0 {% endif %}">
+  <div class="collection__list-wrapper" 
+    x-data="carousel" 
+    @keydown.right="next"
+    @keydown.left="prev">
+    
+    {%- unless section.settings.heading == blank -%}
+      <div class="my-4 flex justify-between items-center">
+
+          {% render 'heading', options: section.settings, id: section.id %}
+
+          {% if section.settings.show_arrows %}
+            <div class="slider-arrows flex gap-2">
+              <button @click="prev" 
+                :aria-disabled="atBeginning"
+                :tabindex="atEnd ? -1 : 0"
+                :class="{ 'opacity-50 cursor-not-allowed': atBeginning }"
+                class="w-10 h-10 bg-white flex items-center justify-center">
+                {% render 'icon-chevron-left' %}
+                <span class="sr-only">Skip to previous slide</span>
+              </button>
+              <button @click="next"
+                :aria-disabled="atEnd"
+                :tabindex="atEnd ? -1 : 0"
+                :class="{ 'opacity-50 cursor-not-allowed': atEnd }" 
+                class="w-10 h-10 bg-white flex items-center justify-center">
+                  {% render 'icon-chevron-right' %}
+                  <span class="sr-only">Skip to next slide</span>
+              </button>
+            </div>
+          {% endif %}
+
+      </div>
+    {%- endunless -%}
+
+    <div class="overflow-x-hidden" tabindex="0">
+        <ul x-ref="slider" class="gap-3 md:gap-4 flex w-full overflow-x-scroll snap-mandatory snap-x scrollbar-design">
+          {%- for block in section.blocks -%}
+            <li x-bind="disableNextAndPreviousButtons" 
+              class="collection-list__item 
+                {{ section.settings.items_per_row_mobile }} 
+                {{ section.settings.items_per_row_tablet }} 
+                {{ section.settings.items_per_row }} shrink-0 snap-start mb-3" {{ block.shopify_attributes }} {% if forloop.index > 6 %}style="display:none;"{% endif %}>
+                  {% render 'collection-block-v3', block: block %}
+            </li>
+          {%- endfor -%}
+        </ul>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection list slider",
+  "tag": "section",
+  "class": "section section-collection-list",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Custom Class"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Collection list",
+      "label": "Heading"
+    },
+    {
+        "type": "richtext",
+        "id": "sub_heading",
+        "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "default": false,
+      "label": "Enable arrows"
+    },
+    {
+      "type": "header",
+      "content": "Slider layout"
+    },
+    {
+      "type": "select",
+      "id": "items_per_row",
+      "label": "Items per row (desktop)",
+      "options": [
+        {
+          "value": "lg:w-1/2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:w-1/3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:w-1/4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:w-1/5",
+          "label": "5 items"
+        }
+      ],
+      "default": "lg:w-1/3"
+    },
+    {
+      "type": "select",
+      "id": "items_per_row_tablet",
+      "label": "Items per row (tablet)",
+      "options": [
+        {
+          "value": "md:w-full",
+          "label": "1 items"
+        },
+        {
+          "value": "md:w-1/2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:w-1/3",
+          "label": "3 items"
+        }
+      
+      ],
+      "default": "md:w-1/2"
+    },
+    {
+      "type": "select",
+      "id": "items_per_row_mobile",
+      "label": "Items per row (mobile)",
+      "options": [
+        {
+          "value": "w-full",
+          "label": "1 items"
+        },
+        {
+          "value": "w-10/12",
+          "label": "1.2 items"
+        },
+        {
+          "value": "w-8/12",
+          "label": "1.5 items"
+        },
+        {
+          "value": "w-1/2",
+          "label": "2 items"
+        },
+        {
+          "value": "w-4/12",
+          "label": "2.5 items"
+        },
+        {
+            "label": "3 items",
+            "value": "w-1/3"
+        },
+        {
+            "label": "3.5 items",
+            "value": "w-3/12"
+        }
+      
+      ],
+      "default": "w-1/2"
+    },
+    {
+      "type": "header",
+      "content": "Heading styles"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 100,
+      "step": 2,
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "default": "md:text-left",
+      "options": [
+        {
+          "value": "md:text-left",
+          "label": "Left"
+        },
+        {
+          "value": "md:text-center",
+          "label": "Center"
+        },
+        {
+          "value": "md:text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+        "type": "select",
+        "id": "font",
+        "label": "Font family",
+        "default": "font-heading",
+        "options": [
+        {
+            "value": "font-primary",
+            "label": "Primary"
+        },
+        {
+            "value": "font-secondary",
+            "label": "Secondary"
+        },
+        {
+            "value": "font-heading",
+            "label": "Heading"
+        },
+        {
+            "value": "font-sophillia",
+            "label": "Sophillia"
+        }
+        ]
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "default": "font-bold",
+      "options": [
+        {
+          "value": "font-bold",
+          "label": "Bold"
+        },
+        {
+          "value": "font-semibold",
+          "label": "Semibold"
+        },
+        {
+          "value": "font-medium",
+          "label": "Medium"
+        },
+        {
+          "value": "font-normal",
+          "label": "Normal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Heading styles (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "text_align_mobile",
+      "label": "Text align",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended size: 1400x1200"
+        },
+        {
+          "type": "image_picker",
+          "id": "secondary_image",
+          "label": "Secondary image",
+          "info": "Used for secondary image on hover"
+        },
+        {
+          "type": "checkbox",
+          "id": "lazyload",
+          "label": "Lazyload",
+          "info": "Lazyload only images that's not in the screen view on first load",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list slider",
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

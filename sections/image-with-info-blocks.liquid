@@ -1,0 +1,445 @@
+
+<div style="background-color: {{ section.settings.bg_color }};">
+  <div class="image-with-text-split {{ section.settings.container }} mx-auto px-4">
+
+      {% if section.settings.title != blank %}
+        <style>
+          #title__{{ section.id }} {
+            font-size: {{ section.settings.font_size | append: 'px' }};
+          }
+          /* mobile */
+          @media (max-width: 640px) {
+            #title__{{ section.id }} {
+              font-size: {{ section.settings.font_size_mobile | append: 'px' }};
+            }
+          }
+        </style>
+        <h2 id="title__{{ section.id }}" class="{{ section.settings.align_text }} mb-3 heading-underline font-bold">
+            {{ section.settings.title | escape }}
+          </h2>
+      {% endif %}
+
+      <div class="flex flex-wrap py-8
+          {% if section.settings.reverse %} md:flex-row-reverse {% endif %}
+          {{ section.settings.text_box_x_position }} 
+          {{ section.settings.text_box_y_position }} ">
+  
+          {% if section.settings.image != blank and section.settings.video_url == blank %}
+              <div class="w-full md:w-1/2">
+                {% render 'img-medium', image: section.settings.image %}
+              </div>
+          {% endif %}
+
+          {% if section.settings.video_url != blank %}
+              <div class="w-full md:w-1/2">
+                <div class="video-wrapper relative" x-data="{ playing: true, sound: false }">
+                  <video x-ref="video" src="{{ section.settings.video_url  }}#t=0.001" muted loop playsinline autoplay class="">
+                    <track src="{{ 'no-captions.vtt' | asset_url }}" kind="captions" srclang="en" label="English" default>
+                  </video>
+                  <button 
+                    class="absolute z-10 bottom-4 right-4 bg-white p-3 rounded-full"
+                    x-cloak
+                    aria-label="Toggle video"
+                    @click="playing = !playing; (playing) ? $refs.video.pause() : $refs.video.play(); " type="button">
+
+                      <svg x-show="!playing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+
+                      <svg x-show="playing" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+
+                  </button>
+
+                  <button 
+                    class="absolute z-10 bottom-20 right-4 bg-white p-3 rounded-full"
+                    x-cloak
+                    aria-label="Toggle sound"
+                    @click="$refs.video.muted = !$refs.video.muted; sound = !sound " type="button">
+
+                      <svg x-show="sound" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+
+                      <svg x-show="!sound" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-x"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+
+                  </button>
+
+                </div>
+              </div>
+          {% endif %}
+  
+          <div class="w-full md:w-1/2 p-5">
+              {% assign info_blocks = section.blocks | where: 'type', 'info' %}
+
+              {% if info_blocks.size > 0 %}
+                <div class="grid 
+                  {{ section.settings.grid_desktop }}
+                  {{ section.settings.grid_tablet }}
+                  {{ section.settings.grid_mobile }}
+                  {{ section.settings.grid_gap }}
+                ">
+                  {% for block in section.blocks %}
+
+                    {%- case block.type -%}
+                      {%- when '@app' -%}
+                        {% render block %}
+
+                      {% when 'info' %}
+                        <div class="info-block">
+                          {% if block.settings.title != blank %}
+                            <h3 class="text-2xl md:text-3xl mb-2 font-bold"> {{ block.settings.title }} </h3>
+                          {% endif %}
+
+                          {% if block.settings.details != blank %}
+                            <div class="block__details font-medium opacity-75">
+                              {{ block.settings.details }}
+                            </div>
+                          {% endif %}
+                        </div>
+                    {%- endcase -%}
+                  {% endfor %}
+
+                </div>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Image with info blocks",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Heading",
+      "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Align text",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size (mobile)",
+      "unit": "px",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image-with-text.settings.image.label",
+      "info": "Recommended size: 1200x1200"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)",
+      "info": "Recommended size: 900x900"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video url",
+      "info": "Upload video to Shopify files and paste the url here. Please note, video should end with .mp4 extension. Remove other query params from the url."
+    },
+    {
+        "type": "header",
+        "content": "Settings"
+    },
+    {
+        "type": "select",
+        "id": "text_box_y_position",
+        "options": [
+          {
+            "value": "items-center",
+            "label": "Center"
+          },
+          {
+            "value": "items-start",
+            "label": "Top"
+          },
+          {
+            "value": "items-end",
+            "label": "Bottom"
+          }
+        ],
+        "default": "items-center",
+        "label": "Text Y Position (direction)"
+      },
+      {
+        "type": "select",
+        "id": "text_box_x_position",
+        "options": [
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "justify-start",
+            "label": "Left"
+          },
+          {
+            "value": "justify-end",
+            "label": "Right"
+          }
+        ],
+        "default": "justify-center",
+        "label": "Text X Position (direction)"
+      },
+      {
+        "type": "select",
+        "id": "text_align",
+        "label": "Align text",
+        "default": "text-left",
+        "options": [
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+      },
+      {
+        "type": "checkbox",
+        "id": "reverse",
+        "label": "Reverse",
+        "default": false,
+        "info": "This will reverse the image and text position"
+      },
+      {
+        "type": "header",
+        "content": "Block grid"
+      },
+      {
+        "type": "select",
+        "id": "grid_desktop",
+        "label": "Desktop grid",
+        "info": "Number of items per row",
+        "default": "lg:grid-cols-2",
+        "options": [
+          {
+            "value": "lg:grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "lg:grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "lg:grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "lg:grid-cols-4",
+            "label": "4 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_tablet",
+        "label": "Tablet grid",
+        "info": "Number of items per row",
+        "default": "md:grid-cols-2",
+        "options": [
+          {
+            "value": "md:grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "md:grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "md:grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "md:grid-cols-4",
+            "label": "4 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_mobile",
+        "label": "Mobile grid",
+        "info": "Number of items per row",
+        "default": "grid-cols-1",
+        "options": [
+          {
+            "value": "grid-cols-1",
+            "label": "1 item"
+          },
+          {
+            "value": "grid-cols-2",
+            "label": "2 item"
+          },
+          {
+            "value": "grid-cols-3",
+            "label": "3 item"
+          },
+          {
+            "value": "grid-cols-4",
+            "label": "4 item"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "grid_gap",
+        "label": "Grid gap",
+        "info": "Gaps between items",
+        "default": "gap-4",
+        "options": [
+          {
+            "value": "",
+            "label": "None"
+          },
+          {
+            "value": "gap-1",
+            "label": "Small"
+          },
+          {
+            "value": "gap-2",
+            "label": "Regular"
+          },
+          {
+            "value": "gap-3",
+            "label": "Medium"
+          },
+          {
+            "value": "gap-4",
+            "label": "Large"
+          },
+          {
+            "value": "gap-6",
+            "label": "xLarge"
+          },
+          {
+            "value": "gap-8",
+            "label": "2xLarge"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background",
+        "info": "Section background"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "info": "Content text color"
+      }
+  ],
+
+  "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "info",
+        "name": "Info",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "details",
+            "label": "Details"
+          }
+        ]
+      }
+  ],
+  "presets": [
+    {
+      "name": "Image with info blocks",
+      "blocks": [
+       
+      ]
+    }
+  ]
+}
+{% endschema %}

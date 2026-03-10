@@ -1,0 +1,26 @@
+<style>
+    #Quote-{{ id }} .quote__description{
+        font-size: {{ options.font_size | append: 'px' }};
+    }
+
+    @media (max-width: 768px) {
+        #Quote-{{ id }} .quote__description{
+            font-size: {{ options.font_size_mobile | append: 'px' }};
+        }
+    }
+</style>
+<div id="Quote-{{ id }}" class="quote-wrapper space-y-2 {{ options.text_align }} {{ options.text_align_mobile }}">
+   {% if options.description != blank %}
+    <span class="quote__icon block">
+        {% render 'icon-quote' %}
+    </span>
+    <div class="quote__description {{ options.font }} {{ options.font_weight }}">
+        {{ options.description }}
+    </div>
+   {% endif %}
+    {% if options.author != blank %}
+     <div class="quote__author">
+          {{ options.author }}
+     </div>
+    {% endif %}
+</div>

@@ -1,0 +1,13 @@
+<div 
+    x-init="$nextTick(() => {
+        fetch(window.Shopify.routes.root + `?section_id={{ section_id }}`)
+            .then(response => response.text())
+            .then(html => {
+                $refs.dynamic_section.innerHTML = html;
+            });
+    })"
+    x-title="Dynamic Section"
+    x-ref="dynamic_section"
+    x-data>
+
+</div>

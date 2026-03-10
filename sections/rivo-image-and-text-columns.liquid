@@ -1,0 +1,177 @@
+<div class="rivo-content-wrapper" style="--bg-color: {{ section.settings.bg_color }};">
+  <div class="rivo-lp-content">
+    <div class="rivo-lp-section-subheading">{{ section.settings.section_subheading }}</div>
+    <h2 class="rivo-lp-section-title">{{ section.settings.section_title }}</h2>
+    <div class="rivo-img-and-text-columns">
+      {% for block in section.blocks %}
+        <div class="rivo-img-and-text-column">
+          {% if block.settings.block_image %}
+            <img
+              class="rivo-img-and-text-image"
+              src="{{ block.settings.block_image | image_url }}"
+              alt="{{ block.settings.block_title }}"
+              width="100"
+              height="100"
+            >
+          {% else %}
+            <img
+              class="rivo-img-and-text-image"
+              src="{{ 'no-image.svg' | file_url }}"
+              alt="Upload an icon"
+              width="100"
+              height="100"
+            >
+          {% endif %}
+
+          <h3 class="rivo-img-and-text-block-title">{{ block.settings.block_title }}</h3>
+          <p class="rivo-img-and-text-block-description">{{ block.settings.block_description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .rivo-content-wrapper {
+    background-color: var(--bg-color, #fff);
+  }
+
+  .rivo-img-and-text-columns {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 25px;
+    gap: 25px;
+  }
+
+  .rivo-img-and-text-column {
+    text-align: center;
+    flex: 1 1 calc(25% - 20px); /* Ensures 4 columns per row */
+    max-width: calc(25% - 20px); /* Adjusting for gap between columns */
+    margin: 10px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  img.rivo-img-and-text-image {
+    max-height: 100px;
+    width: auto;
+    margin: 0 auto;
+  }
+
+  .rivo-img-and-text-block-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .rivo-img-and-text-block-description {
+    font-size: 16px;
+  }
+
+  @media (min-width: 901px) {
+    .rivo-img-and-text-block-description {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    /* Applies when there are exactly 2 columns */
+    .rivo-img-and-text-columns:has(
+        .rivo-img-and-text-column:nth-child(2):last-child
+      )
+      .rivo-img-and-text-column {
+      flex: 1 1 calc(30% - 5px);
+      max-width: calc(30% - 5px);
+    }
+    .rivo-img-and-text-columns:has(
+        .rivo-img-and-text-column:nth-child(2):last-child
+      )
+      .rivo-img-and-text-column
+      .rivo-img-and-text-block-description {
+      max-width: 85%;
+    }
+  }
+
+  /* --- Mobile --- */
+  @media screen and (max-width: 900px) {
+    .rivo-img-and-text-columns {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .rivo-img-and-text-column {
+      flex: 1 1 calc(49% - 5px); /* 2 columns per row on mobile, considering gap */
+      max-width: calc(49% - 5px); /* Adjusting for gap between columns */
+    }
+
+    /* Center the last single item if odd number of items */
+    .rivo-img-and-text-column:last-child:nth-child(odd) {
+      margin: 0 auto;
+      flex: 1 1 calc(49% - 5px); /* 2 columns per row on mobile, considering gap */
+      max-width: calc(49% - 5px); /* Adjusting for gap between columns */
+    }
+    img.rivo-img-and-text-image {
+      max-height: 60px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "RIVO Img Text 3-4 Col",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_subheading",
+      "label": "Subheading",
+      "default": "Add VIP Tier Threshold"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Add VIP Tier Title"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_text",
+      "name": "Image Text Block",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "block_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "block_title",
+          "label": "Block Title",
+          "default": "Add column title"
+        },
+        {
+          "type": "textarea",
+          "id": "block_description",
+          "label": "Block Description",
+          "default": "Add column description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "RIVO Img Text 3-4 Col",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

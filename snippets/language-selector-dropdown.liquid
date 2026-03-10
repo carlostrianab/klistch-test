@@ -1,0 +1,34 @@
+<div class="language-selector__dropdown absolute border bg-white overflow-auto no-scrollbar shadow-lg z-30 p-2 w-28 max-h-52 right-4 {{ class }}"
+    x-show="openLanguage"
+    x-cloak
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 transform scale-90"
+    x-transition:enter-end="opacity-100 transform scale-100"
+    x-transition:leave="transition ease-in duration-75"
+    x-transition:leave-start="opacity-100 transform scale-100"
+    x-transition:leave-end="opacity-0 transform scale-90">
+
+    {% form 'localization', x-ref: 'HeaderLangauageForm' %}
+        <ul class="language-selector__list flex flex-col gap-2">
+            {% for language in localization.available_languages %}
+                <li class="disclosure__item" tabindex="-1">
+                    <button type="button" @click="language = `{{ language.iso_code  }}`" class="hover:underline flex gap-x-1 uppercase" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}">
+                        {% if language.iso_code == localization.language.iso_code %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-check" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>
+                            {{ language.iso_code | capitalize }}
+                        {% else %}
+                            <span class="pl-5 uppercase">
+                                {{ language.iso_code | capitalize }}
+                            </span>
+                        {% endif %}
+                    </button>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="hidden" name="language_code" x-model="language" value="{{ localization.language.iso_code }}">
+    {% endform %}
+
+</div>

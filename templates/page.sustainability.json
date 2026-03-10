@@ -1,0 +1,772 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "image_banner_yiLRga": {
+      "type": "image-banner",
+      "disabled": true,
+      "name": "Image banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/SustainabilityBanner-Desktop-2-5400x1400px.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/SustainabilityBanner-Mobile-Horizontal-712x484px.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#fff",
+        "content_background_opacity": 1,
+        "text_color": "#000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "image_banner_a9ybdy": {
+      "type": "image-banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Group_14.png",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/sustainability-banner-mobile-revised-1.png",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "https://www.mykitsch.com/collections/shampoo-conditioner-combo-packs",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 1,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "rich_text_Ld4Y48": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_L8YdQJ": {
+          "type": "heading",
+          "settings": {
+            "heading": "We believe the smallest details",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 38,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-normal",
+            "font_size_mobile": 24,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "heading_pVHCb8": {
+          "type": "heading",
+          "settings": {
+            "heading": "can make the  biggest difference",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 38,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-normal",
+            "font_size_mobile": 24,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_RgWYwD": {
+          "type": "text",
+          "settings": {
+            "text": "<p>That’s why we’re committed to creating beauty products that are sustainable, effective, and easy to use. Our approach involves making thoughtful choices at every step of the process, whether it’s adopting biodegradable packaging, using recyclable and reusable materials, sourcing cruelty-free ingredients, or minimizing packaging waste.</p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "md:text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_AJK4bG": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>With every decision we make, we’re dedicated to providing a seamless, eco-friendly experience for our customers while maintaining our high-quality standards</strong></p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "md:text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "heading_L8YdQJ",
+        "heading_pVHCb8",
+        "text_RgWYwD",
+        "text_AJK4bG"
+      ],
+      "settings": {
+        "container": "full-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 24,
+        "margin_bottom": 24
+      }
+    },
+    "image_banner_waDqYD": {
+      "type": "image-banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Desktop_IG_Grid_Banner.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Phone_IG_Grid_Banner.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 1,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "rich_text_xVpRhP": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_gKXtb9": {
+          "type": "heading",
+          "settings": {
+            "heading": "We simplified,  so you don’t have to",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 38,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-normal",
+            "font_size_mobile": 24,
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "heading_gKXtb9"
+      ],
+      "settings": {
+        "container": "full-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 24,
+        "margin_bottom": 24
+      }
+    },
+    "icon_with_text_iYRecw": {
+      "type": "icon-with-text",
+      "blocks": {
+        "icon_ATijJh": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Group_96_1_ecca9e05-273a-42b8-9919-cfcc7eb42e6d.png",
+            "title": "",
+            "text": "<p>We are certified <a href=\"/pages/4ocean-partnership\" title=\"/pages/4ocean-partnership\"><strong>4Ocean</strong></a> cleanup partners! With our Buy 1 to Pull 1 partnership, we have helped remove 429,232 pounds of plastic and trash from the ocean, rivers, and coastlines— that’s the equivalent of 3,863,079 shampoo bottles or 17.1 Million Water bottles worth of plastic!</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_nHjMt7": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Group_98.png",
+            "title": "",
+            "text": "<p>Taking water out of products like shampoo, conditioner, and body wash cuts down on shipping weight and volume, which helps to reduce carbon emissions and packing from production to consumption.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_VgUUBz": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Group_99.png",
+            "title": "",
+            "text": "<p>Globally, we produce twice as much plastic packaging waste than we did 20 years ago. The vast majority of this waste ends up in landfills, where it takes up to 450 years to decompose.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_GVBQK9": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Group_100.png",
+            "title": "",
+            "text": "<p>98% of Kitsch products come in paper packaging. It’s our go-to packaging material because it has lower carbon emissions and it’s recyclable.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        },
+        "icon_39Cier": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/Group_2_4.png",
+            "title": "",
+            "text": "<p>In an effort to support new and emerging projects in underserved communities, we have partnered with Charity Water to build a community well in Uganda that will provide clean water access to over 300 community members.</p>",
+            "use_custom_style": false,
+            "border_color": "",
+            "bg_color": "",
+            "title_color": "",
+            "text_bg": ""
+          }
+        }
+      },
+      "block_order": [
+        "icon_ATijJh",
+        "icon_nHjMt7",
+        "icon_VgUUBz",
+        "icon_GVBQK9",
+        "icon_39Cier"
+      ],
+      "custom_css": [
+        "div.bg-contain {display: block; max-width: 875px; background-color: #c1d4cf !important; padding: 2rem !important; margin: 0 auto;}",
+        ".icon-with-text {background-color: #; padding-bottom: 2rem;}",
+        ".icon-with-text h2 {text-align: center; font-weight: 300;}",
+        ".icon-with-text .max-w-\\[70px\\] {max-width: 100%; width: 100px;}",
+        "@media (max-width: 768px) {.icon__text {text-align: center; }}"
+      ],
+      "settings": {
+        "container": "page-width",
+        "heading": "Did you know?",
+        "classic_style": true,
+        "spaced_icons": false,
+        "align_text": "text-center",
+        "title_font_size": 26,
+        "image_size": "400x",
+        "grid_desktop": "lg:grid-cols-1",
+        "grid_tablet": "md:grid-cols-1",
+        "grid_mobile": "grid-cols-1",
+        "grid_gap": "gap-6",
+        "font_size": 26,
+        "text_align": "md:text-center",
+        "font": "font-heading",
+        "font_weight": "font-normal",
+        "font_size_mobile": 14,
+        "text_align_mobile": "text-center",
+        "bg_color": "rgba(0,0,0,0)",
+        "text_color": "",
+        "padding_top": 6,
+        "padding_bottom": 6
+      }
+    },
+    "rich_text_yBeTT3": {
+      "type": "rich-text",
+      "blocks": {
+        "buttons_H7ErXX": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "EXPLORE 4OCEAN PARTNERSHIP",
+            "primary_button_link": "shopify://pages/4ocean-partnership",
+            "primary_button_style": "button--secondary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-center",
+            "buttons_justify_mobile": "justify-center"
+          }
+        }
+      },
+      "block_order": [
+        "buttons_H7ErXX"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "spacer_643KJd": {
+      "type": "spacer",
+      "settings": {
+        "container": "page-width",
+        "border_width": 0.5,
+        "border_color": "#ffffff",
+        "padding_top": 1,
+        "padding_bottom": 40
+      }
+    },
+    "image_banner_NrzfYr": {
+      "type": "image-banner",
+      "settings": {
+        "container": "medium-width",
+        "image": "shopify://shop_images/Mask_group.png",
+        "max_height": 650,
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "medium-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "rich_text_M4p8jr": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_bVnTek": {
+          "type": "heading",
+          "settings": {
+            "heading": "",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "heading_9Mb6qE": {
+          "type": "heading",
+          "settings": {
+            "heading": "Consciously Created",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 52,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-normal",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_PLYCNk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>CHECK OUT OUR SUSTAINABILITY PRACTICES IN ACTION</p>",
+            "text_font": "font-default",
+            "font_size": 18,
+            "text_align": "md:text-center",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-center"
+          }
+        },
+        "text_x6TUFC": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "md:text-left",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "heading_bVnTek",
+        "heading_9Mb6qE",
+        "text_PLYCNk",
+        "text_x6TUFC"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "image_with_text_G4EBEp": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_jpeXY4": {
+          "type": "heading",
+          "settings": {
+            "heading": "BOTTLE-FREE BEAUTY",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 22,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 18,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_8xzRha": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Shampoo, conditioner, and body wash bars made with the best ingredients for head-to-toe clean, without additional water or bottles. </p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-left",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_D8Ffci": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "Shop Now",
+            "primary_button_link": "shopify://collections/shampoo-conditioner",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start",
+            "buttons_font_weight": "font-medium"
+          }
+        }
+      },
+      "block_order": [
+        "heading_jpeXY4",
+        "text_8xzRha",
+        "buttons_D8Ffci"
+      ],
+      "custom_css": [
+        ".image-with-text {max-width: 944px; margin: 0 auto;}",
+        "@media (max-width: 768px) {.image-with-text > .py-8 {padding-bottom: 0; padding-top: 0.5rem; }}"
+      ],
+      "settings": {
+        "container": "container",
+        "image": "shopify://shop_images/BFB-riceWaterProtein_shampoo-ingredient_focused-819677026745-3000x3000px_682d1156-98e8-4753-9c3f-6bffe20b832f.jpg",
+        "image_link": "",
+        "image_padding": true,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": ""
+      }
+    },
+    "image_with_text_tMNfiV": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_bb7CBw": {
+          "type": "heading",
+          "settings": {
+            "heading": "HAIR TIES & CLIPS",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 22,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 18,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_iRCKHN": {
+          "type": "text",
+          "settings": {
+            "text": "<p>High-quality hair accessories made with recycled plastic and nylon. </p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-left",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_TFNBGq": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "Shop Now",
+            "primary_button_link": "shopify://collections/hair-ties",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start",
+            "buttons_font_weight": "font-medium"
+          }
+        }
+      },
+      "block_order": [
+        "heading_bb7CBw",
+        "text_iRCKHN",
+        "buttons_TFNBGq"
+      ],
+      "custom_css": [
+        ".image-with-text {max-width: 944px; margin: 0 auto;}",
+        "@media (max-width: 768px) {.image-with-text > .py-8 {padding-bottom: 0; padding-top: 0.5rem; }}"
+      ],
+      "settings": {
+        "container": "container",
+        "image": "shopify://shop_images/Frame_23.png",
+        "image_link": "",
+        "image_padding": true,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": ""
+      }
+    },
+    "image_with_text_hQkGw4": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_kTVCB3": {
+          "type": "heading",
+          "settings": {
+            "heading": "HEATLESS HAIR",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 22,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 18,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_NPzFDU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Get gorgeous waves without the heat damage or extra energy use.</p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-left",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_gKVDfr": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "Shop Now",
+            "primary_button_link": "shopify://collections/heatless-hair",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start",
+            "buttons_font_weight": "font-medium"
+          }
+        }
+      },
+      "block_order": [
+        "heading_kTVCB3",
+        "text_NPzFDU",
+        "buttons_gKVDfr"
+      ],
+      "custom_css": [
+        ".image-with-text {max-width: 944px; margin: 0 auto;}",
+        "@media (max-width: 768px) {.image-with-text > .py-8 {padding-bottom: 0; padding-top: 0.5rem; }}"
+      ],
+      "settings": {
+        "container": "container",
+        "image": "shopify://shop_images/Frame_24.png",
+        "image_link": "",
+        "image_padding": true,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": ""
+      }
+    },
+    "rich_text_wPXRrF": {
+      "type": "rich-text",
+      "blocks": {
+        "buttons_AxEPBF": {
+          "type": "buttons",
+          "settings": {
+            "primary_button": "EXPLORE BEST SELLERS",
+            "primary_button_link": "shopify://collections/best-sellers-catalogue",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-center",
+            "buttons_justify_mobile": "justify-center"
+          }
+        }
+      },
+      "block_order": [
+        "buttons_AxEPBF"
+      ],
+      "custom_css": [
+        ".rich-text__blocks {max-width: 400px; margin: 0 auto;}",
+        ".button--primary {background-color: #000; border-color: #000; color: #fff; text-transform: uppercase;}"
+      ],
+      "settings": {
+        "container": "full-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 20,
+        "margin_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_banner_yiLRga",
+    "image_banner_a9ybdy",
+    "rich_text_Ld4Y48",
+    "image_banner_waDqYD",
+    "rich_text_xVpRhP",
+    "icon_with_text_iYRecw",
+    "rich_text_yBeTT3",
+    "spacer_643KJd",
+    "image_banner_NrzfYr",
+    "rich_text_M4p8jr",
+    "image_with_text_G4EBEp",
+    "image_with_text_tMNfiV",
+    "image_with_text_hQkGw4",
+    "rich_text_wPXRrF"
+  ]
+}

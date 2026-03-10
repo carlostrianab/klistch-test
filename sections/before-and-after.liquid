@@ -1,0 +1,274 @@
+<script defer src="https://cdn.knightlab.com/libs/juxtapose/latest/js/juxtapose.min.js"></script>
+<link rel="stylesheet" href="https://cdn.knightlab.com/libs/juxtapose/latest/css/juxtapose.css">
+<style>
+    .jx-slider .jx-knightlab{
+        display: none;
+        opacity: 0;
+    }
+
+    #Before-after_{{ section.id }}{
+        background-color: {{ section.settings.bg_color }};
+        padding-top: {{ section.settings.padding_top | append: 'px' }}; 
+        padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+    }
+</style>
+
+<div id="Before-after_{{ section.id }}">
+    <div class="before-and-after-compare {{ section.settings.container }} px-4">
+      <div class="relative md:mx-10"
+            @keydown.right="next"
+            @keydown.left="prev"
+            tabindex="0"
+            x-init="slider = $refs.slider"
+            role="region"
+            aria-labelledby="product carousel"
+            x-data="carousel">
+          <div class="flex w-full overflow-x-scroll no-scrollbar"  
+              x-ref="slider"
+              style="scroll-snap-type: x mandatory;">
+              {% for block in section.blocks %}
+                <div class="flex-shrink-0 px-1 md:px-3 md:flex w-full {% if section.settings.reverse %} md:flex-row-reverse {% endif %}
+                    flex-shrink-0 px-1 md:px-3
+                    {{ section.settings.text_box_x_position }} 
+                    {{ section.settings.text_box_y_position }}" style="background-color: {{ block.settings.block_bg_color }}">
+                    {% if block.settings.before_image != blank %}
+                        <div class="w-full md:w-1/2">
+                            <div {% if block.settings.after_image != blank %} class="juxtapose" {% endif %}>
+                                <img  data-label="Before" loading="lazy" alt="{{ block.settings.before_image.alt }}" src="{{ block.settings.before_image | img_url: 'master' }}"/>
+                                {% if block.settings.after_image != blank %}
+                                    <img data-label="After" loading="lazy" alt="{{ block.settings.after_image.alt }}" src="{{ block.settings.after_image | img_url: 'master' }}"/>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                      
+                    <div class="md:w-1/2">
+                        <div class="block__content p-4 {{ section.settings.text_align }}">
+                          {% if block.settings.heading != blank %}
+                            <h3 class="py-3 inline-block leading-none font-medium w-full font-albra text-2xl">
+                              {{ block.settings.heading }}
+                            </h3>
+                          {% endif %}
+          
+                          {% if block.settings.details != blank %}
+                            <div class="w-full {{ section.settings.text_align }}">
+                              {{ block.settings.details }}
+                            </div>
+                          {% endif %}
+                        </div>
+                    </div>
+        
+                </div>
+              {% endfor %}
+          </div>
+
+          {% unless section.settings.hide_arrows %}
+                <button 
+                  x-init="console.log($refs.slider.scrollLeft)"
+                  @click="prev" 
+                  class="w-10 h-10 bg-white flex items-center justify-center p-1 absolute top-1/2 transform -translate-y-1/2 z-10 -left-3 border rounded-full">
+                  {% render 'icon-arrow-left' %}
+                  <span class="sr-only">Skip to previous slide</span>
+                </button>
+      
+                <button 
+                    @click="next" 
+                    class="w-10 h-10 bg-white flex items-center justify-center p-1 absolute top-1/2 transform -translate-y-1/2 z-10 -right-3 border rounded-full">
+                    {% render 'icon-arrow-right' %}
+                    <span class="sr-only">Skip to next slide</span>
+                </button>
+          {% endunless %}
+
+      </div>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Before and After",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+        "type": "header",
+        "content": "Settings"
+    },
+    {
+        "type": "checkbox",
+        "id": "reverse",
+        "label": "Reverse",
+        "default": false,
+        "info": "This will reverse the image and text position"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_arrows",
+      "label": "Hide arrows",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 10
+    },
+    {
+        "type": "select",
+        "id": "text_box_y_position",
+        "options": [
+          {
+            "value": "items-center",
+            "label": "Center"
+          },
+          {
+            "value": "items-start",
+            "label": "Top"
+          },
+          {
+            "value": "items-end",
+            "label": "Bottom"
+          }
+        ],
+        "default": "items-center",
+        "label": "Text Vertical Position (direction)"
+      },
+      {
+        "type": "select",
+        "id": "text_box_x_position",
+        "options": [
+          {
+            "value": "justify-center",
+            "label": "Center"
+          },
+          {
+            "value": "justify-start",
+            "label": "Left"
+          },
+          {
+            "value": "justify-end",
+            "label": "Right"
+          }
+        ],
+        "default": "justify-center",
+        "label": "Text horizontal Position (direction)"
+      },
+      {
+        "type": "select",
+        "id": "text_align",
+        "label": "Align text",
+        "default": "text-left",
+        "options": [
+            {
+              "value": "text-center",
+              "label": "Center"
+            },
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ]
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background",
+        "info": "Section background"
+      }
+  ],
+
+  "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+            {
+              "type": "image_picker",
+              "id": "before_image",
+              "label": "Before image"
+            },
+            {
+              "type": "image_picker",
+              "id": "after_image",
+              "label": "After image"
+            },
+            {
+              "type": "text",
+              "id": "heading",
+              "label": "Heading",
+              "default": "Heading"
+            },
+            {
+              "type": "richtext",
+              "id":"details",
+              "label": "Details"
+            },
+            {
+              "type": "color",
+              "id": "block_bg_color",
+              "label": "Background"
+            }
+          ]
+        }
+  ],
+  "presets": [
+    {
+      "name": "Before and after",
+      "blocks": [
+       
+      ]
+    }
+  ]
+}
+{% endschema %}

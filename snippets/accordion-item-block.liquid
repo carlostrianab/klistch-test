@@ -1,0 +1,25 @@
+<div x-cloak x-data="{ 
+    id: {{ index }}, 
+    get expanded() { return this.active_accordion === this.id },
+    set expanded(value) { this.active_accordion = value ? this.id : null },}"
+    class="accordion-item has-border {{ class }}"
+    role="region">
+  
+  <button @click="expanded = !expanded" 
+        :aria-expanded="expanded" 
+        class="flex items-center w-full justify-between py-3 border-b border-black border-x px-2">
+        <span class="font-semibold"> {{ options.title | default: 'Accordion title' }} </span>
+        <span class="duration-300 mr-3" :class="expanded ? 'transform rotate-[135deg]' : ''">
+            {% render 'icon-plus', class: 'w-4 ' %}
+        </span>
+  </button>
+
+  <div x-show="expanded" x-collapse.duration.300ms class="border-x border-black border-b">
+      <div class="py-3 text-base prose ml-6">
+        {% if options.description %}
+          {{ options.description }}
+        {% endif %}
+      </div>
+  </div>
+
+</div>

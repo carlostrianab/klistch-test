@@ -1,0 +1,49 @@
+<div class="event-info__block grid gap-4 {{ block.settings.grid_mobile }} {{ block.settings.grid_desktop }} {{ block.settings.text_align_mobile }} {{ block.settings.text_align }}">
+    {% if block.settings.location != blank %}
+        <div class="event-info__location flex gap-2 items-center">
+            <div class="event-info__location-icon">
+                {% render 'icon-list', name: 'location', class: 'w-6' %}
+            </div>
+            <div class="event-info__location-text">
+                {{ block.settings.location }}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- duration -->
+    {% if block.settings.duration != blank %}
+        <div class="event-info__duration flex gap-2 items-center">
+            <div class="event-info__duration-icon">
+                {% render 'icon-list', name: 'time', class: 'w-6' %}
+            </div>
+            <div class="event-info__duration-text">
+                {{ block.settings.duration }}
+            </div>
+        </div>
+    {% endif %}
+    <!-- date -->
+    {% if block.settings.date != blank %}
+        <div class="event-info__date flex gap-2 items-center">
+            <div class="event-info__date-icon">
+                {% render 'icon-list', name: 'calendar', class: 'w-6' %}
+            </div>
+            <div class="event-info__date-text">
+                {{ block.settings.date }}
+            </div>
+        </div>
+    {% endif %}
+    <!-- price -->
+    {% if block.settings.price != blank %}
+        <div class="event-info__price flex gap-2 items-center">
+            <div class="event-info__price-icon">
+                {% render 'icon-list', name: 'user', class: 'w-6' %}
+            </div>
+            <div class="event-info__price-text">
+                {{ block.settings.price }}
+            </div>
+        </div>
+    {% endif %}
+
+
+
+</div>

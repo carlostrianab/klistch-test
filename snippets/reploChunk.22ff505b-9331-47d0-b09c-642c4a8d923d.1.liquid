@@ -1,0 +1,915 @@
+-star-filled"></use><use x="16.24705882352941" href="#oke-star-filled"></use><use x="32.49411764705882" href="#oke-star-filled"></use><use x="48.74117647058823" href="#oke-star-filled"></use><use x="64.98823529411764" href="#oke-star-filled"></use></svg></div><span class="oke-a11yText">Rated 4.8 out of 5 stars</span></div></div><div class="oke-sr-count"><span class="oke-sr-count-number">15,900</span><span class="oke-sr-label-text"> Reviews</span><!----></div><!----></div><script type="application/json" data-oke-metafield-data=""> {"averageRating":"4.8","reviewCount":15900} </script></div>
+        </div>
+
+        
+
+    </div>
+
+
+</div>
+</div>
+          <div class="card__information">
+
+            
+              <div class="card__price">
+                
+
+
+
+
+
+
+
+
+
+<div x-init="$nextTick(() => { 
+      
+
+      checkDiscountCode();
+
+    })" x-title="Product price" x-data="{
+      
+        discount_table: JSON.parse(JSON.stringify(`WINTER24:20,Secretsale:25,Kitsch25:25,FB20:20,WELCOME20:20,Kitschwelcome:20,SUMMEREND:20,15Kitsch:15,Fall15:15,CODE10:10,HAIRDAY24:25,discount24:24,LOVEYA30:30,LOVE25:25,FF28:28,SPRING20:20,MOTHERSDAY:25,MEMDAY:27`)).split(','),
+      
+        isBundle: false,
+        onSale: false, 
+        soldOut: false,
+        isPDP: false,
+      
+        enable_tag_discount: false,
+      
+      variant: {
+        price: 2800,
+      },
+      getPrice(){
+          if(this.variant){
+            let price = this.variant.price;
+            if(this.enable_tag_discount &amp;&amp; !this.isPDP){
+                price = price - (price * this.discount_percentage / 100);
+            }
+
+            price = Math.round(price);
+            if(price % 100 == 99){
+              price = Math.ceil(price / 10) * 10;
+            }
+            return Unick.formatMoney(price);
+        }
+      },
+      checkDiscountCode(){
+          
+          if(typeof this?.discount_table !== 'undefined' &amp;&amp; this?.discount_table.length > 0){
+              const cookieDiscount = Unick.getCookie('discount_code');
+              if(cookieDiscount){
+                  const discount = this.discount_table.find((item) => {
+                    return item.toString().toLowerCase().includes(cookieDiscount.toLowerCase());
+                  });
+
+                  const discountPercentage = discount?.split(':')[1] || 0;
+                  let productPrice = 2800;
+                  
+
+                  this.$dispatch('discount-percentage', { percentage: discountPercentage });
+                  
+                  if(discountPercentage > 0){
+                    this.onSale = true;
+                  }
+
+                  let displayPrice = productPrice - (productPrice * discountPercentage / 100);
+                  
+                    this.$dispatch('discounted-price', { id: 7688221229237, new_price: displayPrice, new_orignal_price: 2800 });
+                  
+
+              }else if(!this.enable_tag_discount){
+                this.onSale = false;
+                // reset price and dispatch the events to update the price
+                
+                  this.$dispatch('discounted-price', { id: 7688221229237, new_price: 2800, new_orignal_price: 2800 });
+                
+
+              }
+          }
+          
+      }
+  }" @price-update.window="if($event.detail.id == 7688221229237) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @bundle-price-update.window="if($event.detail.id == 7688221229237) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @discounted-price.window="if($event.detail.id == 7688221229237) {
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+  }" @discount-applied.window="$nextTick(() => checkDiscountCode())" @discount-removed.window="$nextTick(() => checkDiscountCode())" class="price justify-center font-medium flex gap-x-2 items-center">
+  <div class="price__container"><div class="price__regular">
+        <span class="sr-only">Regular price</span>
+        <span class="price-item price-item--regular" x-text="getPrice()" :class="{ 'text-red-700': enable_tag_discount || onSale }">$28.00</span>
+
+        <template x-if="variant?.orignal_price &amp;&amp; variant?.orignal_price > variant?.price ">
+          <s x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+        
+        <template x-if="enable_tag_discount">
+          <div class="inline-block tag-discount-price">
+            <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)" class="price-item price-item--regular text-gray-700">
+            </s>
+          </div>
+        </template>
+
+      </div><small class="unit-price  hidden">
+      <span class="sr-only">Unit price</span>
+      <span class="price-item price-item--last">
+        <span></span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;per&nbsp;</span>
+        <span>
+        </span>
+      </span>
+    </small>
+
+  </div>
+
+</div>
+              </div>
+            
+
+            
+
+          </div>
+      </a>
+        
+      
+
+      
+
+      
+      
+  </div>
+                </li><li class="featured-colection__item keen-slider__slide w-full">
+                  
+<div class="card-wrapper flex flex-col h-full">
+
+      <div class="cart__media relative group" x-bind="behaviour" x-data="QuickViewButton">
+        
+
+        <a class="cursor-pointer" href="/products/self-draining-soap-dish-1" aria-label="Terracotta Self-draining Soap Dish">
+            
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/63832-SelfDrainingSoapDish-BottleFreeBeauty-Terracotta-1280x1280px-72dpi_1.jpg?v=1710235522&amp;width=700" alt="Terracotta Self-draining Soap Dish" srcset="//www.mykitsch.com/cdn/shop/files/63832-SelfDrainingSoapDish-BottleFreeBeauty-Terracotta-1280x1280px-72dpi_1.jpg?v=1710235522&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/63832-SelfDrainingSoapDish-BottleFreeBeauty-Terracotta-1280x1280px-72dpi_1.jpg?v=1710235522&amp;width=700 700w" width="700" height="700" loading="eager" fetchpriority="high">
+
+            
+              
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/63832-6745-6752-9852-60602-9487-CreativeProductShoot-Group-1280x1280px.jpg?v=1719418029&amp;width=700" alt="Terracotta Self-draining Soap Dish" srcset="//www.mykitsch.com/cdn/shop/files/63832-6745-6752-9852-60602-9487-CreativeProductShoot-Group-1280x1280px.jpg?v=1719418029&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/63832-6745-6752-9852-60602-9487-CreativeProductShoot-Group-1280x1280px.jpg?v=1719418029&amp;width=700 700w" width="700" height="700" loading="lazy" fetchpriority="auto" class=" absolute z-10 top-0 left-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 ">
+
+            
+
+            <div class="item-flag grid grid-cols-3 gap-1 empty:hidden">
+    
+        
+
+        
+    
+        
+
+        
+    
+</div>
+
+<div class="product-award absolute top-1 left-1 w-12 h-12 empty:hidden">
+    
+        
+    
+        
+    
+</div>
+
+
+          
+        </a>
+
+        
+
+        
+      </div>
+      <a href="/products/self-draining-soap-dish-1" class="card__content block cursor-pointer   py-4  text-center space-y-1">
+          <p class="card__heading font-medium">
+            
+            Terracotta Self-draining Soap Dish
+          </p>
+          <div class="flex justify-center gap-2 items-center"><div class="">
+  
+
+
+    <div class="flex items-center okendo-custom-review justify-center lg:justify-normal">
+        <div data-oke-star-rating="" data-oke-reviews-product-id="shopify-7550911643829">
+            <div data-oke-reviews-version="0.76.5" data-oke-container="" class="okeReviews oke-sr oke-sr-static"><div class=""><div class="oke-sr-rating"> 4.6 </div><div class="oke-sr-stars"><div class="oke-stars"><!----><div class="oke-stars-background"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-empty"></use><use x="16.24705882352941" href="#oke-star-empty"></use><use x="32.49411764705882" href="#oke-star-empty"></use><use x="48.74117647058823" href="#oke-star-empty"></use><use x="64.98823529411764" href="#oke-star-empty"></use></svg></div><div class="oke-stars-foreground" style="width: 92.6622%;"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-filled"></use><use x="16.24705882352941" href="#oke-star-filled"></use><use x="32.49411764705882" href="#oke-star-filled"></use><use x="48.74117647058823" href="#oke-star-filled"></use><use x="64.98823529411764" href="#oke-star-filled"></use></svg></div><span class="oke-a11yText">Rated 4.6 out of 5 stars</span></div></div><div class="oke-sr-count"><span class="oke-sr-count-number">2,030</span><span class="oke-sr-label-text"> Reviews</span><!----></div><!----></div><script type="application/json" data-oke-metafield-data=""> {"averageRating":"4.6","reviewCount":2030} </script></div>
+        </div>
+
+        
+
+    </div>
+
+
+</div>
+</div>
+          <div class="card__information">
+
+            
+              <div class="card__price">
+                
+
+
+
+
+
+
+
+
+
+<div x-init="$nextTick(() => { 
+      
+
+      checkDiscountCode();
+
+    })" x-title="Product price" x-data="{
+      
+        discount_table: JSON.parse(JSON.stringify(`WINTER24:20,Secretsale:25,Kitsch25:25,FB20:20,WELCOME20:20,Kitschwelcome:20,SUMMEREND:20,15Kitsch:15,Fall15:15,CODE10:10,HAIRDAY24:25,discount24:24,LOVEYA30:30,LOVE25:25,FF28:28,SPRING20:20,MOTHERSDAY:25,MEMDAY:27`)).split(','),
+      
+        isBundle: false,
+        onSale: false, 
+        soldOut: false,
+        isPDP: false,
+      
+        enable_tag_discount: false,
+      
+      variant: {
+        price: 1400,
+      },
+      getPrice(){
+          if(this.variant){
+            let price = this.variant.price;
+            if(this.enable_tag_discount &amp;&amp; !this.isPDP){
+                price = price - (price * this.discount_percentage / 100);
+            }
+
+            price = Math.round(price);
+            if(price % 100 == 99){
+              price = Math.ceil(price / 10) * 10;
+            }
+            return Unick.formatMoney(price);
+        }
+      },
+      checkDiscountCode(){
+          
+          if(typeof this?.discount_table !== 'undefined' &amp;&amp; this?.discount_table.length > 0){
+              const cookieDiscount = Unick.getCookie('discount_code');
+              if(cookieDiscount){
+                  const discount = this.discount_table.find((item) => {
+                    return item.toString().toLowerCase().includes(cookieDiscount.toLowerCase());
+                  });
+
+                  const discountPercentage = discount?.split(':')[1] || 0;
+                  let productPrice = 1400;
+                  
+
+                  this.$dispatch('discount-percentage', { percentage: discountPercentage });
+                  
+                  if(discountPercentage > 0){
+                    this.onSale = true;
+                  }
+
+                  let displayPrice = productPrice - (productPrice * discountPercentage / 100);
+                  
+                    this.$dispatch('discounted-price', { id: 7550911643829, new_price: displayPrice, new_orignal_price: 1400 });
+                  
+
+              }else if(!this.enable_tag_discount){
+                this.onSale = false;
+                // reset price and dispatch the events to update the price
+                
+                  this.$dispatch('discounted-price', { id: 7550911643829, new_price: 1400, new_orignal_price: 1400 });
+                
+
+              }
+          }
+          
+      }
+  }" @price-update.window="if($event.detail.id == 7550911643829) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @bundle-price-update.window="if($event.detail.id == 7550911643829) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @discounted-price.window="if($event.detail.id == 7550911643829) {
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+  }" @discount-applied.window="$nextTick(() => checkDiscountCode())" @discount-removed.window="$nextTick(() => checkDiscountCode())" class="price justify-center font-medium flex gap-x-2 items-center">
+  <div class="price__container"><div class="price__regular">
+        <span class="sr-only">Regular price</span>
+        <span class="price-item price-item--regular" x-text="getPrice()" :class="{ 'text-red-700': enable_tag_discount || onSale }">$14.00</span>
+
+        <template x-if="variant?.orignal_price &amp;&amp; variant?.orignal_price > variant?.price ">
+          <s x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+        
+        <template x-if="enable_tag_discount">
+          <div class="inline-block tag-discount-price">
+            <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)" class="price-item price-item--regular text-gray-700">
+            </s>
+          </div>
+        </template>
+
+      </div><small class="unit-price  hidden">
+      <span class="sr-only">Unit price</span>
+      <span class="price-item price-item--last">
+        <span></span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;per&nbsp;</span>
+        <span>
+        </span>
+      </span>
+    </small>
+
+  </div>
+
+</div>
+              </div>
+            
+
+            
+
+          </div>
+      </a>
+        
+      
+
+      
+
+      
+      
+  </div>
+                </li><li class="featured-colection__item keen-slider__slide w-full">
+                  
+<div class="card-wrapper flex flex-col h-full">
+
+      <div class="cart__media relative group" x-bind="behaviour" x-data="QuickViewButton">
+        
+
+        <a class="cursor-pointer" href="/products/rosemary-biotin-shampoo-conditioner-2pc-combo-pack" aria-label="Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo">
+            
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/Rosemary_BiotinShampoo_Conditioner-Bundle.jpg?v=1730471668&amp;width=700" alt="Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo" srcset="//www.mykitsch.com/cdn/shop/files/Rosemary_BiotinShampoo_Conditioner-Bundle.jpg?v=1730471668&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/Rosemary_BiotinShampoo_Conditioner-Bundle.jpg?v=1730471668&amp;width=700 700w" width="700" height="700" loading="eager" fetchpriority="high">
+
+            
+              
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/BFB-Rosemary_BiotinSolidShampoo-5StarReview-1280x1280px.jpg?v=1730907425&amp;width=700" alt="Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo" srcset="//www.mykitsch.com/cdn/shop/files/BFB-Rosemary_BiotinSolidShampoo-5StarReview-1280x1280px.jpg?v=1730907425&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/BFB-Rosemary_BiotinSolidShampoo-5StarReview-1280x1280px.jpg?v=1730907425&amp;width=700 700w" width="700" height="700" loading="lazy" fetchpriority="auto" class=" absolute z-10 top-0 left-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 ">
+
+            
+
+            <div class="item-flag grid grid-cols-3 gap-1 empty:hidden">
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+</div>
+
+<div class="product-award absolute top-1 left-1 w-12 h-12 empty:hidden">
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+          
+        </a>
+
+        
+
+        
+      </div>
+      <a href="/products/rosemary-biotin-shampoo-conditioner-2pc-combo-pack" class="card__content block cursor-pointer   py-4  text-center space-y-1">
+          <p class="card__heading font-medium">
+            
+            Rosemary &amp; Biotin Volumizing Shampoo &amp; Conditioner Combo
+          </p>
+          <div class="flex justify-center gap-2 items-center"><div class="">
+  
+
+
+    <div class="flex items-center okendo-custom-review justify-center lg:justify-normal">
+        <div data-oke-star-rating="" data-oke-reviews-product-id="shopify-7839889817781">
+            <div data-oke-reviews-version="0.76.5" data-oke-container="" class="okeReviews oke-sr oke-sr-static"><div class=""><div class="oke-sr-rating"> 4.7 </div><div class="oke-sr-stars"><div class="oke-stars"><!----><div class="oke-stars-background"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-empty"></use><use x="16.24705882352941" href="#oke-star-empty"></use><use x="32.49411764705882" href="#oke-star-empty"></use><use x="48.74117647058823" href="#oke-star-empty"></use><use x="64.98823529411764" href="#oke-star-empty"></use></svg></div><div class="oke-stars-foreground" style="width: 94.4967%;"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-filled"></use><use x="16.24705882352941" href="#oke-star-filled"></use><use x="32.49411764705882" href="#oke-star-filled"></use><use x="48.74117647058823" href="#oke-star-filled"></use><use x="64.98823529411764" href="#oke-star-filled"></use></svg></div><span class="oke-a11yText">Rated 4.7 out of 5 stars</span></div></div><div class="oke-sr-count"><span class="oke-sr-count-number">1,325</span><span class="oke-sr-label-text"> Reviews</span><!----></div><!----></div><script type="application/json" data-oke-metafield-data=""> {"averageRating":"4.7","reviewCount":1325} </script></div>
+        </div>
+
+        
+
+    </div>
+
+
+</div>
+</div>
+          <div class="card__information">
+
+            
+              <div class="card__price">
+                
+
+
+
+
+
+
+
+
+
+<div x-init="$nextTick(() => { 
+      
+
+      checkDiscountCode();
+
+    })" x-title="Product price" x-data="{
+      
+        discount_table: JSON.parse(JSON.stringify(`WINTER24:20,Secretsale:25,Kitsch25:25,FB20:20,WELCOME20:20,Kitschwelcome:20,SUMMEREND:20,15Kitsch:15,Fall15:15,CODE10:10,HAIRDAY24:25,discount24:24,LOVEYA30:30,LOVE25:25,FF28:28,SPRING20:20,MOTHERSDAY:25,MEMDAY:27`)).split(','),
+      
+        isBundle: false,
+        onSale: false, 
+        soldOut: false,
+        isPDP: false,
+      
+        enable_tag_discount: false,
+      
+      variant: {
+        price: 2800,
+      },
+      getPrice(){
+          if(this.variant){
+            let price = this.variant.price;
+            if(this.enable_tag_discount &amp;&amp; !this.isPDP){
+                price = price - (price * this.discount_percentage / 100);
+            }
+
+            price = Math.round(price);
+            if(price % 100 == 99){
+              price = Math.ceil(price / 10) * 10;
+            }
+            return Unick.formatMoney(price);
+        }
+      },
+      checkDiscountCode(){
+          
+          if(typeof this?.discount_table !== 'undefined' &amp;&amp; this?.discount_table.length > 0){
+              const cookieDiscount = Unick.getCookie('discount_code');
+              if(cookieDiscount){
+                  const discount = this.discount_table.find((item) => {
+                    return item.toString().toLowerCase().includes(cookieDiscount.toLowerCase());
+                  });
+
+                  const discountPercentage = discount?.split(':')[1] || 0;
+                  let productPrice = 2800;
+                  
+
+                  this.$dispatch('discount-percentage', { percentage: discountPercentage });
+                  
+                  if(discountPercentage > 0){
+                    this.onSale = true;
+                  }
+
+                  let displayPrice = productPrice - (productPrice * discountPercentage / 100);
+                  
+                    this.$dispatch('discounted-price', { id: 7839889817781, new_price: displayPrice, new_orignal_price: 2800 });
+                  
+
+              }else if(!this.enable_tag_discount){
+                this.onSale = false;
+                // reset price and dispatch the events to update the price
+                
+                  this.$dispatch('discounted-price', { id: 7839889817781, new_price: 2800, new_orignal_price: 2800 });
+                
+
+              }
+          }
+          
+      }
+  }" @price-update.window="if($event.detail.id == 7839889817781) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @bundle-price-update.window="if($event.detail.id == 7839889817781) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @discounted-price.window="if($event.detail.id == 7839889817781) {
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+  }" @discount-applied.window="$nextTick(() => checkDiscountCode())" @discount-removed.window="$nextTick(() => checkDiscountCode())" class="price justify-center font-medium flex gap-x-2 items-center">
+  <div class="price__container"><div class="price__regular">
+        <span class="sr-only">Regular price</span>
+        <span class="price-item price-item--regular" x-text="getPrice()" :class="{ 'text-red-700': enable_tag_discount || onSale }">$28.00</span>
+
+        <template x-if="variant?.orignal_price &amp;&amp; variant?.orignal_price > variant?.price ">
+          <s x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+        
+        <template x-if="enable_tag_discount">
+          <div class="inline-block tag-discount-price">
+            <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)" class="price-item price-item--regular text-gray-700">
+            </s>
+          </div>
+        </template>
+
+      </div><small class="unit-price  hidden">
+      <span class="sr-only">Unit price</span>
+      <span class="price-item price-item--last">
+        <span></span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;per&nbsp;</span>
+        <span>
+        </span>
+      </span>
+    </small>
+
+  </div>
+
+</div>
+              </div>
+            
+
+            
+
+          </div>
+      </a>
+        
+      
+
+      
+
+      
+      
+  </div>
+                </li><li class="featured-colection__item keen-slider__slide w-full">
+                  
+<div class="card-wrapper flex flex-col h-full">
+
+      <div class="cart__media relative group" x-bind="behaviour" x-data="QuickViewButton">
+        
+
+        <a class="cursor-pointer" href="/products/hair-wax-stick" aria-label="Hair Wax Stick">
+            
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-hero-2-1280x1280px.jpg?v=1727494558&amp;width=700" alt="Hair Wax Stick" srcset="//www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-hero-2-1280x1280px.jpg?v=1727494558&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-hero-2-1280x1280px.jpg?v=1727494558&amp;width=700 700w" width="700" height="700" loading="eager" fetchpriority="high">
+
+            
+              
+
+
+
+
+
+
+
+
+<img src="//www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-Before_After-1280x1280px.jpg?v=1715976981&amp;width=700" alt="Hair Wax Stick" srcset="//www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-Before_After-1280x1280px.jpg?v=1715976981&amp;width=352 352w, //www.mykitsch.com/cdn/shop/files/64976-HairWaxStick-HairCare-Terracotta-Before_After-1280x1280px.jpg?v=1715976981&amp;width=700 700w" width="700" height="700" loading="lazy" fetchpriority="auto" class=" absolute z-10 top-0 left-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 ">
+
+            
+
+            <div class="item-flag grid grid-cols-3 gap-1 empty:hidden">
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+        
+
+        
+    
+</div>
+
+<div class="product-award absolute top-1 left-1 w-12 h-12 empty:hidden">
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+          
+        </a>
+
+        
+
+        
+      </div>
+      <a href="/products/hair-wax-stick" class="card__content block cursor-pointer   py-4  text-center space-y-1">
+          <p class="card__heading font-medium">
+            
+            Hair Wax Stick
+          </p>
+          <div class="flex justify-center gap-2 items-center"><div class="">
+  
+
+
+    <div class="flex items-center okendo-custom-review justify-center lg:justify-normal">
+        <div data-oke-star-rating="" data-oke-reviews-product-id="shopify-7558045139125">
+            <div data-oke-reviews-version="0.76.5" data-oke-container="" class="okeReviews oke-sr oke-sr-static"><div class=""><div class="oke-sr-rating"> 4.6 </div><div class="oke-sr-stars"><div class="oke-stars"><!----><div class="oke-stars-background"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-empty"></use><use x="16.24705882352941" href="#oke-star-empty"></use><use x="32.49411764705882" href="#oke-star-empty"></use><use x="48.74117647058823" href="#oke-star-empty"></use><use x="64.98823529411764" href="#oke-star-empty"></use></svg></div><div class="oke-stars-foreground" style="width: 92.6622%;"><svg height="17" viewBox="0 0 79.58823529411765 14" aria-hidden="true" role="none"><use x="0" href="#oke-star-filled"></use><use x="16.24705882352941" href="#oke-star-filled"></use><use x="32.49411764705882" href="#oke-star-filled"></use><use x="48.74117647058823" href="#oke-star-filled"></use><use x="64.98823529411764" href="#oke-star-filled"></use></svg></div><span class="oke-a11yText">Rated 4.6 out of 5 stars</span></div></div><div class="oke-sr-count"><span class="oke-sr-count-number">163</span><span class="oke-sr-label-text"> Reviews</span><!----></div><!----></div><script type="application/json" data-oke-metafield-data=""> {"averageRating":"4.6","reviewCount":163} </script></div>
+        </div>
+
+        
+
+    </div>
+
+
+</div>
+</div>
+          <div class="card__information">
+
+            
+              <div class="card__price">
+                
+
+
+
+
+
+
+
+
+
+<div x-init="$nextTick(() => { 
+      
+
+      checkDiscountCode();
+
+    })" x-title="Product price" x-data="{
+      
+        discount_table: JSON.parse(JSON.stringify(`WINTER24:20,Secretsale:25,Kitsch25:25,FB20:20,WELCOME20:20,Kitschwelcome:20,SUMMEREND:20,15Kitsch:15,Fall15:15,CODE10:10,HAIRDAY24:25,discount24:24,LOVEYA30:30,LOVE25:25,FF28:28,SPRING20:20,MOTHERSDAY:25,MEMDAY:27`)).split(','),
+      
+        isBundle: false,
+        onSale: false, 
+        soldOut: false,
+        isPDP: false,
+      
+        enable_tag_discount: false,
+      
+      variant: {
+        price: 1400,
+      },
+      getPrice(){
+          if(this.variant){
+            let price = this.variant.price;
+            if(this.enable_tag_discount &amp;&amp; !this.isPDP){
+                price = price - (price * this.discount_percentage / 100);
+            }
+
+            price = Math.round(price);
+            if(price % 100 == 99){
+              price = Math.ceil(price / 10) * 10;
+            }
+            return Unick.formatMoney(price);
+        }
+      },
+      checkDiscountCode(){
+          
+          if(typeof this?.discount_table !== 'undefined' &amp;&amp; this?.discount_table.length > 0){
+              const cookieDiscount = Unick.getCookie('discount_code');
+              if(cookieDiscount){
+                  const discount = this.discount_table.find((item) => {
+                    return item.toString().toLowerCase().includes(cookieDiscount.toLowerCase());
+                  });
+
+                  const discountPercentage = discount?.split(':')[1] || 0;
+                  let productPrice = 1400;
+                  
+
+                  this.$dispatch('discount-percentage', { percentage: discountPercentage });
+                  
+                  if(discountPercentage > 0){
+                    this.onSale = true;
+                  }
+
+                  let displayPrice = productPrice - (productPrice * discountPercentage / 100);
+                  
+                    this.$dispatch('discounted-price', { id: 7558045139125, new_price: displayPrice, new_orignal_price: 1400 });
+                  
+
+              }else if(!this.enable_tag_discount){
+                this.onSale = false;
+                // reset price and dispatch the events to update the price
+                
+                  this.$dispatch('discounted-price', { id: 7558045139125, new_price: 1400, new_orignal_price: 1400 });
+                
+
+              }
+          }
+          
+      }
+  }" @price-update.window="if($event.detail.id == 7558045139125) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @bundle-price-update.window="if($event.detail.id == 7558045139125) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }" @discounted-price.window="if($event.detail.id == 7558045139125) {
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+  }" @discount-applied.window="$nextTick(() => checkDiscountCode())" @discount-removed.window="$nextTick(() => checkDiscountCode())" class="price justify-center font-medium flex gap-x-2 items-center">
+  <div class="price__container"><div class="price__regular">
+        <span class="sr-only">Regular price</span>
+        <span class="price-item price-item--regular" x-text="getPrice()" :class="{ 'text-red-700': enable_tag_discount || onSale }">$14.00</span>
+
+        <template x-if="variant?.orignal_price &amp;&amp; variant?.orignal_price > variant?.price ">
+          <s x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+        
+        <template x-if="enable_tag_discount">
+          <div class="inline-block tag-discount-price">
+            <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)" class="price-item price-item--regular text-gray-700">
+            </s>
+          </div>
+        </template>
+
+      </div><small class="unit-price  hidden">
+      <span class="sr-only">Unit price</span>
+      <span class="price-item price-item--last">
+        <span></span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;per&nbsp;</span>
+        <span>
+        </span>
+      </span>
+    </small>
+
+  </div>
+
+</div>
+              </div>
+            
+
+            
+
+          </div>
+      </a>
+        
+      
+
+      
+
+      
+      
+  </div>
+                </li>
+        
+        </ul>
+      </div>
+
+    </div>
+
+    
+      <a href="/collections/best-sellers" class="button button--white max-w-fit !font-semibold mx-auto mt-5">
+        shop top sellers
+      </a>
+    
+
+  </div>
+
+
+
+</section></div></div></div><style>@import url(https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900;950)</style></div>
+{%- comment -%}replo-liquid-chunk-begin{%- endcomment -%}<script type="application/json" id="replo-deps-shopify-store">{ "shop": { "moneyFormat": {{ shop.money_format | json }}, "moneyWithCurrencyFormat": {{ shop.money_with_currency_format | json }}, } }</script>{%- comment -%}replo-liquid-chunk-end{%- endcomment -%}

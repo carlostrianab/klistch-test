@@ -1,0 +1,246 @@
+
+<style>
+  #Main-blogs-{{ section.id }}{
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+</style>
+<div id="Main-blogs">
+  {%- paginate blog.articles by section.settings.articles_to_show -%}
+    <div class="{{ section.settings.container }} mx-auto px-4 ">
+      <h1 class="font-heading text-center text-2xl md:text-3xl my-6">{{ blog.title | escape }}</h1>
+
+      <div class="blog-articles grid gap-5
+        {{ section.settings.grid_desktop }} 
+        {{ section.settings.grid_tablet }} 
+        {{ section.settings.grid_mobile }}">
+        {%- for article in blog.articles -%}
+          <div class="blog-articles__article article">
+            {%- render 'article-card',
+              article: article,
+              show_image: section.settings.show_image,
+              show_date: section.settings.show_date,
+              show_author: section.settings.show_author,
+              media_aspect_ratio: section.settings.image_ratio
+              show_excerpt: true 
+            -%}
+          </div>
+        {%- endfor -%}
+      </div>
+  
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
+    </div>
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "min": 2,
+      "max": 16,
+      "step": 2,
+      "default": 4,
+      "label": "Maximum articles to show"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-3",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 items"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "6 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-3",
+      "options": [
+        {
+          "value": "md:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 items"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Blog post card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show featured image"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "aspect-auto",
+          "label": "Auto"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-portrait",
+          "label": "Portrait"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show author"
+    },
+    {
+      "type": "paragraph",
+      "content": "Change excerpts by editing your blog posts. [Learn more](https://help.shopify.com/manual/online-store/blogs/writing-blogs#display-an-excerpt-from-a-blog-post)"
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    }
+  ]
+}
+{% endschema %}

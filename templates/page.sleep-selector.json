@@ -1,0 +1,169 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_XVWdXN": {
+      "type": "image-banner",
+      "name": "Image banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_1_4_copy.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83_8_copy.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "custom_liquid_Q4Gnbp": {
+      "type": "custom-liquid",
+      "settings": {
+        "container": "page-width",
+        "custom_liquid": "<h1 style=\"font-weight: bold; font-size: 30px;\">Sleep</h1>",
+        "padding_top": 24,
+        "padding_bottom": 0
+      }
+    },
+    "collection_tabs_vertical_gHEigd": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_nK9g98": {
+          "type": "filter",
+          "settings": {
+            "title": "What's New",
+            "collection": "cherry-sleep",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_kqedPx": {
+          "type": "filter",
+          "settings": {
+            "title": "Pillowcases",
+            "collection": "pillowcases-queen",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_fAzpHU": {
+          "type": "filter",
+          "settings": {
+            "title": "Satin Bonnets",
+            "collection": "bonnet",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_cjMtQN": {
+          "type": "filter",
+          "settings": {
+            "title": "Eye Masks",
+            "collection": "eye-masks",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_VJLrEn": {
+          "type": "filter",
+          "settings": {
+            "title": "Sleep Wear",
+            "collection": "sleep-wear",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_6pyEq6": {
+          "type": "filter",
+          "settings": {
+            "title": "Bundles",
+            "collection": "pillowcase-2-pack-bundles",
+            "products_to_show": 12,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_nK9g98",
+        "filter_kqedPx",
+        "filter_fAzpHU",
+        "filter_cjMtQN",
+        "filter_VJLrEn",
+        "filter_6pyEq6"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": false,
+        "subscription_toggle_title": "Save 30% w/ Auto-ship",
+        "subscription_toggle_active_title": "Shopping Auto-ship",
+        "subscription_toggle_perks": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+        "filter_title": "Collection",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "image_banner_XVWdXN",
+    "main",
+    "custom_liquid_Q4Gnbp",
+    "collection_tabs_vertical_gHEigd"
+  ]
+}

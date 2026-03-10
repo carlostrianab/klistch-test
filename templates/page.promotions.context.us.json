@@ -1,0 +1,7 @@
+{
+  "parent": "page.promotions.json",
+  "context": {
+    "market": "us"
+  },
+  "sections": {}
+}

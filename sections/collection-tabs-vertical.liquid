@@ -1,0 +1,553 @@
+<style>
+  /* CLS fixes */
+  .bundle-and-save {
+    min-height: 800px;
+  }
+  @media (max-width: 767px) {
+    .bundle-and-save {
+      min-height: 650px;
+    }
+  }
+</style>
+
+{% render 'collection-banner-red' %}
+
+<div class="bundle-and-save ">
+  <div class="py-8 {{ section.settings.container }} mx-auto px-4">
+    <div
+      x-cloak
+      x-init="$nextTick(() => {
+          let scrollEl = new URLSearchParams(window.location.search).get('scroll');
+          let filterTab = new URLSearchParams(window.location.search).get('filter_tab');
+          if (filterTab) {
+            setActive(parseInt(filterTab));
+          }
+          if (scrollEl) {
+            let el = document.getElementById(scrollEl);
+            if (el) {
+              // scroll after 1 second
+              setTimeout(() => {
+                el.scrollIntoView({ behavior: 'smooth' });
+              }, 2000);
+            }
+          }
+        })"
+      x-title="Collection tabs vertical"
+      x-data="{
+          activeTab: [0],
+          totalTabs: {{ section.blocks.size }},
+          isActive(index){
+              return this.activeTab.includes(index);
+          },
+          setActive(index){
+
+              if(this.activeTab.includes(index)){
+                  this.activeTab = this.activeTab.filter(item => item !== index);
+                  if(this.activeTab.length === 0) {
+                      this.activeTab = [0];
+                  }
+              } else {
+                 this.activeTab = [index];
+              }
+              // Update URL
+              const url = new URL(window.location.href);
+              url.searchParams.set('filter_tab', index);
+              window.history.pushState({}, '', url);
+          }
+        }
+      "
+    >
+
+    {% if section.settings.show_subscription_toggle %}
+        {% render 'subscription-toggle', options: section.settings, active: false %}
+    {% endif %}
+      <div class="md:flex gap-x-6 relative">
+        <div class="md:w-3/12 md:border-r">
+          <nav x-data="{
+                openFilter: true,
+                openable: false,
+                adjustFilter(){
+                    if(window.innerWidth > 768){
+                        this.openFilter = true;
+                        this.openable = false;
+                    } else {
+                        this.openFilter = false;
+                        this.openable = true;
+                    }
+                }
+              }
+            "
+            x-init="adjustFilter()"
+            class="absolute md:relative right-0 z-20">
+
+            <button type="button" @click="if(openable){ openFilter = !openFilter}" class="py-2 mb-2 md:border-b uppercase font-medium w-full text-left">
+              Filter by
+            </button>
+
+            {% if section.settings.filter_title != blank %}
+              <h3 class="py-2 font-medium hidden md:block abtest-heading-hide">
+                {{ section.settings.filter_title }}
+              </h3>
+            {% endif %}
+
+            <div
+              role="tablist"
+              aria-label="Tabs"
+              class="nav__items top-12 md:top-0 absolute md:relative min-w-[220px] z-50 bg-white shadow-md right-0 md:right-auto md:shadow-none p-3 md:p-0" x-show="openFilter">
+              <div class="filter-options-wrapper">
+              <div class="filter-toggle py-2 font-medium" data-targetfilter="default">Category
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-arrow-right h-5">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+              </div>
+              <div class="filters-wrapper" data-filteropen="default">
+                {% for block in section.blocks %}
+                {% if forloop.first %}
+                  <button type="button" 
+                    @click="setActive(0);" 
+                    role="tab" 
+                    tabindex="0" 
+                    aria-controls="shop-all-panel" 
+                    title="Shop all"
+                    :aria-selected="isActive(0)"
+                    class="group flex items-center py-2"
+                    :class="{
+                          'text-[#000000] font-semibold': isActive(0),
+                          'text-gray-700 font-medium ': !isActive(0)
+                      }">
+                      <svg x-show="!isActive(0)" xmlns="http://www.w3.org/2000/svg" class="icon-square" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="4" y="4" width="16" height="16"rx="2" />
+                      </svg>
+
+                      <svg x-show="isActive(0)" xmlns="http://www.w3.org/2000/svg" class="icon-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="4" y="4" width="16" height="16"rx="2" />
+                        <path d="M9 12l2 2l4 -4" />
+                      </svg>
+                    <span class="pl-2"> Shop all </span>
+                  </button>
+                {% endif %}
+
+                <button type="button" role="tab" tabindex="0"
+                  aria-controls="{{ block.settings.title | handleize }}"
+                  :aria-selected="isActive({{ forloop.index }})"
+                  @click="setActive({{ forloop.index }}); if(openable){ openFilter = false }"
+                  title="{{ block.settings.title | escape }}"
+                  class="group flex items-center py-2"
+                  :class="
+                    {
+                        'text-[#000000] font-semibold': isActive({{ forloop.index }}),
+                        'text-gray-700 font-medium ': !isActive({{ forloop.index }})
+                    }
+                  ">
+                  <svg x-show="!isActive({{ forloop.index }})" xmlns="http://www.w3.org/2000/svg" class="icon-square" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <rect x="4" y="4" width="16" height="16"rx="2" />
+                  </svg>
+
+                  <svg x-show="isActive({{ forloop.index }})" xmlns="http://www.w3.org/2000/svg" class="icon-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <path d="M9 12l2 2l4 -4" />
+                  </svg>
+
+                  <span class="pl-2 text-left">{{ block.settings.title }}</span>
+                </button>
+              {% endfor %}
+              </div>
+              </div>
+              <div class="filter-options-wrapper default-hide">
+                <div class="filter-toggle py-2 font-medium" data-targetfilter="hairconcern">Hair Concern
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon icon-arrow-right h-5">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+                </div>
+                  <div class="filters-wrapper" data-filteropen="hairconcern">
+                    {% assign hairfilters = 'Hair loss/thinning,Frizz,Fine/Flat,Dry/Damaged,Dull,Oily,Sensitive Scalp,Brassy Color' | split:',' %}
+                    {% for hairfilter in hairfilters %}
+                    <button type="button" role="tab" tabindex="0"
+                      aria-controls="hair-loss" data-target="{{ hairfilter | handle }}"
+                      title="{{ hairfilter | escape }}"
+                      class="group flex items-center py-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon-square" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="4" y="4" width="16" height="16"rx="2" />
+                      </svg>
+    
+                      <svg  xmlns="http://www.w3.org/2000/svg" class="icon-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="4" y="4" width="16" height="16" rx="2" />
+                        <path d="M9 12l2 2l4 -4" />
+                      </svg>
+    
+                      <span class="pl-2 text-left">{{ hairfilter }}</span>
+                </button>
+                          {% endfor %}
+                  </div>
+              </div>
+            </div>
+          </nav>
+
+        </div>
+
+        <div class="md:w-9/12">
+            <div class="" role="tabpanel" id="shop-all-panel"></div>
+          {% for block in section.blocks %}
+            {% assign blockIndex = forloop.index %}
+            <div tabindex="0" x-cloak x-show="isActive({{ forloop.index }}) || isActive(0) || activeTab.length == 0" role="tabpanel"
+              class="pb-3 mb-3 md:px-2 tab-collection-wrapper"
+              id="{{ block.settings.title | handleize }}"
+              aria-labelledby="{{ block.settings.title | handleize }}"
+            >
+              <div class="sorting-text-wrapper">
+              {% if block.settings.title != blank %}
+                <h2 class="py-2 border-b mb-2 text-2xl font-semibold">
+                  {{ block.settings.title }}
+                </h2>
+              {% endif %}
+         {% assign sort_by = collection.sort_by | default: 'Best Sellers' %}
+                  <div class="collection__sort enavi-collection-sort flex relative justify-end order-2 md:order-2" 
+          x-data="filter" x-init="sort = '{{ sort_by }}'">
+
+          {% render 'loader' %}
+
+          <div class="flex items-center justify-end gap-2">
+            
+            <details class="sort relative" x-data x-ref="details" @click.outside="$refs.details.removeAttribute('open')">
+              <summary class="sort-summary flex gap-1 cursor-pointer items-center">
+                <div class="font-medium text-sm">
+                    {{ 'products.facets.sort_by_label' | t }} <span class="selected-sortby">{{ sort_by }}</span>
+                </div>
+                <span class="arrow-icon rotate-90">
+                    {% render 'icon-chevron-right', class: "w-5" %}
+                </span>
+              </summary>
+              <div class="sort-display pb-3 absolute space-y-1 right-0 z-20 bg-white shadow p-3 min-w-44 rounded-sm">
+                <button type="button" class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 sort-button active-sort" data-sort="best-selling"> 
+                  {{ 'sections.collection_template.sorting.best_selling' | t }}
+                </button>
+                <button type="button" class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 sort-button" data-sort="created-descending"> 
+                  {{ 'sections.collection_template.sorting.date_descending' | t }}
+                </button>
+                <button type="button" class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 sort-button" data-sort="price-ascending"> 
+                  {{ 'sections.collection_template.sorting.price_ascending' | t }}
+                </button>
+                <button type="button" class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400 sort-button" data-sort="price-descending"> 
+                  {{ 'sections.collection_template.sorting.price_descending' | t }}
+                </button>
+              </div>
+            </details>
+            
+          </div>
+
+          <select id="sort-by" x-model="sort" @change="sortBy(sort)" class="rounded-md text-body border-0 hidden">
+            {% for option in block.settings.collection.sort_options %}
+              <option value="">
+                {{ 'products.facets.filter_sorting_title' | t }}
+              </option>
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+            </div>
+              {% if block.settings.collection != blank %}
+                <div class="product-collection grid gap-y-6 gap-x-4
+                      {{ section.settings.grid_desktop }}
+                      {{ section.settings.grid_tablet }}
+                      {{ section.settings.grid_mobile }}
+                  ">
+                  
+                  {%- for product in block.settings.collection.products limit: 20 -%}
+                   {% assign prefetch = false %}
+                   {% if section.index < 3 and forloop.index < 6 %}
+                    {% assign prefetch = true %}
+                   {% endif %}
+
+                    <div class="product-grid-main {% if forloop.index > block.settings.products_to_show %} default-hide {% endif %}" data-price="{{ product.price }}" data-handle="{{ product.handle }}" data-created="{{ product.created_at}}" data-index="{{ forloop.index }}">
+                      {% render 'card-product',
+                        card_product: product,
+                        show_secondary_image: true,
+                        show_rating: true,
+                        show_add_to_cart: block.settings.show_atc,
+                        enable_quick_view_bundle: block.settings.enable_quick_view_bundle,
+                        show_sold_count: block.settings.show_sold_count,
+                        show_add_to_bundle: block.settings.show_add_to_bundle,
+                        prefetch: prefetch,
+                        quick_shop_enabled: true
+                      %}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% render 'quick-shop-modal' %}
+</div>
+{% schema %}
+{
+  "name": "Collection tabs vertical",
+  "class": "collection-tabs-vertical",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "header",
+      "content": "Subscription toggle"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subscription_toggle",
+      "label": "Show subscription toggle",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "subscription_toggle_title",
+      "label": "Title",
+      "default": "Save 30% w/ Auto-ship"
+    },
+    {
+      "type": "text",
+      "id": "subscription_toggle_active_title",
+      "label": "Active title",
+      "default": "Shopping Auto-ship"
+    },
+    {
+      "type": "liquid",
+      "id": "subscription_toggle_perks",
+      "label": "Perks",
+      "default": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+      "info": "Colon  separated values: eg: Free shipping: 30% off: cancel anytime"
+    },
+    {
+      "type": "header",
+      "content": "Filter"
+    },
+    {
+      "type": "text",
+      "id": "filter_title",
+      "label": "Filter title",
+      "default": "Category",
+      "info": "Leave empty if you don't want to show"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-5",
+      "options": [
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 item"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 item"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 item"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 item"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "5 item"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-3",
+      "options": [
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 item"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 item"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 item"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 item"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 item"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 item"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 item"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Item gap",
+      "default": "gap-4",
+      "options": [
+        {
+          "value": "gap-0",
+          "label": "no-gap"
+        },
+        {
+          "value": "gap-2",
+          "label": "Small"
+        },
+        {
+          "value": "gap-4",
+          "label": "Medium"
+        },
+        {
+          "value": "gap-6",
+          "label": "Large"
+        },
+        {
+          "value": "gap-8",
+          "label": "X Large"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter",
+      "name": "Filter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Filter title",
+          "label": "Title"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "label": "Limit",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "default": 8
+        },
+        {
+          "type": "checkbox",
+          "id": "show_atc",
+          "label": "Show add to cart button",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_add_to_bundle",
+          "label": "Show add to bundle button",
+          "default": false,
+          "info": "Require bunlde section to be configured"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_sold_count",
+          "label": "Show sold count",
+          "default": false,
+          "info": "Require metafield to be configured"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_quick_view_bundle",
+          "label": "Quick view bundle",
+          "default": false,
+          "info": "Require bunlde section to be configured. This will popup quick view instead of product detail page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tabs vertical",
+      "blocks": [
+        {
+          "type": "filter"
+        },
+        {
+          "type": "filter"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

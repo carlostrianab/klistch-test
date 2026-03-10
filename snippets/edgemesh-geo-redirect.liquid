@@ -1,0 +1,119 @@
+{% comment %} Edgemesh redirect based on user location {% endcomment %}
+<script>
+    
+    let UnickTheme = {
+        setCookie: function(name,value,mins) {
+            var expires = "";
+            if (mins) {
+                var date = new Date();
+                date.setTime(date.getTime() + (mins*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        },
+        getCookie: function(name){
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        },
+        eraseCookie: function (name) {   
+            document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'; 
+        },
+    };
+    // Send request to edgemesh to get user location
+    // Redirect to user country's store
+    let countryCodes = [
+        { country: 'United States', code: 'us', slug: '/' },
+        { country: 'Canada', code: 'ca', slug: '/en-ca' },
+        { country: 'Australia', code: 'au', slug: '/en-au' },
+        { country: 'United Kingdom', code: 'gb', slug: '/en-gb' },
+        { country: 'France', code: 'fr', slug: '/fr-fr' },
+        { country: 'Sweden', code: 'se', slug: '/en-se' },
+        { country: 'Norway', code: 'no', slug: '/en-no' },
+        { country: 'Ireland', code: 'ie', slug: '/en-ie' },
+        { country: 'Netherlands', code: 'nl', slug: '/nl-nl' },
+        { country: 'Singapore', code: 'sg', slug: '/en-sg' },
+        { country: 'UAE', code: 'ae', slug: '/en-ae' },
+        { country: 'Denmark', code: 'dk', slug: '/en-dk' },
+        { country: 'Switzerland', code: 'ch', slug: '/en-ch' },
+        { country: 'Israel', code: 'il', slug: '/en-il' },
+        { country: 'Austria', code: 'at', slug: '/en-at' },
+        { country: 'Mexico', code: 'mx', slug: '/en-mx' },
+        { country: 'Germany', code: 'de', slug: '/de-de' },
+        { country: 'Italy', code: 'it', slug: '/en-it' },
+        { country: 'Portugal', code: 'it', slug: '/en-pt' },
+    ]   
+    
+    console.log('checking user location');
+
+    async function runCountryCheck(){
+
+        let response = await fetch(window.Shopify.routes.root
+            + 'browsing_context_suggestions.json'
+            + '?country[enabled]=true'
+            + `&country[exclude]=${window.Shopify.country}`
+            + '&language[enabled]=true'
+            + `&language[exclude]=${window.Shopify.language}`
+        ).then(r => r.json());
+
+        let userLanguage = response.suggestions[0]?.parts?.language?.handle;
+        if(userLanguage){
+            // select #FooterCountryForm form and append a hidden input
+            const footerForm = document.getElementById('FooterCountryForm');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'language_code';
+            hiddenInput.value = userLanguage;
+            footerForm?.appendChild(hiddenInput);
+        }
+
+        await fetch('/em-cgi/utils/geo')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+
+                console.log('user_country', data.country);
+
+                let user_country = data.country.toLowerCase();
+                let urlPath = window.location.href;
+                let result = countryCodes.find(countryObj => countryObj.code === user_country);
+                if(!result){
+                    return 0;
+                }
+                if(UnickTheme.getCookie('unick_force_redirect') && UnickTheme.getCookie('unick_force_redirect') == 'no'){
+                    return 0;
+                }
+                
+                countryCodes.forEach(country => {
+                    if(user_country != '{{ localization.country.iso_code | downcase }}' && UnickTheme.getCookie('edgemesh_country') != user_country) {
+                        UnickTheme.setCookie('edgemesh_country', user_country , 0.5);
+
+                        const footerForm = document.getElementById('FooterCountryForm');
+                        // update footerForm and add country_code as new value
+                        footerForm.querySelector('input[name="country_code"]').value = user_country;
+                        // Submit the form
+                        footerForm.submit();
+                    }
+                })
+    
+            });
+
+    }
+    runCountryCheck();
+
+    // Custom Redirects
+    if (window.location.href.includes('/%7Bignore%7D')){
+        window.location.href = "/";
+    }
+
+    if (window.location.href.includes('&nbt=nb:adwords')){
+        window.location.href = "/";
+    }
+  
+</script>

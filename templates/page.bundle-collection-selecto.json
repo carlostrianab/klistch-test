@@ -1,0 +1,248 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_rirAC9": {
+      "type": "image-banner",
+      "name": "Image banner",
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_1_4_copy.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83_8_copy.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#fff",
+        "content_background_opacity": 1,
+        "text_color": "#000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "bundle_header_pPqxAP": {
+      "type": "bundle-header",
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "main_product": "self-draining-soap-dish-1",
+        "main_product_title": "Main product title",
+        "free_product": false,
+        "empty_placeholder": 3,
+        "sticky_bottom_bar_text": "Add bundle to cart",
+        "background_color": "#f4f4f4",
+        "text_color": "#000000"
+      }
+    },
+    "image_banner_6dzUym": {
+      "type": "image-banner",
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_2_804f3b48-f1b3-4666-a87a-a4a3c6b783cb.jpg",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "collection_tabs_vertical_mezamG": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_fE3L4Q": {
+          "type": "filter",
+          "settings": {
+            "title": "Shampoo Bundles",
+            "collection": "bottle-free-beauty-bundles",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_VJJVeH": {
+          "type": "filter",
+          "settings": {
+            "title": "Hair Treatment / Styling",
+            "collection": "hair-treatment-bundles",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_Tjh9Ty": {
+          "type": "filter",
+          "settings": {
+            "title": "Travel Bundles",
+            "collection": "travel-bundles",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_T4bWVb": {
+          "type": "filter",
+          "settings": {
+            "title": "Collab Bundles",
+            "collection": "collab-bundles",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_68cETX": {
+          "type": "filter",
+          "settings": {
+            "title": "Sleep Bundles",
+            "collection": "pillowcase-bundles-queen",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_x9PikQ": {
+          "type": "filter",
+          "settings": {
+            "title": "Heatless Hair Bundles",
+            "collection": "heatless-bundles",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_XJc8b4": {
+          "type": "filter",
+          "settings": {
+            "title": "Cleanse Bundles",
+            "collection": "cleanse-bundles-1",
+            "products_to_show": 6,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_GybpaD": {
+          "type": "filter",
+          "settings": {
+            "title": "Holiday Bundles",
+            "collection": "holiday-bundles",
+            "products_to_show": 8,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_MpwUCP": {
+          "type": "filter",
+          "disabled": true,
+          "settings": {
+            "title": "Glazey Bundles",
+            "collection": "glazey-bundle",
+            "products_to_show": 2,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_fE3L4Q",
+        "filter_VJJVeH",
+        "filter_Tjh9Ty",
+        "filter_T4bWVb",
+        "filter_68cETX",
+        "filter_x9PikQ",
+        "filter_XJc8b4",
+        "filter_GybpaD",
+        "filter_MpwUCP"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": false,
+        "subscription_toggle_title": "Save 30% w/ Auto-ship",
+        "subscription_toggle_active_title": "Shopping Auto-ship",
+        "subscription_toggle_perks": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+        "filter_title": "Collection",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "image_banner_rirAC9",
+    "main",
+    "bundle_header_pPqxAP",
+    "image_banner_6dzUym",
+    "collection_tabs_vertical_mezamG"
+  ]
+}

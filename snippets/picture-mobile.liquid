@@ -1,0 +1,32 @@
+
+{% comment %} 
+    Required parameters:
+    - image: the image object to display
+    - preload: set to true to add the preload attribute to the image tag
+    Optional parameters:
+    - class: a class to add to the image
+
+ {% endcomment %}
+
+{% assign image_class = ' mobile-size-fix' %}
+
+{% if class %}
+    {% assign image_class = image_class |  append: class %}
+{% endif %}
+
+<picture>
+  <source
+    media="(max-width: 1000px)"
+    srcset="
+      {{ media | image_url: width: 300 }} 300w,
+      {{ media | image_url: width: 600 }} 600w,
+      ">
+    {{ image |
+      image_url: width: 900 |
+      image_tag:
+          widths: '300, 600 ,900',
+          fetchpriority: 'high',
+          preload: preload,
+          sizes: '(min-width: 1000px) 760px, (min-width: 800px) calc(100vw - 380px), (min-width: 400px) 298px, 78.75vw',
+          class: image_class }}
+</picture>

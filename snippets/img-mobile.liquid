@@ -1,0 +1,9 @@
+{% assign loading = loading | default: 'lazy' %}
+{% assign fetchpriority = 'auto' %}
+{% if loading == 'eager' %}
+    {% assign fetchpriority = 'high' %}
+{% endif %}
+
+{% assign class = class | append: " w-full " %}
+
+{{ image | image_url: width: 600 | image_tag: loading: loading, fetchpriority: fetchpriority, class: class }}

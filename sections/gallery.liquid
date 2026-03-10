@@ -1,0 +1,274 @@
+<style>
+    #ImageGallery-{{ section.id }}{
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+    }
+</style>
+
+<div id="ImageGallery-{{ section.id }}" class="gallery-section {{ section.settings.container }} mx-auto px-4">
+    <div class="gap-4
+        {% unless section.settings.layout_style == 'grid' %}
+            space-y-4 
+        {% endunless %}
+        {{ section.settings.mobile_layout_style }}
+        {{ section.settings.layout_style }}
+        {{ section.settings.grid_desktop }} 
+        {{ section.settings.grid_tablet }} 
+        {{ section.settings.grid_mobile }}">
+        {% for block in section.blocks %}
+            {% if block.settings.image != blank %}
+                {% assign image_class = ' object-cover ' %}
+                {% assign image_class = image_class | append: block.settings.image_ratio %}
+                {% render 'img-large', image: block.settings.image, class: image_class %}
+            {% endif %}
+        {% endfor %}
+
+        {% if section.blocks.size == 0 %}
+          {% liquid
+            for i in (1..6)
+                render 'placeholder'
+            endfor
+          %}
+        {% endif %}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Gallery",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "header",
+      "content": "Media blocks"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout (desktop)",
+      "info": "If you select masonry, the mobile layout should be also masonry",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "md:columns-2",
+          "label": "Masonry 2 columns"
+        },
+        {
+          "value": "md:columns-3",
+          "label": "Masonry 3 columns"
+        },
+        {
+          "value": "md:columns-4",
+          "label": "Masonry 4 columns"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout_style",
+      "label": "Layout (mobile)",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "columns-1",
+          "label": "Masonry 1 column"
+        },
+        {
+          "value": "columns-2",
+          "label": "Masonry 2 columns"
+        },
+        {
+          "value": "columns-3",
+          "label": "Masonry 3 columns"
+        }
+      ]
+    },
+
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-3",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 items"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "6 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-2",
+      "options": [
+        {
+          "value": "md:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 items"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_ratio",
+          "label": "Image ratio",
+          "options": [
+            {
+              "value": "aspect-auto",
+              "label": "Auto"
+            },
+            {
+              "value": "aspect-square",
+              "label": "Square"
+            },
+            {
+              "value": "aspect-portrait",
+              "label": "Portrait"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gallery"
+    }
+  ]
+}
+{% endschema %}

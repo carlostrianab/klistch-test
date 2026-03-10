@@ -1,0 +1,987 @@
+<style>
+  #ProductGridContainer{
+    padding-top: {{ section.settings.padding_top | append: 'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+</style>
+<div class="{{ section.settings.container }} mx-auto px-4" id="ProductGridContainer">
+
+  {% if section.settings.tag_filtering and collection.metafields.custom.tag_filter != blank and collection.handle != 'best-sellers'%}
+    <div class="tag__filtering my-2"  x-cloak 
+      x-title="Tag filtering"
+      x-init="
+      $watch('products_count', (value) => {
+        if(value < 2) {
+          $dispatch('no-products-found');
+        }
+      })"
+      x-data="{
+        activeTag: null,
+        loading: false,
+        products_count: {{ collection.all_products_count }},
+        loadByTag(tag) {
+          this.loading = true;
+          fetch(`{{ collection.url }}/` + tag)
+          .then(response => response.text())
+          .then(data => {
+            let el = document.createElement('div');
+            el.innerHTML = data;
+            let collectionWrapper = el.querySelector('#collection-content').innerHTML;
+            let collectionEl = document.createElement('div');
+            collectionEl.innerHTML = collectionWrapper;
+            document.querySelector('#collection-content').innerHTML = collectionWrapper;
+            this.products_count = collectionEl.childElementCount;
+            this.loading = false;
+            this.activeTag = tag;
+          });
+        }
+      }">
+
+    {% render 'loader' %}
+      {% comment %} collection.metafields.custom.tag_filter {% endcomment %}
+      {% assign tag_filter = collection.metafields.custom.tag_filter | split: ',' %}
+      <div class="flex gap-2 flex-wrap">
+        {% for tag in tag_filter %}
+          {% assign tag = tag | strip %}
+          {% if tag != blank %}
+            <button type="button" @click="loadByTag('{{ tag | stripe }}')" 
+              :class="{'bg-black text-white': activeTag == '{{ tag }}'}"
+              class="py-1 px-4 text-sm rounded border border-black capitalize">{{ tag }}</button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if collection.metafields.custom.collection_filters != blank and section.settings.tag_filtering and collection.handle != 'best-sellers' %}
+    <div 
+      x-title="Collection Filter"
+      x-init="
+        $watch('products_count', (value) => {
+          if(value < 2) {
+            $dispatch('no-products-found');
+          }
+        });
+        $watch('collectionURL', () => {
+          loadCollection();
+        })
+      "
+      x-data="{
+        loading: false,
+        collectionURL: '{{ collection.url }}',
+        products_count: {{ collection.all_products_count }},
+        loadCollection() {
+          this.loading = true;
+          fetch(this.collectionURL)
+          .then(response => response.text())
+          .then(data => {
+            let el = document.createElement('div');
+            el.innerHTML = data;
+            let collectionWrapper = el.querySelector('#collection-content').innerHTML;
+            let collectionEl = document.createElement('div');
+            collectionEl.innerHTML = collectionWrapper;
+            document.querySelector('#collection-content').innerHTML = collectionWrapper;
+            // update filters
+            let filterWrapper = el.querySelector('.collection_filters');
+            if(filterWrapper){
+              let filterEl = document.createElement('div');
+              filterEl.innerHTML = filterWrapper?.innerHTML;
+              document.querySelector('.collection_filters').innerHTML = filterWrapper?.innerHTML;
+            }
+            // update full url without refreshing the page. 
+
+            let newUrl = window.location.origin + this.collectionURL;
+            console.log('new url: ', newUrl);
+            window.history.pushState({}, '', newUrl);
+
+            this.products_count = collectionEl.childElementCount;
+            this.loading = false;
+          });
+        }
+      }"
+      class="tag_filtering my-2 pb-2 flex gap-2 no-scrollbar overflow-x-scroll">
+      {% render 'loader' %}
+      {% for collection_filter in collection.metafields.custom.collection_filters.value %}
+        {% if collection_filter.url == collection.url %}
+          <button type="button" 
+            class="shrink-0 snap-start py-1 px-4 text-sm rounded border border-black capitalize bg-black text-white" 
+            aria-current="true">{{ collection_filter.title }} </button>
+        {% else %}
+          <button 
+            :class="{ 'bg-black text-white': collectionURL == '{{ collection_filter.url }}' }"
+            :disabled="loading || collectionURL == '{{ collection_filter.url }}'"
+            @click="collectionURL = '{{ collection_filter.url }}'"
+            class="shrink-0 snap-start py-1 px-4 text-sm rounded border cursor-pointer border-black capitalize">{{ collection_filter.title }} </button>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+{% if collection.handle == 'best-sellers' %}
+
+    {% for filter in collection.filters %}
+    {% if filter.label contains 'Subcollection Quick Filter' %}
+        {% if filter.active_values.size > 0 %}
+          {% assign collection_url = filter.active_values[0].url_to_add %}
+        {% endif %}
+      {% break %}
+    {% endif %}
+    {% endfor %}
+
+    {% if collection_url == blank %}
+      {% assign collection_url = collection.url %}
+    {% endif %}
+ 
+<div 
+      x-title="Collection Filter"
+      x-init="
+        $watch('products_count', (value) => {
+          if(value < 2) {
+            $dispatch('no-products-found');
+          }
+        });
+        $watch('collectionURL', () => {
+          loadCollection();
+        })
+      "
+      x-data="{
+        loading: false,
+        collectionURL: '{{ collection_url }}',
+        products_count: {{ collection.all_products_count }},
+        loadCollection() {
+          this.loading = true;
+          fetch(this.collectionURL)
+          .then(response => response.text())
+          .then(data => {
+            let el = document.createElement('div');
+            el.innerHTML = data;
+            let collectionWrapper = el.querySelector('#collection-content').innerHTML;
+            let collectionEl = document.createElement('div');
+            collectionEl.innerHTML = collectionWrapper;
+            document.querySelector('#collection-content').innerHTML = collectionWrapper;
+            // update filters
+            let filterWrapper = el.querySelector('.collection_filters');
+            if(filterWrapper){
+              let filterEl = document.createElement('div');
+              filterEl.innerHTML = filterWrapper?.innerHTML;
+              document.querySelector('.collection_filters').innerHTML = filterWrapper?.innerHTML;
+            }
+            // update full url without refreshing the page. 
+
+            let newUrl = window.location.origin + this.collectionURL;
+            console.log('new url: ', newUrl);
+            window.history.pushState({}, '', newUrl);
+
+            this.products_count = collectionEl.childElementCount;
+            this.loading = false;
+          });
+        }
+      }"
+      class="new-collection-filter my-2 pb-2 flex gap-2 no-scrollbar overflow-x-scroll">
+      {% render 'loader' %}
+      {% for filter in collection.filters %}
+        {% if filter.label contains 'Subcollection Quick Filter' %}
+          <button 
+                :class="{ 'bg-black text-white': collectionURL == '{{ collection.url }}' }"
+                :disabled="loading || collectionURL == '{{ collection.url }}'"
+                @click="collectionURL = '{{ collection.url }}'"
+                class="all-filter shrink-0 snap-start py-1 px-4 text-sm rounded border cursor-pointer border-black capitalize {% if filter.active_values.size == 0 %} bg-black text-white{% endif %}">All</button>
+          {% for filter_value in filter.values %}
+            {% assign collectionURL = filter_value.url_to_add %}
+            {% assign filterexist = false %}
+              {% for pro in collection.products %}
+                {% if pro.metafields.custom.subcollection_quick_filter.value contains filter_value.label  %}
+                  {% assign filterexist = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+          <button 
+                :class="{ 'bg-black text-white selected-filter': collectionURL == '{{ collectionURL }}' }"
+                :disabled="loading'"
+                @click="collectionURL = '{{ collectionURL }}'"
+                class=" filter-exist-{{ filterexist }} shrink-0 snap-start py-1 px-4 text-sm rounded border cursor-pointer border-black capitalize {% if filter_value.active %} bg-black text-white{% endif %} {{filter_value.label | handle}}">{{ filter_value.label }} </button>
+            {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div 
+      x-title="Collection Filter"
+      x-init="
+        $watch('products_count', (value) => {
+          if(value < 2) {
+            $dispatch('no-products-found');
+          }
+        });
+        $watch('collectionURL', () => {
+          loadCollection();
+        })
+      "
+      x-data="{
+        loading: false,
+        collectionURL: '{{ collection_url }}',
+        products_count: {{ collection.all_products_count }},
+        loadCollection() {
+          this.loading = true;
+          fetch(this.collectionURL)
+          .then(response => response.text())
+          .then(data => {
+            let el = document.createElement('div');
+            el.innerHTML = data;
+            let collectionWrapper = el.querySelector('#collection-content').innerHTML;
+            let collectionEl = document.createElement('div');
+            collectionEl.innerHTML = collectionWrapper;
+            document.querySelector('#collection-content').innerHTML = collectionWrapper;
+            // update filters
+            let filterWrapper = el.querySelector('.collection_filters');
+            if(filterWrapper){
+              let filterEl = document.createElement('div');
+              filterEl.innerHTML = filterWrapper?.innerHTML;
+              document.querySelector('.collection_filters').innerHTML = filterWrapper?.innerHTML;
+            }
+            // update full url without refreshing the page. 
+
+            let newUrl = window.location.origin + this.collectionURL;
+            console.log('new url: ', newUrl);
+            window.history.pushState({}, '', newUrl);
+
+            this.products_count = collectionEl.childElementCount;
+            this.loading = false;
+          });
+        }
+      }"
+      class="new-collection-filter hair-goal-filter my-2 pb-2 flex gap-2 no-scrollbar overflow-x-scroll">
+      {% render 'loader' %}
+      {% for filter in collection.filters %}
+        {% if filter.label contains 'Hair Concern Goals' %}
+           {% for filter_value in filter.values %}
+            {% assign collectionURL = filter_value.url_to_add %}
+            {% assign filterexist = false %}
+              {% for pro in collection.products %}
+                {% if pro.metafields.custom.hair_concern.value contains filter_value.label  %}
+                  {% assign filterexist = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+          <button 
+                :class="{ 'bg-black text-white selected-filter': collectionURL == '{{ collectionURL }}' }"
+                :disabled="loading'"
+                @click="collectionURL = '{{ collectionURL }}'"
+                class=" filter-exist-{{ filterexist }} shrink-0 snap-start py-1 px-4 text-sm rounded border cursor-pointer border-black capitalize {% if filter_value.active %} bg-black text-white{% endif %} {{filter_value.label | handle}}">{{ filter_value.label }} </button>
+            {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  {% if section.settings.enable_filtering or section.settings.enable_sorting %}
+    <div class="collection_filters flex justify-between items-center pb-4 pt-2 gap-4 flex-wrap md:flex-nowrap">
+      {%- comment -%}
+        Find if there is any filter applied
+      {%- endcomment -%}
+      {% assign hasFilter = false %}
+      {%- for filter in collection.filters -%}
+        {%- for filter_value in filter.active_values -%}
+            {% assign hasFilter = true %}
+        {% endfor %}
+      {% endfor %}
+
+      <div class=" order-1" 
+        x-data="{ 
+          showFilter: false
+        }"
+        @toggle-filter.window="$nextTick(() => {
+          showFilter = !showFilter;
+          document.body.classList.toggle('overflow-fixed');
+        })">
+        <button @click="$dispatch('toggle-filter')" type="button" class="flex items-center text-sm w-full md:hidden" aria-label="{{ 'products.facets.filter_by_label' | t }}">
+          {% render 'icon-slider', class: "w-4" %}
+          <div class="font-medium w-16">
+            {{ 'products.facets.filter_by_label' | t }}
+          </div>
+        </button>
+        <div x-show="showFilter" x-cloak class="filter-overlay fixed z-10 inset-0 bg-[#0000004f]" @click="showFilter = false"></div>
+        <!-- Mobile filters -->
+        <div x-cloak class="collection__filters overflow-scroll flex flex-col border-t shadow-lg" 
+            x-transition:enter="transform transition ease-in-out duration-400" 
+            x-transition:enter-start="translate-y-full opacity-0" 
+            x-transition:enter-end="translate-y-0 opacity-1" 
+            x-transition:leave="transform transition ease-in-out duration-400" 
+            x-transition:leave-start="-translate-y-0" 
+            x-transition:leave-end="translate-y-full opacity-0"
+            @keydown.escape.window="showFilter = false; document.body.classList.remove('overflow-fixed')"
+            @click.outside="showFilter = false; document.body.classList.remove('overflow-fixed')"
+            x-trap="showFilter" 
+            x-show="showFilter" role="dialog" aria-modal="true" aria-labelledby="filter-title-mobile">
+
+            <div class="flex justify-center items-center relative py-2 mx-5">
+              <span class="text-center">
+                {{ 'products.facets.filter_by_label2' | t }}
+              </span>
+
+              <button type="button" @click="showFilter = false; document.body.classList.remove('overflow-fixed');" class="absolute right-0">
+                {% render 'icon-close', class: "w-5" %}
+              </button>
+            </div>
+
+            <div class="p-5 pt-3">
+              {% render 'filters', results: collection, enable_sorting: section.settings.enable_filtering, mobile_filter: true, heading_id: 'filter-title-mobile' %}
+  
+              <div class="filter-group-display__submit my-2 flex gap-3 items-center justify-between mt-auto pt-3" x-data="filter">
+                {% render 'loader' %}
+  
+                {%- if hasFilter %}
+                  <button type="button" @click="updateFilter('sort_by={{ collection.sort_by }}')" class="button button--outline-dark w-full">
+                    {{ 'products.facets.clear_all' | t }}
+                  </button>
+                {% endif %}
+  
+                <button type="button" @click="$dispatch('submit-filter')" class="button button--secondary ml-auto w-full">
+                  {{ 'products.facets.apply' | t }}
+                </button>
+            </div>
+
+            </div>
+        </div>
+
+      </div>
+      
+      {% if section.settings.enable_filtering %}
+        <div class="hidden md:block">
+          {% render 'filters', results: collection, enable_sorting: section.settings.enable_filtering, heading_id: 'filter-title' %}
+        </div>
+      {% endif %}
+
+      {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+
+      {% if section.settings.enable_sorting %}
+        <div class="collection__sort flex relative justify-end order-2 md:order-2" 
+          x-data="filter" x-init="sort = '{{ sort_by }}'">
+
+          {% render 'loader' %}
+
+          <div class="flex items-center justify-end w-[170px] gap-2">
+            
+            <details class="sort relative" x-data x-ref="details" @click.outside="$refs.details.removeAttribute('open')">
+              <summary class="sort-summary flex gap-1 cursor-pointer items-center">
+                <div class="font-medium text-sm w-14">
+                    {{ 'products.facets.sort_by_label' | t }}
+                </div>
+                <span class="arrow-icon rotate-90">
+                    {% render 'icon-chevron-right', class: "w-5" %}
+                </span>
+              </summary>
+              <div class="sort-display pb-3 absolute space-y-1 right-0 z-20 bg-white shadow p-3 min-w-44 rounded-sm">
+                <button type="button" 
+                    class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400" 
+                    @click="sortBy('manual')" 
+                    selected="selected"> 
+                    {{ 'sections.collection_template.sorting.best_selling' | t }}
+                 </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400" 
+                  @click="sortBy('price-ascending')"> 
+                  {{ 'sections.collection_template.sorting.price_ascending' | t }}
+                </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400" 
+                  @click="sortBy('price-descending')"> 
+                  {{ 'sections.collection_template.sorting.price_descending' | t }}
+                </button>
+                <button type="button" 
+                  class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400" 
+                  @click="sortBy('created-descending')"> 
+                  {{ 'sections.collection_template.sorting.date_descending' | t }}
+                </button>
+                <button type="button" 
+                class="py-2 w-full text-left text-sm focus:border-gray-400 border border-transparent active:border-gray-400" 
+                  @click="sortBy('created-ascending')"> 
+                  {{ 'sections.collection_template.sorting.date_ascending' | t }}
+                </button>
+              </div>
+            </details>
+
+            <span class="hidden md:block">|</span>
+
+            <div class="w-20 text-sm hidden md:block">
+              {{ 'products.facets.product_count_simple.items' | t: count: collection.all_products_count  }}
+            </div>
+            
+          </div>
+
+          <select id="sort-by" x-model="sort" @change="sortBy(sort)" class="rounded-md text-body border-0 hidden">
+            {% for option in collection.sort_options %}
+              <option value="">
+                {{ 'products.facets.filter_sorting_title' | t }}
+              </option>
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+      {% endif %}
+
+    </div>
+  {% endif %}
+
+  <div class="flex">
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        {%- if collection.products.size == 0 -%}
+          <div class="collection collection--empty" id="collection-content" data-id="{{ section.id }}">
+            <div class="title-wrapper center">
+              <h2 class="title title--primary">
+                {{ 'sections.collection_template.empty' | t }}<br>
+                {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underlined-link link" }}
+              </h2>
+            </div>
+          </div>
+        {%- else -%}
+          <div class="collection" id="collection-content">
+
+          {% if section.settings.pagination_type == 'load_more' %}
+            {% assign productCount = paginate.current_page | minus: 1 | times: section.settings.products_per_page %}
+              <div class="w-full mb-8 text-center"
+                x-show="product_count >= limit"
+                x-title="Load previous page"
+                @no-products-found.window="show = false"
+                x-show="show"
+                x-cloak
+                x-data="{ 
+                  show: true,
+                  product_count: {{ productCount }},
+                  loading: false,
+                  page: {{ paginate.current_page }},
+                  current_page: {{ paginate.current_page }},
+                  limit: {{ section.settings.products_per_page }},
+                  totalLoaded() {
+                    let total = this.page * this.limit;
+                    return total > this.product_count ? this.product_count : total;
+                  },
+                  loadMore() {
+                    this.loading = true;
+                    fetch(`${window.location.href} ?dd=01&page=` + this.page)
+                        .then(response => response.text())
+                        .then(data => {
+                          let el = document.createElement('div');
+                          el.innerHTML = data;
+                          let collectionWrapper = el.querySelector('#product-grid').innerHTML;
+                          let collectionEl = document.createElement('div');
+                          collectionEl.innerHTML = collectionWrapper;
+                          document.querySelector('#product-grid').insertAdjacentHTML('afterbegin', collectionWrapper);
+                                
+                          // update url with page = this.page
+                          let url = new URL(window.location.href);
+                          url.searchParams.set('page', this.page);
+                          window.history.pushState({}, '', url.href);
+                          
+                          this.page--;
+                          this.loading = false;
+                    });
+                    
+                    
+                  },
+                }"
+                x-init="$nextTick(() => {
+                  page -= 1;
+                })">
+
+                <button @click="loadMore" x-show="totalLoaded() > 0" class="inline-block px-8 py-3 uppercase text-center font-semibold rounded-sm button--primary cursor-pointer">
+                  {{ 'sections.collection_template.load_more_previous' | t }}
+                </button>
+
+                <div class="mt-4">
+                  Showing <span x-text="totalLoaded" class="font-semibold"></span> of <span x-text="product_count" class="font-semibold"></span> Items
+                </div>
+               
+                <div class="fixed inset-0 z-10 bg-white/50 flex items-center justify-center" x-transition.opacity x-show="loading">
+                    <div class="w-10">
+                      {% render 'loader', class:'rotate-center' %}
+                    </div>
+                </div>
+    
+              </div>
+          {% endif %}
+
+              <ul id="product-grid" data-id="{{ section.id }}" class="grid
+                {{ section.settings.gap }}
+                {{ section.settings.gap_mobile }} 
+                {{ section.settings.grid_desktop }} 
+                {{ section.settings.grid_tablet }} 
+                {{ section.settings.grid_mobile }}">
+                {%- for product in collection.products -%}
+                  {% unless product.handle contains 'navidium' %}
+                    <li class="grid__item collection-product-grid" data-handle="{{ product.handle }}">
+                      {% render 'card-product',
+                        card_product: product,
+                        show_secondary_image: section.settings.show_secondary_image,
+                        show_vendor: section.settings.show_vendor,
+                        show_rating: section.settings.show_rating,
+                        image_ratio: section.settings.image_ratio,
+                        show_add_to_cart: section.settings.show_add_to_cart,
+                        show_sold_count: section.settings.show_sold_count,
+                        position: forloop.index,
+                        compact_reviews: section.settings.compact_reviews
+                      %}
+                    </li>
+                  {% endunless %}
+                {%- endfor -%}
+              </ul>
+
+           {% if section.settings.pagination_type == 'load_more' %}
+              <div id="pagination-bottom">
+                <div class="w-full my-[60px] text-center" x-cloak
+                  @no-products-found.window="show = false"
+                  x-show="show"
+                  x-title="Load more"
+                  x-data="{ 
+                    show: true,
+                    product_count: {{ collection.products_count }},
+                    loading: false,
+                    next_page: `{{ paginate.next.url }}`,
+                    total_pages: {{ paginate.pages }},
+                    current_page: {{ paginate.current_page }},
+                    totalProductShown: {{ paginate.page_size | times: paginate.current_page }},
+                    loadMore() {
+                      this.loading = true;
+                      fetch(this.next_page)
+                          .then(response => response.text())
+                          .then(data => {
+                            let el = document.createElement('div');
+                            el.innerHTML = data;
+                            let collectionWrapper = el.querySelector('#product-grid').innerHTML;
+                            let collectionEl = document.createElement('div');
+                            collectionEl.innerHTML = collectionWrapper;
+                            document.querySelector('#product-grid').insertAdjacentHTML('beforeend', collectionWrapper);
+
+                            this.current_page++;
+                            let url = new URL(window.location.href);
+                            url.searchParams.set('page', this.current_page);
+                            window.history.pushState({}, '', url.href);
+                         
+                            this.loading = false;
+  
+                            // replace content of pagination-bottom with new pagination
+                            let newPagination = el.querySelector('#pagination-bottom').innerHTML;  
+                            document.querySelector('#pagination-bottom').innerHTML = newPagination;
+  
+                          });
+                    },
+                  }"
+                  x-init="$nextTick(() => {
+                    {% if section.settings.products_per_page > collection.products_count %}
+                      limit = {{ collection.products_count }};
+                    {% endif %}
+                    let url = new URL(window.location.href);
+                    let clickedValue = url.searchParams.get('clicked')
+                    if(clickedValue &&  document.getElementById(clickedValue)) {
+                      console.log('scrolling');
+                      document.getElementById(clickedValue).scrollIntoView();
+                      history.scrollRestoration = 'manual';
+                    }
+                  })"
+                  >
+                  {% comment %} Showing 48 of 568 Items {% endcomment %}
+                  <div class="mb-3">
+                    Showing <span class="font-semibold"> 
+                    {% assign fineTotalShown = paginate.page_size | times: paginate.current_page %}
+                    {% if fineTotalShown > collection.products_count %}
+                      {{ collection.products_count }}
+                    {% else %}
+                      {{ paginate.page_size | times: paginate.current_page }}
+                    {% endif %}
+                    </span> of <span class="font-semibold total-product-count">{{ collection.products_count }} </span> Items
+                  </div>
+
+                  <button @click="loadMore" x-show="product_count > totalProductShown" class="inline-block px-8 py-3 uppercase font-semibold rounded-sm text-center button--primary cursor-pointer">
+                    {{ 'sections.collection_template.load_more' | t }}
+                  </button>
+
+  
+                  <div class="fixed inset-0 z-10 bg-white/50 flex items-center justify-center"
+                      x-transition.opacity
+                      x-cloak
+                      x-show="loading">
+                      <div class="w-10">
+                        {% render 'loader', class:'rotate-center' %}
+                      </div>
+                  </div>
+  
+                </div>
+
+              </div>
+            {% else %}
+              {%- if paginate.pages > 1 -%}
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+              {%- endif -%}
+            {% endif %}
+
+            {% if section.settings.show_collection_description %}
+              <div class="collection-hero__description prose max-w-screen-2xl">
+                {{ collection.description }}
+              </div>
+            {% endif %}
+    
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-3",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 items"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "6 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-2",
+      "options": [
+        {
+          "value": "md:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Item gap (desktop)",
+      "default": "md:gap-4",
+      "options": [
+        {
+          "value": "md:gap-0",
+          "label": "no-gap"
+        },
+        {
+          "value": "md:gap-2",
+          "label": "Small"
+        },
+        {
+          "value": "md:gap-4",
+          "label": "Medium"
+        },
+        {
+          "value": "md:gap-6",
+          "label": "Large"
+        },
+        {
+          "value": "md:gap-8",
+          "label": "X Large"
+        },
+        {
+          "value": "md:gap-10",
+          "label": "2X Large"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "gap_mobile",
+      "label": "Item gap (mobile)",
+      "default": "gap-4",
+      "options": [
+        {
+          "value": "gap-0",
+          "label": "no-gap"
+        },
+        {
+          "value": "gap-2",
+          "label": "Small"
+        },
+        {
+          "value": "gap-4",
+          "label": "Medium"
+        },
+        {
+          "value": "gap-6",
+          "label": "Large"
+        },
+        {
+          "value": "gap-8",
+          "label": "X Large"
+        },
+        {
+          "value": "gap-10",
+          "label": "2X Large"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "aspect-auto",
+          "label": "Auto"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-portrait",
+          "label": "Portrait"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_to_cart",
+      "default": false,
+      "label": "Show add to cart button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_count",
+      "default": false,
+      "label": "Show product sold count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#featured-collection-show-product-rating)"
+    },
+     {
+      "type": "checkbox",
+      "id": "compact_reviews",
+      "default": false,
+      "label": "Show reviews compact"
+    },
+    {
+      "type": "header",
+      "content": "Filter and Sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering",
+      "info": "Customize [filters](/admin/menus)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "tag_filtering",
+      "default": false,
+      "label": "Enable tag filtering",
+      "info": "Enable tag filtering for collections. You can add tags to collection metafields"
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "Pagination type",
+      "default": "load_more",
+      "options": [
+        {
+          "value": "load_more",
+          "label": "Load more"
+        },
+        {
+          "value": "pagination",
+          "label": "Pagination"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": false,
+      "label": "Show collection description",
+      "info": "Show collection description on the footer of the collection page"
+    },
+    {
+      "type": "header",
+      "content": "Filter styles"
+    },
+
+    {
+      "type": "select",
+      "id": "price_style",
+      "label": "Price range style",
+      "default": "input",
+      "options": [
+        {
+          "value": "input",
+          "label": "Input"
+        },
+        {
+          "value": "range",
+          "label": "Range slider"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Styles"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

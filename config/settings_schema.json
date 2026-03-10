@@ -1,0 +1,1026 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Unick",
+    "theme_version": "2.0.0",
+    "theme_author": "Codeinspire.io",
+    "theme_documentation_url": "https:\/\/www.codeinspire.io\/shopify-unick-theme\/",
+    "theme_support_url": "https:\/\/www.codeinspire.io\/contact\/"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General colors"
+      },
+      {
+        "type": "color",
+        "id": "body_color",
+        "default": "#424242",
+        "label": "Body color"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "default": "#50524D",
+        "label": "Border color"
+      },
+      {
+        "type": "color",
+        "id": "link_color",
+        "default": "#50524D",
+        "label": "Link color"
+      },
+      {
+        "type": "color",
+        "id": "primary_color",
+        "default": "#50524D",
+        "label": "Primary color"
+      },
+      {
+        "type": "header",
+        "content": "Buttons"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_background_color",
+        "default": "#fff",
+        "label": "Primary background"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_text_color",
+        "default": "#50524D",
+        "label": "Primary text"
+      },
+      {
+        "type": "color",
+        "id": "button_secondary_background_color",
+        "default": "#50524D",
+        "label": "Secondary background"
+      },
+      {
+        "type": "color",
+        "id": "button_secondary_text_color",
+        "default": "#fff",
+        "label": "Secondary text"
+      },
+      {
+        "type": "color",
+        "id": "outline_dark_button_color",
+        "default": "#50524D",
+        "label": "Outline dark"
+      },
+      {
+        "type": "color",
+        "id": "outline_light_button_color",
+        "default": "#fff",
+        "label": "Outline light"
+      },
+      {
+        "type": "header",
+        "content": "Flags"
+      },
+      {
+        "type": "color",
+        "id": "flag_background",
+        "default": "#000",
+        "label": "Flag background"
+      },
+      {
+        "type": "color",
+        "id": "flag_color",
+        "default": "#fff",
+        "label": "Flag text color"
+      },
+      {
+        "type": "color",
+        "id": "discount_flag_background",
+        "default": "#000",
+        "label": "Discount flag background"
+      },
+      {
+        "type": "color",
+        "id": "discount_flag_color",
+        "default": "#fff",
+        "label": "Discount flag text color"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General typography"
+      },
+      {
+        "type": "font_picker",
+        "id": "sophillia_replacement",
+        "label": "Sophillia replacement",
+        "default": "assistant_n4",
+        "info": "Replace the sophillia font with your own font"
+      },
+      {
+        "type": "font_picker",
+        "id": "primary_font",
+        "default": "assistant_n4",
+        "label": "Primary font",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "font_picker",
+        "id": "primary_font_light",
+        "default": "assistant_n4",
+        "label": "Primary font light",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "font_picker",
+        "id": "primary_font_bold",
+        "default": "assistant_n4",
+        "label": "Primary font bold",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "font_picker",
+        "id": "secondary_font",
+        "default": "assistant_n4",
+        "label": "Secondary font",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "font_picker",
+        "id": "secondary_font_light",
+        "default": "assistant_n4",
+        "label": "Secondary font light",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "font_picker",
+        "id": "secondary_font_bold",
+        "default": "assistant_n4",
+        "label": "Secondary font bold",
+        "info": "You can assign this font to any element in the theme during content update."
+      },
+      {
+        "type": "header",
+        "content": "Heading"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "assistant_n4",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https:\/\/help.shopify.com\/manual\/online-store\/os\/store-speed\/improving-speed#fonts)"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "assistant_n4",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https:\/\/help.shopify.com\/manual\/online-store\/os\/store-speed\/improving-speed#fonts)"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_semi_bold",
+        "default": "assistant_n4",
+        "label": "Semi bold font"
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "default": 16,
+        "label": "Body font size",
+        "min": 6,
+        "max": 48,
+        "step": 1,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "min": 1000,
+        "max": 1600,
+        "step": 100,
+        "default": 1200,
+        "unit": "px",
+        "label": "Page width",
+        "info": "You can use this settings on every section"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https:\/\/facebook.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https:\/\/pinterest.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "http:\/\/instagram.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "Tiktok",
+        "info": "https:\/\/tiktok.com\/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr",
+        "info": "https:\/\/shopify.tumblr.com"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat",
+        "info": "https:\/\/snapchat.com\/add\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "Youtube",
+        "info": "https:\/\/youtube.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo",
+        "info": "https:\/\/vimeo.com\/shopify"
+      }
+    ]
+  },
+  {
+    "name": "Discounts",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_tag_discount",
+        "label": "Tag discount",
+        "info": "You can tag products and it will apply discount to prices. discount:10 will apply 10% discount",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "discount_table",
+        "label": "Discount table",
+        "info": "Strike through price will be shown in the product price based on the discount table. eg: welcome:10 will apply 10% discount. You can add multiple discounts comma separated"
+      }
+    ]
+  },
+  {
+    "name": "Subscription",
+    "settings": [
+      {
+        "type": "select",
+        "id": "default_selected",
+        "label": "Default selected",
+        "default": "subscription",
+        "options": [
+          {
+            "value": "onetime",
+            "label": "Onetime"
+          },
+          {
+            "value": "subscription",
+            "label": "Subscription"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "selected_delivery_period",
+        "label": "Selected delivery period",
+        "default": 0,
+        "min": 0,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "text",
+        "id": "onetime_title",
+        "label": "Onetime title",
+        "default": "Onetime Purchase"
+      },
+      {
+        "type": "richtext",
+        "id": "onetime_subtitle",
+        "label": "Onetime Subtitle",
+        "default": "<p> Normal price <\/p>"
+      },
+      {
+        "type": "text",
+        "id": "subscription_title",
+        "label": "Subscription title",
+        "default": "Subscription"
+      },
+      {
+        "type": "richtext",
+        "id": "subscription_subtitle",
+        "label": "Subscription Subtitle",
+        "info": "[discount] variable is available to show the discount amount"
+      },
+      {
+        "type": "richtext",
+        "id": "subscription_message",
+        "label": "Subscription message",
+        "info": "This text message will show for the users under the subscription"
+      },
+      {
+        "type": "text",
+        "id": "cart_subscription_discount",
+        "label": "Cart subscription discount",
+        "default": "Subscription discount $x"
+      },
+      {
+        "type": "text",
+        "id": "delivery_title",
+        "label": "Delivery title",
+        "default": "Delivery"
+      },
+      {
+        "type": "text",
+        "id": "most_popular_title",
+        "label": "Most popular title",
+        "default": "Most popular"
+      },
+      {
+        "type": "header",
+        "content": "Autoship"
+      },
+      {
+        "type": "textarea",
+        "id": "autoship_advantages",
+        "label": "Autoship advantages",
+        "info": "Comma separated list of advantages"
+      },
+      {
+        "type": "textarea",
+        "id": "onetime_advantages",
+        "label": "onetime advantages",
+        "info": "Comma separated list of advantages"
+      },
+      {
+        "type": "header",
+        "content": "Subscription benefits"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit1_icon",
+        "label": "Benefit 1 icon"
+      },
+      {
+        "type": "richtext",
+        "id": "benefit1",
+        "label": "Benefit 1"
+      },
+      {
+        "type": "richtext",
+        "id": "benefit1_netsuite",
+        "label": "Benefit 1 netsuite"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit2_icon",
+        "label": "Benefit 2 icon"
+      },
+      {
+        "type": "richtext",
+        "id": "benefit2",
+        "label": "Benefit 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit3_icon",
+        "label": "Benefit 3 icon"
+      },
+      {
+        "type": "richtext",
+        "id": "benefit3",
+        "label": "Benefit 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit4_icon",
+        "label": "Benefit 4 icon"
+      },
+      {
+        "type": "richtext",
+        "id": "benefit4",
+        "label": "Benefit 4"
+      }
+    ]
+  },
+  {
+    "name": "Search settings",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "default": true,
+        "label": "Enable predictive search",
+        "info": "Predictive search will show you products that match your search query as you type."
+      },
+      {
+        "type": "select",
+        "id": "search_type",
+        "default": "shopify",
+        "label": "Search type",
+        "options": [
+          {
+            "value": "shopify",
+            "label": "Shopify"
+          },
+          {
+            "value": "wizzy",
+            "label": "Wizzy"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "predictive_search_limit",
+        "label": "Limit",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "default": 10
+      },
+      {
+        "type": "link_list",
+        "id": "popular_searches",
+        "label": "Popular search",
+        "info": "Add popular searches to show in the search dropdown"
+      },
+      {
+        "type": "collection",
+        "id": "trending_products",
+        "label": "Trending products",
+        "info": "Add trending products to show in the search dropdown"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Will be scaled down to 32x32px"
+      }
+    ]
+  },
+  {
+    "name": "Quick view",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "quick_view_enabled",
+        "default": true,
+        "label": "Enable quick view",
+        "info": "Quick view allows your customers to view product details without leaving the page they are currently on."
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view_show_share",
+        "default": false,
+        "label": "Show share button"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view_show_price",
+        "default": false,
+        "label": "Show price"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view_show_variants",
+        "default": true,
+        "label": "Show variants"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view_show_add_to_cart",
+        "default": true,
+        "label": "Show add to cart button"
+      },
+      {
+        "type": "checkbox",
+        "id": "quick_view_show_dynamic_checkout",
+        "default": false,
+        "label": "Show dynamic checkout button"
+      },
+      {
+        "type": "select",
+        "id": "quick_view_variant_picker_type",
+        "default": "radio-buttons",
+        "label": "Variant picker type",
+        "options": [
+          {
+            "value": "radio-buttons",
+            "label": "Radio buttons"
+          },
+          {
+            "value": "dropdown",
+            "label": "Dropdown"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "quick_view_color_swatch_style",
+        "default": "basic",
+        "label": "Color swatch style",
+        "options": [
+          {
+            "value": "basic",
+            "label": "Basic"
+          },
+          {
+            "value": "color-swatch",
+            "label": "Color swatch"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Event products"
+      },
+      {
+        "type": "text",
+        "id": "quick_view_event_title",
+        "label": "Title",
+        "default": "Select date"
+      },
+      {
+        "type": "richtext",
+        "id": "quick_view_event_subtitle",
+        "label": "Subtitle"
+      },
+      {
+        "type": "range",
+        "id": "quick_view_event_collapsed_height",
+        "label": "Collapsed height",
+        "unit": "px",
+        "min": 50,
+        "max": 500,
+        "step": 5,
+        "default": 400
+      }
+    ]
+  },
+  {
+    "name": "Currency format",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Currency codes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Cart and checkout prices always show currency codes. Example: $1.00 USD."
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency codes",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Market",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Market settings"
+      },
+      {
+        "type": "range",
+        "id": "market_price_adjustment",
+        "label": "Market price adjustment",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "info": "percentage of the market price adjustment"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_edgemesh_redirect",
+        "label": "Enable Edgemesh redirect",
+        "default": false,
+        "info": "This will redirect the user to user country specific store using edgemesh"
+      }
+    ]
+  },
+  {
+    "name": "GWP",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_gwp",
+        "default": false,
+        "label": "Enable GWP",
+        "info": "You must setup the below options for this to work"
+      },
+      {
+        "type": "checkbox",
+        "id": "gwp_usa_only",
+        "default": false,
+        "label": "US only"
+      },
+      {
+        "type": "checkbox",
+        "id": "gwp_removable",
+        "default": false,
+        "label": "Removable"
+      },
+      {
+        "type": "product",
+        "id": "gwp_product",
+        "label": "GWP product",
+        "info": "Free gift product"
+      },
+      {
+        "type": "header",
+        "content": "Product based GWP"
+      },
+      {
+        "type": "product",
+        "id": "eligible_product",
+        "label": "Eligible product",
+        "info": "If this product is added to cart, the GWP will be added too"
+      },
+      {
+        "type": "header",
+        "content": "Threshold based GWP"
+      },
+      {
+        "type": "text",
+        "id": "eligible_threshold",
+        "label": "Eligible threshold",
+        "info": "If the cart total is greater than this amount, the GWP will be added"
+      },
+      {
+        "type": "product_list",
+        "id": "gwp_slider_products",
+        "label": "GWP slider products",
+        "info": "Products to show in the GWP slider in cart"
+      },
+      {
+        "type": "text",
+        "id": "gwp_title",
+        "label": "GWP title",
+        "default": "Select your free gift"
+      }
+    ]
+  },
+  {
+    "name": "Product page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "label": "Enable shop promise",
+        "id": "enable_shop_promise",
+        "default": false,
+        "info": "The Shop Promise badge is displayed beside delivery dates"
+      }
+    ]
+  },
+  {
+    "name": "Product listing",
+    "settings": [
+      {
+        "type": "checkbox",
+        "label": "Show product excerpt",
+        "id": "show_product_excerpt",
+        "default": false,
+        "info": "Short description of the product will be shown. You must set the metafields for the product excerpt"
+      },
+      {
+        "type": "select",
+        "label": "Review format",
+        "id": "review_format",
+        "default": "normal",
+        "options": [
+          {
+            "value": "normal",
+            "label": "Normal"
+          },
+          {
+            "value": "compact",
+            "label": "Compact"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Collection banner",
+    "settings": [
+      {
+        "type": "checkbox",
+        "label": "Show collection banner",
+        "id": "show_collection_banner",
+        "default": false
+      },
+      {
+        "type": "richtext",
+        "label": "Banner message",
+        "id": "collection_banner_message"
+      },
+      {
+        "type": "color",
+        "label": "Text",
+        "id": "collection_banner_text_color",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "label": "Background color",
+        "id": "collection_banner_bg_color",
+        "default": "#000"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer",
+        "label": "Cart type"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_discount",
+        "label": "Show discount",
+        "default": false,
+        "info": "This will show automatic discount applied in cart"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_savings",
+        "label": "Show savings",
+        "default": false,
+        "info": "Savings will be total discount. It's an alternative way to show discounts"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_shop_pay",
+        "label": "Enable shop pay",
+        "info": "This will show shop pay cart checkout",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_discount_remover",
+        "label": "Enable discount remover",
+        "info": "Discount remove icon will be shown in the cart",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_dynamic_checkout",
+        "label": "Show dynamic checkout",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "compressed_bundle",
+        "default": false,
+        "label": "Compressed bundle",
+        "info": "This will show the product bundle in a compressed way"
+      },
+      {
+        "type": "text",
+        "id": "volume_discount_tier",
+        "label": "Volume discount tier",
+        "info": "You should have the section configured and paste the section id here. Leave empty to disable"
+      },
+      {
+        "type": "url",
+        "id": "continue_shopping_url",
+        "label": "Continue shopping link",
+        "default": "\/collections\/all"
+      },
+      {
+        "type": "header",
+        "content": "Cart Drawer"
+      },
+      {
+        "type": "collection",
+        "id": "cart_drawer_collection",
+        "label": "Collection",
+        "info": "Select a collection to display in the cart drawer when cart is empty."
+      },
+      {
+        "type": "header",
+        "content": "Shipping Progress Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_shipping_bar",
+        "label": "Show shipping progress bar",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Standard Free Shipping"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "default": "40"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_before",
+        "label": "Text before threshold",
+        "default": "You're $x away from free shipping",
+        "info": "$x will be replaced by remaining amount"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_after",
+        "label": "Text after threshold",
+        "default": "Yayy!, you have got free shipping"
+      },
+      {
+        "type": "header",
+        "content": "Expedited Shipping"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_expedited_shipping",
+        "label": "Enable expedited shipping tier",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "expedited_shipping_threshold",
+        "label": "Expedited shipping threshold",
+        "default": "60"
+      },
+      {
+        "type": "text",
+        "id": "expedited_shipping_before",
+        "label": "Text before expedited threshold",
+        "default": "Add $x more for expedited shipping",
+        "info": "$x will be replaced by remaining amount"
+      },
+      {
+        "type": "text",
+        "id": "expedited_shipping_after",
+        "label": "Text after expedited threshold",
+        "default": "Congratulations! You've unlocked expedited shipping"
+      },
+      {
+        "type": "header",
+        "content": "Free Gift"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_free_gift",
+        "label": "Enable free gift tier",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "free_gift_threshold",
+        "label": "Free gift threshold",
+        "default": "40"
+      },
+      {
+        "type": "text",
+        "id": "free_gift_before",
+        "label": "Text before threshold",
+        "default": "You're $x away from free gift"
+      },
+      {
+        "type": "text",
+        "id": "free_gift_after",
+        "label": "Text after threshold",
+        "default": "Yayy!, you have got free gift"
+      },
+      {
+        "type": "color",
+        "id": "progress_bar_color",
+        "label": "Progress bar color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Cart recommendations"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_recommendations",
+        "label": "Enable cart recommendations",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title_before_free_shipping",
+        "label": "Title before free shipping",
+        "default": "You're close to free shipping. Try These."
+      },
+      {
+        "type": "text",
+        "id": "title_after_free_shipping",
+        "label": "Title after free shipping",
+        "default": "Frequently Bought Together"
+      },
+      {
+        "type": "header",
+        "content": "Checking out status",
+        "info": "Number of people checking out"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_checkout_status",
+        "label": "Enable checkout status",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "checkout_status_title",
+        "label": "Title",
+        "default": "$x people are checking out now",
+        "info": "$x will be replaced by the number of people checking out"
+      },
+      {
+        "type": "number",
+        "id": "status_min_number",
+        "label": "Minimum number",
+        "default": 100,
+        "info": "Number will be random between min and max"
+      },
+      {
+        "type": "number",
+        "id": "status_max_number",
+        "label": "Maximum number",
+        "default": 110
+      },
+      {
+        "type": "color",
+        "id": "status_bg_color",
+        "label": "Background color"
+      }
+    ]
+  }
+]

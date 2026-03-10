@@ -1,0 +1,99 @@
+{% assign intent = 'related' %}
+{% if firstItem.product.metafields.custom and firstItem.product.metafields.custom.product_recommendation_strategy %}
+    {% assign intent = firstItem.product.metafields.custom.product_recommendation_strategy %}
+{% endif %}
+
+<div x-data="{
+        intent: '{{ intent }}',
+        recommended_products: [],
+        exclude_list: [{{ excludeFromRecommended | join: ', ' }}],
+        free_shipping_eligible: false,
+        discountPercentage: 0,
+        updateRecommendedProducts(){
+            fetch(`${window.Shopify.routes.root}recommendations/products.json?product_id={{ firstItem.product.id }}&limit=9}&intent={{ intent }}`)
+                .then( res => res.json() )
+                .then(data => {
+                    let products = data.products;
+                    products.forEach(item => {
+                        if(!this.exclude_list.includes(item.id) && item.tags.includes('exclude_cart') === false){
+
+                           let newItem = item;
+                             // loop through item.tags and if any tag contains discount: then set discount to that value
+                            {% if settings.enable_tag_discount %}
+                            newItem.tags.forEach(tag => {
+                                if(tag.includes('discount:') || tag.includes('Discount:') || tag.includes('discount: ') || tag.includes('Discount: ') ){
+                                    discount = tag.split(':')[1];
+                                    // update compare at price to price and set price to price - discount percetage
+                                    newItem.compare_at_price = newItem.price;
+                                    newItem.price = newItem.price - (newItem.price * (discount / 100));
+                                }
+                            });
+                            {% endif %}
+
+                            // if discountPercentage is set then apply discount to price and set price to compare_at_price
+                            if(this.discountPercentage > 0){
+                                newItem.compare_at_price = newItem.price;
+                                newItem.price = newItem.price - (newItem.price * (this.discountPercentage / 100));
+                            }
+
+                            this.recommended_products.push(newItem);
+                        }
+                    })
+                })
+        }
+    }"
+    x-title="Cart Recommendations"
+    x-init="$nextTick(() => {
+            updateRecommendedProducts();
+
+            {% if cart.cart_level_discount_applications %}
+                {% if cart.cart_level_discount_applications[0].value_type == 'percentage' %}
+                    let discount = {{ cart.cart_level_discount_applications[0].value }};
+                    // discountPercentage = discount;
+                {% endif %}
+            {% endif %}
+
+            if(Alpine.store('shippingThreshold').free_shipping_eligible == true){
+                free_shipping_eligible = true;
+            }
+        });
+        $watch('showCart', (value) => {
+            if(value){
+                okeWidgetApi.initAllWidgets();
+            }
+        });"
+
+    class="recommended-products bg-[#e8eaec] pb-48" x-show="recommended_products.length > 0">
+        <template x-if="free_shipping_eligible">
+            <h3 class="py-2 px-4 font-bold uppercase">
+                {{ settings.title_after_free_shipping }}
+            </h3>
+        </template>
+
+        <template x-if="!free_shipping_eligible">
+            <h3 class="py-2 px-4 font-bold">
+               {{ settings.title_before_free_shipping }}
+            </h3>
+        </template>
+
+        <template x-for="item in recommended_products.slice(0, 3)" :key='item.id'>
+            <div class="py-2 flex px-4 text-base items-center">
+                <img loading="lazy" :src="item.featured_image" :alt="item.title" class="w-4/12 object-cover mr-2">
+                <div class="w-8/12">
+                    <a :href="item.url" class="" x-text="item.title"></a>
+                    <div data-oke-star-rating :data-oke-reviews-product-id="'shopify-' + item.id"></div>
+
+                    <div class="flex gap-x-1">
+                        <span class="block py-1" :class="{ 'text-red-600': item.compare_at_price > item.price }" x-text="Unick.formatMoney(item.price)"></span>
+                        <s class="block py-1 text-gray-500" x-show="item.compare_at_price > item.price" x-text="Unick.formatMoney(item.compare_at_price)"></s>
+                    </div>
+                    <button
+                        @click="addToCart(item.variants[0].id, 1)"
+                        class="bg-black text-white py-1 px-4 rounded-sm font-semibold" type="button">
+                        {{ 'general.cart.cta' | t }}
+                    </button>
+                </div>
+            </div>
+        </template>
+
+</div>

@@ -1,0 +1,88 @@
+{% assign product_title = byo_product.title %}
+{% assign featured_img = byo_product.featured_image %}
+
+    
+{% if byo_product.available %}
+    <div class="promo-product text-center flex flex-col items-center relative overflow-hidden" 
+        id="promo-product-{{ byo_product.first_available_variant.id }}"
+        x-data="{ 
+            title: '{{ product_title }}',
+            active_variant: {{ byo_product.first_available_variant.id }},
+
+        }"    
+        :class="{'border-black opacity-70': isInCart(active_variant) }">
+        <input type="hidden" :data-variant="active_variant">
+        <div class="relative">
+            <button type="button"
+                @click="viewProduct(`{{ product_title }}`, `{{ byo_product.metafields.global.excerpt | escape }}`, `{{ featured_img | img_url: '800x' }}`, {{ byo_product.first_available_variant.id }} ,{{ byo_product.price }}, `{{ byo_product.metafields.judgeme.badge }}`);"
+                title="{{ title }}" 
+                aria-label="{{ title }}">
+                {% render 'img-small', image: featured_img, title: title, class: 'w-full' %}
+            </button>
+
+            {% if byo_product.metafields.custom.color_variants != blank %}
+                <div class="color-swatchs mb-4 absolute bottom-0 left-2">
+                  <div class=" flex gap-1 justify-center flex-col " >
+                    {% for swatch in  byo_product.metafields.custom.color_variants.value %}
+                      {% assign title = swatch.title |  split: '-' | last | strip %}
+                      <div class="swatch-wrapper rounded-full border-2 border-white">
+                          <button 
+                            @click="title = '{{ swatch.title | strip }}'; active_variant = {{ swatch.first_available_variant.id }};"
+                            type="button" 
+                            class="w-5 h-5 rounded-full block border border-white"
+                            :class="{'!border-black border-2': active_variant == {{ swatch.first_available_variant.id }} }"
+                            title="{{ title }}" 
+                            aria-label="{{ title }}"
+                            style="background-color: {{ swatch.metafields.custom.color }};"></button>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="promo-product-description px-3">
+            <h3 class="promo-product-title font-medium py-2" x-text="title">
+                {{ product_title }} 
+            </h3>
+
+            {% if details != blank %}
+                <div class="product__details">
+                    {{ details }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-auto p-2 w-full">
+            <button 
+                class="rounded-sm leading-none px-2 py-2 button--primary font-semibold transition-all duration-300 w-full" 
+                    :disabled="isInCart(active_variant)"
+                    id="button-variant-{{ byo_product.first_available_variant.id }}"
+                    x-cloak
+                    aria-label="Add to bag"
+                    @click="addToBag(active_variant,title,`{{ featured_img | img_url: "150x" }}`, {{ byo_product.price }})">
+
+                    <span class="text-xs lg:text-sm" x-show="isInCart({{ byo_product.first_available_variant.id }})">
+                        added to bundle
+                    </span>
+
+                    <span class="text-xs lg:text-sm" x-show="!isInCart({{ byo_product.first_available_variant.id }})">
+                        add to bundle
+                    </span>
+                   
+            </button>
+    
+            <div class="hidden justify-between items-center space-x-3" x-cloak x-show="isInCart({{ byo_product.first_available_variant.id }})">
+                <button class="minus w-8 h-8 rounded-full bg-gray-200 text-xl grid" 
+                    aria-label="Remove from bag"
+                    @click="removeItem({{ byo_product.first_available_variant.id }})">-
+                </button>
+                <div class="item-count w-10 h-10 text-lg font-medium rounded-full flex items-center justify-center text-white bg-black" x-text="getItemCount({{ byo_product.first_available_variant.id }})"></div>
+                <button class="plus w-8 h-8 rounded-full bg-gray-200 text-xl grid"
+                    aria-label="Add to bag"
+                    @click='addToBag({{ byo_product.first_available_variant.id }},`{{ byo_product.title | json }}`,`{{ featured_img | img_url: "150x" }}`, {{ byo_product.price }})'>+
+                </button>
+            </div>
+        </div>
+    </div>
+{% endif %}

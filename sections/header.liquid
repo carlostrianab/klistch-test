@@ -1,0 +1,632 @@
+<style>
+  :root{
+    --menu-font-size: {{ section.settings.font_size }}px;
+  }
+  .main__header{
+    color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.background_color }};
+  }
+  .main__header .header__container a span,
+  .main__header .header__container a{
+    color: {{ section.settings.text_color }};
+  }
+
+  {% if section.settings.enable_sticky_header %}
+    .shopify-section-group-header-group{
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+  {% endif %}
+
+  {% if section.settings.sales_color != blank %}
+    .header__menu-item[data-handle="sale"] span,
+    .header__menu-wrap[data-handle="sale"] span{
+      color: {{ section.settings.sales_color }} !important;
+    }
+  {% endif %}
+</style>
+
+<header
+  {% if section.settings.enable_sticky_search %}
+    x-data="{ isSticky: false }"
+    x-ref="mainHeader"
+    @scroll.window="$nextTick(() => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > 0) {
+            if (!$refs.mainHeader.classList.contains('header-is-sticky')) {
+                $refs.mainHeader.classList.add('header-is-sticky');
+            }
+        } else {
+            if ($refs.mainHeader.classList.contains('header-is-sticky')) {
+                $refs.mainHeader.classList.remove('header-is-sticky');
+            }
+        }
+    });"
+  {% endif %}
+  class="main__header relative z-[100] border-b border-black">
+
+  <div class="header__container mx-auto px-4 {{ section.settings.container }} {{ section.settings.menu_breakpoint }}">
+    <div 
+      class="header__toggle-menu flex gap-x-1"
+      @close-mobile-menu.window="open = false; document.body.classList.remove('overflow-fixed');"
+      x-data="{ open: false }">
+      <button type="button" @click="$dispatch('toggle-mobile-menu'); open = !open" aria-label="{{ 'accessibility.toggle_menu' | t }}">
+        <span x-show="!open">
+          {% render 'icon-menu', class: 'w-6' %}
+        </span>
+        <span x-show="open" x-cloak>
+          {% render 'icon-close', class: 'w-6' %}
+        </span>
+      </button>
+
+      {% if section.settings.show_search %}
+        <button type="button" @click="$dispatch('show-search')" aria-label="{{ 'general.search.button' | t }}"
+        class="header__search-submit none-focus py-4 px-2">
+          {% render 'icon-search', class: '' %}
+        </button>
+      {% endif %}
+    </div>
+    <div class="header__brand">
+      {% if section.settings.enable_sticky_search %}
+        <button type="button" @click="$dispatch('show-search')" class="header__brand-search">
+          {{ 'general.search.button' | t }}
+        </button>
+      {% endif %}
+      {%- if request.page_type == 'index' -%}<h1>{%- endif -%}
+          <a href="{{ routes.root_url }}" class="header__brand-link block mb-0.5 not-focusable" aria-label="{{ shop.name }}" style="width: {{ section.settings.logo_width | append: 'px' }}">
+            {%- if section.settings.svg_logo -%}
+              {% render 'kitsch-logo', class: 'w-full h-full' %}
+            {%- elsif section.settings.logo != blank -%}
+              {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+              {%- assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio -%}
+              {{ section.settings.logo | image_url: width: section.settings.width | image_tag:
+                class: 'header__brand-logo',
+                widths: '50, 100, 150, 200, 250, 300, 400',
+                height: logo_height,
+                width: section.settings.logo_width,
+                alt: logo_alt
+              }}
+            {% else %}
+              <span>{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+      {%- if request.page_type == 'index' -%}</h1>{%- endif -%}
+    </div>
+    {%- if section.settings.menu != blank -%}
+      <nav class="header__menu">
+        {% render 'enavi-desktop-nav' %}
+        <ul class="list-menu default-menu list-menu--inline gap-2 flex items-center {{ section.settings.menu_alignment }}" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="header__menu-wrap" data-handle="{{ link.title |  handleize }}">
+              {%- if link.links != blank -%}
+
+                <noscript>
+                  <a href="{{ link.url }}" class="block {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+                    <span>{{ link.title | escape }}</span>
+                  </a>
+                </noscript>
+                {%- comment -%} Dropdown menu vs Megamenu {%- endcomment -%}
+                {% liquid
+                  assign has_sub_menu = false
+                  assign has_mega_menu = false
+
+                  if linklists[link.handle] != empty
+                    assign has_sub_menu = true
+                    for submenu in linklists[link.handle].links
+                        if submenu.url contains '#'
+                          assign has_mega_menu = true
+                          assign has_sub_menu = false
+                        endif
+                    endfor
+                  endif
+                %}
+
+                <div class="{%- if has_sub_menu -%} has-dropdown-menu  {%- endif -%} {%- if has_mega_menu -%} has-mega-menu {%- endif -%}">
+                    <a href="{{ link.url }}"
+                      class="header__menu-item py-10 flex gap-1 items-center {%- if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+                        <span>
+                          {{ link.title | escape }}
+                        </span>
+
+                        {% if section.settings.show_arrows_in_dropdown %}
+                          <span class="flex items-center">
+                            {% render 'icon-chevron-right', class: "h-5 transform rotate-90" %}
+                          </span>
+                        {% endif %}
+                    </a>
+
+                    <div class="mega-menu-wrapper absolute right-0 left-0 bg-[#f6f6f6] shadow-md hidden" id="megamenu-{{ forloop.index }}" x-data x-cloak aria-label="{{ 'accessibility.megamenu' | t }}"></div>
+
+                    {% if has_sub_menu %}
+                      <ul class="header__menu-dropdown shadow min-w-[200px] py-3 bg-white flex-col hidden absolute left-1/2 transform -translate-x-1/2" role="listitem" aria-label="{{ 'accessibility.submenu' | t }}">
+                        {% for subLink in linklists[link.handle].links %}
+                          <li><a href="{{ subLink.url }}" class="py-1.5 px-4 block opacity-75 hover:opacity-100 text-left">{{ subLink.title }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                </div>
+
+              {%- else -%}
+                <a href="{{ link.url }}" data-handle="{{ link.title | handleize }}" class="header__menu-item block animate-link {% if link.current %} header__active-menu-item {% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+                  <span>
+                    {{ link.title | escape }}
+                  </span>
+                </a>
+
+                <div class="mega-menu-wrapper absolute right-0 left-0 bg-[#f6f6f6] shadow-md hidden" id="megamenu-{{ forloop.index }}" x-data x-cloak aria-label="{{ 'accessibility.megamenu' | t }}"></div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="header__icons flex  gap-x-1 justify-self-end items-center">
+
+      {% if section.settings.show_search %}
+        <button x-data type="button" @click="$dispatch('show-search')" aria-label="{{ 'general.search.button' | t }}"
+        class="header__search-submit none-focus py-4 px-2 hidden md:block">
+          {% render 'icon-search', class: '' %}
+        </button>
+
+        <noscript>
+          <a href="{{ routes.search_url }}"
+            title="{{ 'general.search.title' | t }}"
+            class="header__icon header__icon--search">
+            {% render 'icon-search', class: '' %}
+          </a>
+        </noscript>
+      {% endif %}
+
+      {%- if shop.customer_accounts_enabled and section.settings.show_account -%}
+        <a href="#rivo" aria-label="link to account page" class="header__icon header__icon--account py-4 px-2">
+          {% render 'icon-account' %}
+          <span class="sr-only">
+            {%- liquid
+              if customer
+                echo 'customer.account_fallback' | t
+              else
+                echo 'customer.log_in' | t
+              endif
+            -%}
+          </span>
+        </a>
+      {%- endif -%}
+
+      {% if section.settings.enable_currency %}
+        <div class="currency-selector relative text-sm mx-2 hidden lg:block"
+            x-title="Currency"
+            x-data="{
+              openCurrency: false,
+              country_code: '{{ localization.country.iso_code }}',
+              currencyFlag: 'https://cdn.shopify.com/s/files/1/0104/6904/8384/files/black-earth-currency.png',
+              currencyLabel: '{{ localization.country.iso_code }}',
+            }"
+            x-init="$watch('country_code', (value) => {
+              $refs.currencyForm.submit();
+            })"
+            @click.outside="openCurrency = false">
+            <button type="button" @click="openCurrency = !openCurrency" class="header__icon flex gap-1 items-center text-xs">
+              <i class="rounded-full border w-6 h-6 bg-cover fi fi-{{ localization.country.iso_code | downcase | downcase }}"></i>
+              <span class="currency-selector__currency-name sr-only" x-text="currencyLabel">{{ cart.currency.iso_code }}</span>
+            </button>
+
+            {% render 'currency-dropdown', highlighted_countries: section.settings.highlighted_countries, class: 'top-10' %}
+
+        </div>
+      {% endif %}
+
+      {% if localization.available_languages.size > 1 %}
+        <div class="language-selector relative text-sm mx-2 hidden lg:block"
+            x-init="$nextTick(() => {
+                $watch('language', (value) => {
+                    $refs.HeaderLangauageForm.submit();
+                });
+            })"
+            x-data="{
+              openLanguage: false,
+              languageLabel: '{{ localization.language.iso_code | capitalize }}',
+              language: '{{ localization.language.iso_code | downcase }}',
+            }"
+            @click.outside="openLanguage = false">
+            <button type="button" @click="openLanguage = !openLanguage" class="flex items-center gap-1 uppercase">
+              <span class="language-selector__language-name mt-1" x-text="languageLabel">
+                {{ localization.language.iso_code | capitalize }}
+              </span>
+              <span :class="{ 'transform rotate-180': openLanguage }" x-transition>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-chevron-down" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M6 9l6 6l6 -6" />
+                </svg>
+              </span>
+            </button>
+
+            {% render 'language-selector-dropdown', class: 'top-10' %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_cart %}
+        {% if settings.cart_type == 'drawer' %}
+          <button x-data @click="$dispatch('toggle-cart-drawer')" aria-label="{{ 'templates.cart.cart' | t }}" class="header__icon header__icon--cart w-6 relative py-4">
+            {% render 'icon-bag', class: 'w-6 h-6' %}
+            <div x-cloak
+                x-data="{ count: {{ cart.item_count }} }"
+                @cart-count-updated.window="count = $event.detail"
+                :class="{ 'animated-flash': count > 0 }"
+                class="cart-count-bubble flex items-center justify-center absolute bg-red-600 text-white h-5 w-5 py-0.5 px-1 top-0.5 -right-1 text-xs rounded-full leading-none">
+                <span class="absolute z-10" x-text="count"></span>
+            </div>
+
+          </button>
+        {% else %}
+
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart relative">
+            {% render 'icon-bag', class: 'w-6' %}
+            <span class="sr-only">{{ 'templates.cart.cart' | t }}</span>
+            <div x-show="count > 0"
+                x-cloak
+                x-data="{ count: {{ cart.item_count }} }"
+                @cart-count-updated.window="count = $event.detail"
+                class="cart-count-bubble absolute bg-red-600 text-white py-0.5 px-1 top-0 -right-1 text-xs rounded-full leading-none">
+              <span x-text="count"></span>
+            </div>
+          </a>
+
+        {% endif %}
+      {% endif %}
+    </div>
+
+  </div>
+
+  {% if section.settings.mobile_secondary_menu %}
+    <div class="mobile-secondary-menu page-width px-4 md:hidden">
+      <ul class="flex items-center gap-2 w-full overflow-x-scroll no-scrollbar">
+        {%- for link in section.settings.mobile_secondary_menu.links -%}
+          <li class=" flex-shrink-0">
+            <a href="{{ link.url }}" class="py-2 px-2 block text-sm font-medium {% if forloop.first %} pl-0 {% endif %}">
+              {{ link.title }}
+            </a>
+          </li> 
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+</header>
+
+{% render 'mobile-menu', section: section %}
+
+{% if settings.search_type == 'shopify' %}
+  {% render "header-search-form" %}
+{% endif %}
+
+{% if settings.search_type == 'wizzy' %}
+  {% render "header-search-form-wizzy" %}
+{% endif %}
+
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "checkbox",
+      "id": "svg_logo",
+      "label": "Use SVG logo",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_secondary_menu",
+      "label": "Mobile Secondary Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "label": "Mobile Menu (Optional)"
+    },
+    {
+      "type": "select",
+      "id": "menu_alignment",
+      "label": "Menu alignment",
+      "options": [
+        {
+          "value": "justify-start",
+          "label": "Left"
+        },
+        {
+          "value": "justify-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-end",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "menu_breakpoint",
+      "label": "Menu breakpoint",
+      "info": "The breakpoint at which the menu will be collapsed",
+      "default": "menu__breakpoint--tablet",
+      "options": [
+        {
+          "value": "menu__breakpoint--always",
+          "label": "Always collapsed"
+        },
+        {
+          "value": "menu__breakpoint--desktop",
+          "label": "Desktop"
+        },
+        {
+          "value": "menu__breakpoint--laptop",
+          "label": "Laptop"
+        },
+        {
+          "value": "menu__breakpoint--tablet",
+          "label": "Tablet"
+        },
+        {
+          "value": "menu__breakpoint--mobile",
+          "label": "Mobile"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "box_shadow_color",
+      "label": "Shadow color",
+      "default": "#fff"
+    },
+    {
+      "type": "range",
+      "id": "box_shadow_offset",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "default": 5,
+      "unit": "px",
+      "label": "Shadow offset"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "default": true,
+      "label": "Enable sticky header",
+      "info": "Header shows on the screen as customers scroll up."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_search",
+      "default": false,
+      "label": "Enable sticky search",
+      "info": "A search bar will replace the logo when the header is sticky."
+    },
+    {
+      "type": "header",
+      "content": "Header icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_in_dropdown",
+      "default": true,
+      "label": "Show arrows in dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_currency",
+      "default": true,
+      "label": "Enable currency selector"
+    },
+    {
+      "type": "text",
+      "id": "highlighted_countries",
+      "label": "Highlighted countries",
+      "info": "Comma separated list of country codes (ISO 3166-1 alpha-2) to highlight in the currency selector. Leave blank to show all countries."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "default": true,
+      "label": "Show account"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "default": true,
+      "label": "Show cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "default": true,
+      "label": "Show wishlist"
+    },
+    {
+      "type": "header",
+      "content": "Mobile menu"
+    },
+    {
+      "type": "header",
+      "content": "Extras",
+      "info": "Extra links on mobile menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extra",
+      "default": false,
+      "label": "Show extra"
+    },
+    {
+      "type": "header",
+      "content": "icon 1"
+    },
+    {
+      "type": "text",
+      "id": "extra1_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "extra1_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "extra1_icon",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "icon 2"
+    },
+    {
+      "type": "text",
+      "id": "extra2_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "extra2_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "extra2_icon",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "icon 3"
+    },
+    {
+      "type": "text",
+      "id": "extra3_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "extra3_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "extra3_icon",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "icon 4"
+    },
+    {
+      "type": "text",
+      "id": "extra4_title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "extra4_link",
+      "label": "Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "extra4_icon",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#424242"
+    },
+    {
+      "type": "color",
+      "id": "sales_color",
+      "label": "Sales color",
+      "info": "Leave blank to use the default color"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px",
+      "label": "Font size"
+    }
+  ]
+}
+{% endschema %}

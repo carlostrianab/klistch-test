@@ -1,0 +1,395 @@
+<style>
+  #Accordions-{{ section.id }}{
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top | append: 'px' }};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+    margin-top: {{ section.settings.margin_top | append: 'px' }};
+    margin-bottom: {{ section.settings.margin_bottom | append: 'px' }};
+  }
+  #Accordions-{{ section.id }} .prose{
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  }
+</style>
+
+<div id="Accordions-{{ section.id }}" class="accordions">
+  <div class="accordions__wrapper {{ section.settings.container }} mx-auto px-4">
+    {%- unless section.settings.heading == blank -%}
+      <div class="my-6">
+        {% render 'heading', options: section.settings, id: section.id %}
+      </div>
+    {%- endunless -%}
+
+    <div class="relative mt-8">
+      <ul class="grid
+        {{ section.settings.grid_desktop }} 
+        {{ section.settings.grid_tablet }} 
+        {{ section.settings.grid_mobile }} border-t border-black" role="list">
+        {% for block in section.blocks %}
+          <li>
+            {% if block.type == 'accordion' %}
+              {% if block.settings.title != blank %}
+                {% render 'accordion-item-block', options: block.settings, index: forloop.index %}
+              {% endif %}
+            {% endif %}
+          </li>
+        {% endfor %}
+      
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Accordions",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Section title",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "sub_heading",
+      "label": "Sub heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_label",
+      "label": "Label",
+      "info": "This text will show above the heading as a label"
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-3",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 items"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "6 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-3",
+      "options": [
+        {
+          "value": "md:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 items"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Heading styles"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 100,
+      "step": 2,
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "default": "md:text-left",
+      "options": [
+        {
+          "value": "md:text-left",
+          "label": "Left"
+        },
+        {
+          "value": "md:text-center",
+          "label": "Center"
+        },
+        {
+          "value": "md:text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "Font family",
+      "default": "font-heading",
+      "options": [
+        {
+          "value": "font-primary",
+          "label": "Primary"
+        },
+        {
+          "value": "font-secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "font-heading",
+          "label": "Heading"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "default": "font-bold",
+      "options": [
+        {
+          "value": "font-bold",
+          "label": "Bold"
+        },
+        {
+          "value": "font-semibold",
+          "label": "Semibold"
+        },
+        {
+          "value": "font-medium",
+          "label": "Medium"
+        },
+        {
+          "value": "font-normal",
+          "label": "Normal"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Mobile styles"
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size",
+      "unit": "px",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "text_align_mobile",
+      "label": "Text align",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section styles"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Margin top",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Margin bottom",
+      "unit": "px",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Accordion title",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordions",
+      "blocks": [
+        {
+          "type": "accordion"
+        },
+        {
+          "type": "accordion"
+        },
+        {
+          "type": "accordion"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

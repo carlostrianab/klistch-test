@@ -1,0 +1,110 @@
+<style>
+    .subscription-wrapper .subscription-form label.subscription-purchase-option,
+    .subscription-wrapper .subscription-form label.onetime-purchase-option{
+        display: none;
+    }
+</style>
+
+<div class="subscription-toggle md:mr-3">
+    <div x-title="Subscription Toggle" x-data="{ active: {{ active |  default: false }} }" x-init="(() => {
+        const currentUrl = new URL(window.location.href);
+        const sellingPlan = currentUrl.searchParams.get('selling_plan');
+        if(sellingPlan == 'subscription' || active == true){
+            active = true;
+            setTimeout(() => {
+                $dispatch('toggle-subscription', 'subscription');
+            }, 400);
+        }
+    })()">
+    <div class="flex items-center justify-center bg-[#e8eaec] p-2 rounded-md w-full" :class="active && 'subscription-toggle-bg-color'">
+        <label for="toggle-subscription-collection" class="mx-2 cursor-pointer font-semibold flex gap-2">
+            <input type="checkbox" value=""
+                x-ref="checkbox"
+                id="toggle-subscription-collection"
+                class="sr-only peer"
+                :checked="active"
+                @change="
+                (value)=> {
+                    const currentUrl = new URL(window.location.href);
+                    if (value.target.checked) {
+                        currentUrl.searchParams.set('selling_plan', 'subscription');
+                        window.history.pushState({}, '', currentUrl.toString());
+                        $dispatch('toggle-subscription', 'subscription');
+                    } else {
+                        $dispatch('toggle-subscription', 'onetime');
+                        currentUrl.searchParams.delete('selling_plan');
+                        window.history.pushState({}, '', currentUrl.toString());
+                    }
+                    active = value.target.checked
+                }
+                "
+                @keydown.space.prevent="$refs.checkbox.click()"
+                @keydown.enter.prevent="$refs.checkbox.click()"
+                role="switch"
+                :aria-checked="active.toString()"
+            >
+            <div class="relative w-11 h-6
+                bg-[#707070]
+                rounded-full
+                after:content-['']
+                after:absolute after:top-[2px]
+                after:start-[2px]
+                after:border-gray-200
+                after:border after:rounded-full
+                after:h-5
+                after:w-5
+                after:transition-all
+                after:bg-white
+                peer-focus:outline-none
+                peer-focus:ring-2
+                peer-focus:ring-offset-2
+                peer-focus:ring-[#d6a285]
+                peer-checked:bg-[#d6a285]
+                peer-checked:after:bg-white
+                peer-checked:after:translate-x-full
+                peer-checked:after:border-none
+            "></div>
+            <span x-text="active ? `{{ options.subscription_toggle_active_title }}`: `{{ options.subscription_toggle_title }}`"></span>
+        </label>
+
+        <div x-data="{ showTooltip: false }" class="relative flex" @click.outside="showTooltip = false">
+            <button
+                @click="showTooltip = !showTooltip"
+                class="inline-block p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                aria-label="Show more info about subscription"
+                :aria-expanded="showTooltip.toString()"
+            >
+                {% render 'icon-info', class: 'w-4' %}
+            </button>
+
+            <div x-show="showTooltip"
+                x-cloak
+                class="absolute shadow-lg bg-white text-black z-50
+                    border-[#f8b68f] border top-6
+                    font-semibold text-[15px] w-64 rounded
+                    before:w-6 before:h-6
+                    before:border-[#f8b68f] before:border-[1px]
+                    before:rotate-45 before:bg-white before:absolute before:z-[-1]
+                    before:top-0 before:right-2 -right-3
+                "
+                role="tooltip"
+            >
+                <div class="p-3 rounded bg-white">
+                    <div class="font-semibold mb-3">Special Savings & Perks</div>
+
+                    {% assign perks = options.subscription_toggle_perks |  strip |  split: ':' %}
+
+                    <ul class="flex flex-col gap-2 list-none p-0 m-0">
+                        {% for perk in perks %}
+                            <li class="text-xs flex gap-1 items-center">
+                                {% render 'icon-checkmark', class: 'w-4 h-4 text-green-700' %}
+                                {{ perk }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,77 @@
+<div 
+    x-title="Quick view bundle"
+    @quick-view-bundle.window="
+      $watch('show_quick_view', (value) => {
+        if(value){ 
+          document.body.classList.add('overflow-fixed');
+        }else{
+          document.body.classList.remove('overflow-fixed');
+        }
+      });
+      $watch('product_handle', (value) => {
+        if(value){ 
+          loadProduct(value);
+        }
+      });
+      $nextTick(() => { 
+        show_quick_view = true; 
+        product_handle = $event.detail.handle; 
+      });"
+    x-data="{ 
+      show_quick_view: false,
+      loading: false,
+      product_handle: '',
+      loadProduct(handle){
+        this.loading = true;
+        fetch(`${window.Shopify.routes.root}` + 'products/' + handle + '?view=quick-view-bundle')
+        .then(response => response.text())
+        .then(data => {
+          this.loading = false;
+          this.$refs.quick_view_content.innerHTML = data;
+          
+          setTimeout(() => {
+            if(typeof StampedFn !== 'undefined'){
+                StampedFn.reloadUGC();
+            }
+          }, 500);
+
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    }" 
+    style="display: none;"
+    x-show="show_quick_view"
+    @keyup.escape.window="show_quick_view = false; document.body.classList.remove('overflow-fixed');"  
+    role="dialog"
+    aria-modal="true"
+    x-id="['quick-view-bundle']"
+    x-trap="show_quick_view"
+    :aria-labelledby="$id('quick-view-bundle')"
+    class="quick-view-wrapper fixed inset-0 z-[500] overflow-y-auto">
+    <div class="absolute inset-0 z-10 bg-[#0000004f]" x-show="show_quick_view" title="{{ 'products.product.quick_view.close' | t }}" x-transition.opacity @click="show_quick_view = false"></div>
+
+      <div x-show="loading" class="absolute inset-0 bg-black/40 opacity-100 text-white flex w-full justify-center items-center z-50">
+          <div class="w-7">
+              <svg aria-hidden="true" focusable="false" stroke="#000" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+              </svg>
+          </div>
+      </div>
+
+      <div x-show="show_quick_view" x-transition @click="show_quick_view = false" class="relative z-20 flex min-h-screen items-center justify-center">
+
+        <div class="relative w-full max-w-sm lg:max-w-4xl rounded-sm bg-white p-2 md:p-4 shadow-lg" x-on:click.stop x-trap.noscroll.inert="show_quick_view">
+            <div :id="$id('quick-view-bundle')" class="sr-only"> {{ 'products.product.quick_view.title' | t }} </div>
+            <button type="button" aria-label="{{ 'products.product.quick_view.close' | t }}" 
+              class="text-base text-right font-medium p-1 absolute -top-2 -right-2 rounded-full bg-black border-2 border-white text-white" 
+              @click="show_quick_view = false">
+              {% render 'icon-close', class: 'w-5 h-5' %}
+            </button>
+  
+            <div x-ref="quick_view_content" class="max-h-[60vh]  lg:max-h-[initial] overflow-scroll">Loading product...</div>
+        </div>
+    </div>
+    
+</div>

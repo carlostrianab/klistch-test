@@ -1,0 +1,181 @@
+<div class="my-4" x-cloak>
+    <button type="button" @click="openNew = true"  class="button button--secondary absolute top-0 right-2">
+        {{ 'customer.addresses.add_new' | t }}
+    </button>
+    <div class="fixed z-50 inset-0 overflow-y-auto" x-show="openNew" x-transition.opacity role="dialog" aria-modal="true" aria-labelledby="newAddressTitle" x-trap="openNew" @keyup.escape="openNew = false">
+           
+            <div class="flex items-end justify-center min-h-full pt-4 px-4 pb-20 text-center">
+                <div class="fixed inset-0 bg-black/20" x-show="openNew"  x-transition.opacity @click="openNew = false"></div>
+                <div class="inline-block align-bottom bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full rounded-lg">
+                    <button type="button" @click="openNew = false" class="close__icon absolute p-2 top-2 right-2" aria-label="{{ 'accessibility.close' | t }}">
+                        {% render 'icon-close', class: 'w-5' %}
+                    </button>
+                    
+                    {% form 'customer_address', customer.new_address %}
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="new-address-form">
+                                <h3 class="text-lg font-heading pb-3" id="newAddressTitle">{{ 'customer.addresses.add_new' | t }}</h3>
+                                <div class="grid grid-cols-6 gap-3">
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="first_name" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.first_name' | t }}
+                                        </label>
+                                        <input type="text" 
+                                            name="address[first_name]"
+                                            value="{{ form.first_name }}"
+                                            autocapitalize="words"
+                                            required
+                                            id="first_name" class="form__input w-full">
+                                    </div>
+                        
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="last_name" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.last_name' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[last_name]"
+                                            value="{{ form.last_name }}"
+                                            id="last_name"
+                                            required
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+                        
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="company" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.company' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[company]"
+                                            value="{{ form.company }}"
+                                            id="company"
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="phone" class="form__label mb-2 block">
+                                            {{ 'customer.addresses.phone' | t }}
+                                        </label>
+                                        <input type="tel"
+                                                name="address[phone]"
+                                                value="{{ form.phone }}"
+                                                id="phone"
+                                                autocapitalize="words"
+                                                class="form__input w-full">
+                                        </div>
+
+                                    <div class="col-span-6">
+                                        <label for="address1" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.address1' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[address1]"
+                                            value="{{ form.address1 }}"
+                                            id="address1"
+                                            required
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+
+                                    <div class="col-span-6">
+                                        <label for="address2" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.address2' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[address2]"
+                                            value="{{ form.address2 }}"
+                                            id="address2"
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="city" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.city' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[city]"
+                                            value="{{ form.city }}"
+                                            id="city"
+                                            required
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="country" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.country' | t }}
+                                        </label>
+                                        <select 
+                                        name="address[country]"
+                                        @change="province = JSON.parse($event.target.selectedOptions[0].dataset.provinces); address.country = $event.target.selectedOptions[0].text;"
+                                        value="{{ form.country }}"
+                                        id="country"
+                                        required
+                                        class="form__select">
+                                        {{ country_option_tags }}
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-3" x-show="province.length > 0">
+                                        <label for="province" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.province' | t }}
+                                        </label>
+
+                                        <select 
+                                            name="address[province]"
+                                            value="{{ form.province }}"
+                                            id="province"
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                            <template x-for="item in province">
+                                                <option :value="item[0]" x-text="item[0]"></option>
+                                            </template>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="zip" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.zip' | t }}
+                                        </label>
+                                        <input type="text"
+                                            name="address[zip]"
+                                            value="{{ form.zip }}"
+                                            id="zip"
+                                            required
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                    </div>
+
+                                    <div class="col-span-6">
+                                        <div class="flex items-center my-2 md:my-0">
+                                            {{ form.set_as_default_checkbox }}
+                                            <label for="address_default_address_new" class="form__label px-2">
+                                            {{ 'customer.addresses.set_default' | t }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-6">
+                                        <div class="flex gap-x-4 my-2">
+                                            <button type="submit" class="button button--secondary text-sm rounded-sm">
+                                                {{ 'customer.addresses.add' | t }}
+                                            </button>
+                
+                                            <button type="button" @click="openNew = false" class="underline text-sm">
+                                                {{ 'customer.addresses.cancel' | t }}
+                                            </button>
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                            </div>
+                        </div>
+                    {% endform %}
+                </div>
+            </div>
+    </div>
+</div>

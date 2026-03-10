@@ -1,0 +1,134 @@
+
+<div 
+    x-data="{ 
+        customBisModalOpen: false, 
+        email: '',
+        error: false,
+        error_message: '{{ 'products.product.custom_bis_valid_email' | t }}',
+        success: false,
+        registerBis(){
+            this.validateEmail(this.email) ? this.registerBisToKlaviyo() : this.error = true;
+        },
+
+        validateEmail(email) {
+            const re = /\S+@\S+\.\S+/;
+            return re.test(email);
+        },
+
+        registerBisToKlaviyo(){
+
+            const payload = {
+                'data': {
+                    'type': 'back-in-stock-subscription',
+                    'attributes': {
+                    'profile': {
+                        'data': {
+                            'type': 'profile',
+                            'attributes': {
+                                'email': this.email
+                            }
+                        }
+                    },
+                    'channels': ['EMAIL'],
+                    },
+                    'relationships': {
+                    'variant': {
+                        'data': {
+                        'type': 'catalog-variant',
+                        'id': '$shopify:::$default:::{{ product.first_available_variant.id }}'
+                        }
+                    }
+                    }
+                }
+            }
+
+            var requestOptions = {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'revision':'2024-06-15'
+                },
+                body: JSON.stringify(payload),
+            };
+
+            fetch('https://a.klaviyo.com/client/back-in-stock-subscriptions/?company_id=Qic3kf',requestOptions)
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            
+        }
+    }" 
+    x-init="$nextTick(() => {
+       $watch('email', value => {
+            error = false;
+        })
+    })"
+    class="flex justify-center">
+
+    <!-- Modal -->
+    <div x-show="customBisModalOpen"
+        style="display: none"
+        x-on:keydown.escape.prevent.stop="customBisModalOpen = false"
+        @custom-bis-modal:open.window="$nextTick(() => { customBisModalOpen = true; })"
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+        x-id="['modal-title']"
+        :aria-labelledby="$id('modal-title')"
+        class="fixed inset-0 z-10 overflow-y-auto"
+    >
+        <!-- Overlay -->
+        <div x-show="customBisModalOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50"></div>
+
+        <!-- Panel -->
+        <div
+            x-show="customBisModalOpen" x-transition
+            x-on:click="customBisModalOpen = false"
+            class="relative flex min-h-screen items-center justify-center p-4">
+            <div
+                x-on:click.stop
+                x-trap.noscroll.inert="customBisModalOpen"
+                class="relative w-full max-w-md overflow-y-auto rounded bg-white p-8 shadow-lg">
+
+                <!-- Title -->
+                <h2 class="text-xl font-semibold" :id="$id('modal-title')">{{ product.title }} </h2>
+                <!-- Content -->
+                <p class="mt-2 text-gray-600"> {{ 'products.product.custom_bis_subtext' | t }} </p>
+
+                <!-- Buttons -->
+                <div class="flex flex-col gap-3 mt-3">
+                   
+                    {% comment %} Email {% endcomment %}
+                    <input type="email" x-model="email" class="rounded-md border border-gray-200 bg-white px-5 py-2.5" placeholder="{{ 'products.product.custom_bis_email' | t }}">
+
+                    {% comment %} Error {% endcomment %}
+                    <p x-show="error" class="text-red-500 text-sm" x-text="error_message">
+                        {{ 'products.product.custom_bis_valid_email' | t }}
+                    </p>
+
+                    {% comment %} Success {% endcomment %}
+                    <p x-show="success" class="text-green-600 text-sm flex items-center gap-2">
+                        {% render 'icon-checkmark', class: 'w-5 h-5' %}
+                        {{ 'products.product.custom_bis_success' | t }}
+                    </p>
+
+                    {% comment %} Submit {% endcomment %}
+                    <button type="button" x-on:click="registerBis()"
+                        :disabled="!email"
+                        :class="{ 'opacity-80 cursor-not-allowed': !email }"
+                         class="rounded-md border border-gray-800 bg-gray-900 text-white px-5 py-2.5">
+                        {{ 'products.product.custom_bis_notify' | t }}
+                    </button>
+
+                    {% comment %} Close {% endcomment %}
+                    <button type="button" 
+                        aria-label="{{ 'products.product.custom_bis_close' | t }}"
+                        x-on:click="customBisModalOpen = false" 
+                        class=" rounded-full absolute top-2 right-3">
+                        {% render 'icon-close', class: 'w-5 h-5' %}
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

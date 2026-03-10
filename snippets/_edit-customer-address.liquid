@@ -1,0 +1,191 @@
+<div class="fixed z-50 inset-0 overflow-y-auto" 
+        x-cloak 
+        x-show="openEdit" 
+        x-transition.opacity
+        aria-modal="true"
+        @keyup.escape="openEdit = false"
+        x-trap="openEdit"
+        aria-labelledby="editAddress">
+
+        <div class="flex items-end justify-center min-h-full pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-black/20" x-show="openEdit" x-transition.opacity @click="openEdit = false;"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full rounded-lg">
+                <button type="button" @click="openEdit = false" class="close__icon absolute p-2 top-2 right-2" aria-label="{{ 'accessibility.close' | t }}">
+                    {% render 'icon-close', class: 'w-5' %}
+                </button>
+                <form method="post" :action="'/account/addresses/'+address.id" accept-charset="UTF-8" >
+                    <input type="hidden" name="form_type" value="customer_address">
+                    <input type="hidden" name="utf8" value="✓">
+                    <input type="hidden" name="_method" value="put">
+
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="update-address-form">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 pb-3" id="editAddress">{{ 'customer.addresses.edit_address' | t }}</h3>
+                            <div class="grid grid-cols-6 gap-3">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'first_name'+address.id" class="form__label mb-2 block">
+                                    {{ 'customer.addresses.first_name' | t }}
+                                    </label>
+                                    <input type="text" 
+                                        name="address[first_name]"
+                                        :value="address.first_name"
+                                        autocapitalize="words"
+                                        required
+                                        :id="'first_name'+address.id" 
+                                        class="form__input w-full">
+                                </div>
+                    
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'last_name'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.last_name' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[last_name]"
+                                        :value="address.last_name"
+                                        :id="'last_name'+address.id"
+                                        required
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+                    
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'company'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.company' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[company]"
+                                        :value="address.company"
+                                        :id="'company'+address.id"
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'phone'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.phone' | t }}
+                                    </label>
+                                    <input type="tel"
+                                            name="address[phone]"
+                                            :value="address.phone"
+                                            :id="'phone'+address.id"
+                                            autocapitalize="words"
+                                            class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label :for="'address1'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.address1' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[address1]"
+                                        :value="address.address1"
+                                        :id="'address1'+address.id"
+                                        required
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label :for="'address2'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.address2' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[address2]"
+                                        :value="address.address2"
+                                        :id="'address2'+address.id"
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'city'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.city' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[city]"
+                                        :value="address.city"
+                                        :id="'city'+address.id"
+                                        required
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'country'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.country' | t }}
+                                    </label>
+                                    <select x-ref="address_country"
+                                        @change="province = JSON.parse($event.target.selectedOptions[0].dataset.provinces); address.country = $event.target.selectedOptions[0].text;"
+                                        name="address[country]"
+                                        :value="address.country"
+                                        :id="'country'+address.id"
+                                        required
+                                        class="form__select w-full">
+                                        {{ country_option_tags }}
+                                    </select>
+
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3" x-show="province.length > 0">
+                                    <label :for="'province'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.province' | t }}
+                                    </label>
+                                    <select 
+                                        name="address[province]"
+                                        :value="address.province"
+                                        :id="'province'+address.id"
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                        <template x-for="item in province">
+                                            <option :value="item[0]" x-text="item[0]"></option>
+                                        </template>
+                                    </select>
+                                    
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label :for="'zip'+address.id" class="form__label mb-2 block">
+                                        {{ 'customer.addresses.zip' | t }}
+                                    </label>
+                                    <input type="text"
+                                        name="address[zip]"
+                                        :value="address.zip"
+                                        :id="'zip'+address.id"
+                                        required
+                                        autocapitalize="words"
+                                        class="form__input w-full">
+                                </div>
+
+                                <div class="col-span-6">
+                                    <div class="flex items-center my-2 md:my-0">
+                                    <input type="checkbox" 
+                                            name="address[default]"
+                                            :checked="address.default"
+                                            :id="'address_default_address_update'+address.id"
+                                            class="form__checkbox">
+    
+                                    <label :for="'address_default_address_update'+address.id" class="form__label block px-2">
+                                    {{ 'customer.addresses.set_default' | t }}
+                                    </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-span-6">
+                                    <div class="flex gap-x-4 my-2">
+                                        <button class="button button--secondary text-sm rounded-sm">
+                                            {{ 'customer.addresses.update' | t }}
+                                        </button>
+                                        <button type="button" @click="openEdit = false;" class="underline text-sm">
+                                            {{ 'customer.addresses.cancel' | t }}
+                                        </button>
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>

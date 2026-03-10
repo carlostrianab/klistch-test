@@ -1,0 +1,194 @@
+<meta name="em-cache" content="no-cache">
+<!-- Hero Banner -->
+{% if customer %}
+  {% comment %} Customer is logged in {% endcomment %}
+  <div class="rivo-loyalty-banner" id="rivo-loyalty-logged-in-banner">
+    <div class="rivo-loyalty-banner-body">
+      <h1 class="rivo-loyalty-banner-title">Kitsch Rewards</h1>
+      <p class="rivo-loyalty-banner-description">
+        Get rewarded for your beauty routine! (Go you)
+      </p>
+      <div class="rivo-loy-button-wrapper">
+        <a class="rivo-loy-button" href="#rivo-page-wrapper">Earn & Redeem Points</a>
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% comment %} Customer is logged out {% endcomment %}
+  <div class="rivo-loyalty-banner" id="rivo-loyalty-logged-out-banner">
+    <div class="rivo-loyalty-banner-body">
+      <h1 class="rivo-loyalty-banner-title">Kitsch Rewards</h1>
+      <p class="rivo-loyalty-banner-description">
+       Get rewarded for your beauty routine! Sign up for Kitsch Rewards to start earning points on every purchase. 
+      </p>
+      <div class="rivo-loy-button-wrapper">
+        <a class="rivo-loy-button" href="/account/register">Join Now</a>
+        <a class="rivo-loy-button" href="/account/login">Log In</a>
+      </div>
+    </div>
+  </div> 
+{% endif %}
+
+<style>
+  .rivo-loyalty-banner {
+    height: 500px;
+    justify-content: top;
+    background: #E9D5CD !important;
+    padding-left: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 4rem;
+    padding-top: 4rem;
+    justify-content: center;
+  }
+
+  .rivo-loyalty-banner-body {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 0 15px;
+  }
+
+  .rivo-loyalty-banner-title {
+    font-size: 90px;
+    line-height: 1;
+    padding-bottom: 15px;
+    font-family: 'Sophillia', 'Avenir Next', sans-serif;;
+    font-weight: normal !important;
+    margin: 0;
+    padding-bottom: 0;
+  }
+
+   .rivo-loyalty-banner-description {
+      font-size: 20px;
+      line-height: 1.5;
+   }
+
+  .rivo-loy-button-wrapper {
+    gap: 20px;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .rivo-loy-button {
+    text-transform: uppercase;
+    min-width: 200px;
+    background: #000;
+    color: #FFF;
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+    height: 50px;
+    padding: 15px 30px;
+    font-size: 16px;
+    transition: all .3s ease;
+  }
+
+  .rivo-loy-button:hover {
+      background: #303B43;
+  }
+
+  @media (max-width: 720px) {
+  .rivo-loy-button-wrapper {
+    flex-direction: column;
+    align-items: center;
+    }
+    .rivo-loyalty-banner-title {
+    font-size: 60px;
+  }
+}
+</style>
+
+<!-- Rivo Page Wrapper -->
+<div id="rivo-page-wrapper" style="min-height:800px;"></div>
+
+<!-- VIP Tiers -->
+<div class="rivo-page-section">
+  <div class="rivo-container">
+    <h2 class="rivo-pre-title">YOU’RE VIP (YES, YOU!)</h2>
+    <h2 class="rivo-title-sophillia">More Beauty, More Benefits </h2>
+    <p class="rivo-subtitle">
+      Elevate your routine and your rewards tier! Even more points and exclusive perks await.
+    </p>
+    {% render 'rivo-tiers' %}
+  </div>
+</div>
+
+<!-- V2 Referrals -->
+<div class="rivo-page-section" id="rivo-referrals">
+  <div class="rivo-container">
+    <div id="rivo-referral-campaign-3895"></div>
+  </div>
+</div>
+
+<!-- FAQS -->
+<div class="rivo-page-section" id="rivo-faqs">
+  <div class="rivo-container">
+    <h2 class="rivo-title rivo-title-sophillia">FAQs</h2>
+        <p class="rivo-subtitle">Your Questions, Our Answers</p>
+    {% render 'rivo-faqs' %}
+  </div>
+</div>
+
+<!-- General Styling -->
+<style>
+  .rivo-page-section {
+    text-align: center;
+    padding: 70px 0;
+    overflow: hidden;
+  }
+
+  #rivo-referrals {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .rivo-container {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .rivo-title {
+    font-size: 74px;
+  }
+
+  .rivo-subtitle {
+    font-size: 20px;
+  }
+
+  .rivo-pre-title {
+    padding: 0rem 1rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .rivo-title-sophillia {
+    font-family: Sophillia;
+    font-size: 74px;
+    font-weight: normal;
+  }
+
+  @media (max-width: 768px) {
+    .rivo-page-section {
+      padding: 100px 15px;
+    }
+    #rivo-faqs {
+      padding-top: 50px;
+    }
+    .rivo-title,
+    .rivo-title-sophillia {
+      font-size: 50px;
+    }
+  }
+</style>

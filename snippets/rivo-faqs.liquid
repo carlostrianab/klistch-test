@@ -1,0 +1,127 @@
+<div class="rivo-margin-top-30">
+  <div class="rivo-faq-wrapper" id="faq-wrapper"></div>
+</div>
+
+<style>
+  .rivo-faq-wrapper {
+    max-width: 60%;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-size: 16px;
+  }
+
+  .rivo-faq-wrapper button {
+    width: auto !important;
+  }
+  
+  .rivo-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px 0;
+    border-bottom: 1px solid #53565A !important;
+    text-align: left !important;
+    font-weight: 600;
+  }
+
+  .rivo-toggle-button {
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .rivo-answer {
+    display: none;
+    padding: 10px 0;
+    text-align: left;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 767px) {
+    .rivo-faq-wrapper {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const faqs = [
+    {
+      question: "How do I join Kitsch Rewards?",
+      answer: "Joining Kitsch Rewards is quick and easy, simply create an account on our website and opt-in to the program. You will automatically start earning points with your first purchase!"
+    },
+    {
+      question: "Is the Kitsch Rewards free to join?",
+      answer: "Yes! It’s completely free! There are no membership fees or hidden costs. It’s just our way of saying thank you for being a loyal customer!"
+    },
+    {
+      question: "How do I earn points?",
+      answer: "You can earn points in a variety of ways! Points are earned by making purchases, following us on our social media sites, submitting product reviews, referring friends and more! The more points you earn, the higher your loyalty tier, which unlocks even more rewards and benefits."
+    },
+    {
+      question: "How do I redeem rewards?",
+      answer: "Make sure you are logged into your account and scroll down to the loyalty page section with our 5 reward options. Pick a reward to redeem your points for $$ off your purchase with a coupon, and apply the coupon code at checkout! Coupons cannot be combined."
+    },
+    {
+      question: "What happens to my points if I return a purchase?",
+      answer: "If you make a return, the points you earned from the purchase will be deducted from your account."
+    },
+  ];
+
+    // Add more FAQS above ⬆️⬆️⬆️⬆️⬆️
+
+    const faqWrapper = document.querySelector("#faq-wrapper");
+
+    faqs.forEach((faq, index) => {
+      const questionWrapper = document.createElement("div");
+      const question = document.createElement("div");
+      const questionText = document.createElement("span");
+      const toggleButton = document.createElement("button");
+      const answer = document.createElement("div");
+
+      questionWrapper.className = "rivo-question-wrapper";
+      questionWrapper.setAttribute("data-question", index);
+
+      question.className = "rivo-question";
+
+      questionText.textContent = faq.question;
+      question.appendChild(questionText);
+
+      toggleButton.className = "rivo-toggle-button";
+      toggleButton.innerHTML = "+";
+      question.appendChild(toggleButton);
+
+      answer.className = "rivo-answer";
+      answer.textContent = faq.answer;
+      answer.style.display = "none";
+
+      questionWrapper.appendChild(question);
+      questionWrapper.appendChild(answer);
+
+      faqWrapper.appendChild(questionWrapper);
+
+      question.addEventListener("click", () => {
+        answer.style.display = answer.style.display === "none" ? "block" : "none";
+        toggleButton.innerHTML = toggleButton.innerHTML === "+" ? "-" : "+";
+
+        // Close all other open questions (if any)
+        const openQuestions = document.querySelectorAll(".rivo-question-wrapper.open");
+        openQuestions.forEach(openQuestion => {
+          const openAnswer = openQuestion.querySelector(".rivo-answer");
+          const openButton = openQuestion.querySelector(".rivo-toggle-button");
+
+          if (openAnswer !== answer) {
+            openAnswer.style.display = "none";
+            openButton.innerHTML = "+";
+            openQuestion.classList.remove("open");
+          }
+        });
+
+        // Toggle the current question
+        questionWrapper.classList.toggle("open", answer.style.display === "block");
+      });
+    });
+</script>

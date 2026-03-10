@@ -1,0 +1,23 @@
+{
+  "parent": "header-group.json",
+  "context": {
+    "market": "kuwait"
+  },
+  "sections": {
+    "announcement-bar": {
+      "settings": {},
+      "blocks": {
+        "announcement_CJhhXW": {
+          "settings": {
+            "text": "<p><strong>🇰🇼 FREE DELIVERY IN KUWAIT 🇰🇼<\/strong><\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_CJhhXW",
+        "announcement_RHRr9B",
+        "announcement_HdfMnN"
+      ]
+    }
+  }
+}

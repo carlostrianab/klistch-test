@@ -1,0 +1,141 @@
+
+<div class="relative z-10" 
+    {%- if settings.predictive_search_enabled -%}
+        x-data="Search(`{{ search.terms | escape }}`, {{ settings.predictive_search_limit }})"
+        @toggle-search.window="showSearch = !showSearch"
+        @show-search.window="showSearch = true"
+        @keydown.escape.window="showSearch = false;"
+        x-cloak
+        x-trap="showSearch"
+        x-show="showSearch"
+        role="dialog" aria-modal="true"
+    {% endif %}>
+    
+    <div class="header__search w-full absolute left-0 right-0 z-[1000] border-b bg-white px-2">
+        <form action="{{ routes.search_url }}" method="get" class="header__search-form page-width z-[100] relative py-3">
+            <div class=" flex flex-row-reverse">
+                <input type="search" name="q" 
+                    x-ref="search_input" 
+                    x-cloak
+                    x-transition:enter="transform transition ease-in duration-400" 
+                    x-transition:enter-start="w-[0px] opacity-0" 
+                    x-transition:enter-end="w-full opacity-1" 
+                    x-transition:leave="transform transition ease-out duration-400" 
+                    x-transition:leave-start="w-full" 
+                    x-transition:leave-end="w-[0px] opacity-0"
+                {% if settings.predictive_search_enabled %}
+                    x-model.debounce="query"
+                    @focus.debounce="performSearch(); showSearch = true"
+                    @input.debounce="performSearch()"
+                {% endif %}
+                class="border-1 w-full py-1" 
+                placeholder="{{ 'general.search.search' | t }}" autocomplete="off" autofocus>
+                
+            </div>
+            {% if settings.predictive_search_enabled %}
+            <div class="md:flex gap-3 mt-2">
+
+                <template x-if="query != ''">
+                    <div class="search-queries min-w-72 border-r">
+                        <h3 class="text-gray-600 border-b p-3 uppercase text-xs mb-2 font-medium">{{ 'general.search.suggestions' | t }}</h3>
+                        <ul>
+                            <template x-for="item in queries">
+                                <li class="leading-none opacity-75">
+                                    <a @click="query = item.text; $refs?.search_input?.focus();" href="#" class="px-3 py-2 underline flex gap-3 items-center font-medium">
+                                        {% render 'icon-search', class: 'w-4 h-4' %}
+                                        <span x-html="item.styled_text"></span>
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <template x-if="query == ''">
+                    <div class="search-queries min-w-72 border-r">
+                        <h3 class="text-gray-600 border-b p-3 uppercase text-xs mb-2 font-medium">{{ 'general.search.popular_search' | t }}</h3>
+                        {% if settings.popular_searches != blank %}
+                            <ul>
+                                {%- for link in settings.popular_searches.links -%}
+                                    <li class="leading-none opacity-75">
+                                        <a href="{{ link.url }}" class="px-3 py-2 underline flex gap-3 items-center font-medium">
+                                            {% render 'icon-trend', class: 'w-4 h-4' %}
+                                            {{ link.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </template>
+
+                <div x-cloak class="predictive__search w-full bg-white overflow-hidden" 
+                    x-show="showSearch && query != ''">
+
+                    <div class="flex justify-between gap-3 border-b items-center mb-2">
+                        <h3 class="text-gray-600 p-3 uppercase text-xs font-medium" x-show="products.length > 0">{{ 'general.search.products' | t }}</h3>
+                        <button type="submit" class="px-4 py-2  flex justify-between text-sm items-center" aria-label="{{ 'general.search.button' | t }}">
+                            <span class="flex items-center gap-1"> 
+                                <i>
+                                    {% render 'icon-magic2', class: 'w-5 h-5' %}
+                                </i>
+                                {{ 'general.search.search_for' | t }} "<i x-text="query"></i>" 
+                            </span>
+                            <span> {% render 'icon-arrow-right' %} </span>
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <template x-if="products.length > 0">
+                            <ul class="predictive__search-products px-3 flex flex-col max-h-[50vh] overflow-scroll" role="list">
+                            <template x-for="item in products">
+                                <li class="products__item py-2 border-b my-2">
+                                    <a :href="item.url" class="flex gap-x-3 items-center">
+                                    <div class="products__item-image w-20">
+                                        <img :src="item.image" loading="lazy" class="object-cover" :alt="item.title">
+                                    </div>
+                                    
+                                    <div class="products__item-info flex flex-col">
+                                        {% if settings.predictive_search_show_vendor %}
+                                        <span class="prdoucts__item-vendor text-xs uppercase text-gray-500" x-text="item.vendor"></span>
+                                        {% endif %}
+                                        <span class="products__item-name-text hover:underline" x-text="item.title"></span>
+                                        {% if settings.predictive_search_show_price %}
+                                        <span class="prdoucts__item-price text-sm text-gray-500" x-text="Unick.formatMoney2(item.price)"></span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    </a>
+                                </li>
+                            </template>
+                            </ul>
+                            
+                        </template>
+                    </div>
+                </div> 
+                {% if settings.trending_products != blank %}
+                    <div class="trending-search-products relative overflow-hidden" x-show="query == ''">
+                        <h3 class="text-gray-600 border-b p-3 uppercase text-xs mb-2 font-medium">{{ 'general.search.trending_products' | t }}</h3>
+                        <ul class="flex gap-2 overflow-x-scroll snap-mandatory snap-x no-scrollbar">
+                            {% for product in settings.trending_products.products limit: 5 %}
+                                <li class="featured-colection__item w-6/12 md:w-3/12 flex-shrink-0 snap-center last:mr-4 ">
+                                    {% render 'card-product',
+                                        card_product: product,
+                                        show_secondary_image: section.settings.show_secondary_image,
+                                        show_vendor: section.settings.show_vendor,
+                                        show_rating: section.settings.show_rating,
+                                        image_ratio: section.settings.image_ratio
+                                    %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <div @click="showSearch = false" class="bg-overlay bg-black/10 fixed inset-0"></div>
+
+</div>

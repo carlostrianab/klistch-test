@@ -1,0 +1,194 @@
+
+<style>
+    .volume-discount-promo{
+        position: sticky;
+        top: 65px;
+        z-index: 99;
+        background-color: {{ section.settings.background_color }};
+        color: {{ section.settings.text_color }};
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 768px) {
+        .volume-discount-promo{
+            top: 93px;
+        }
+      
+    }
+    .cart__drawer-content .volume-discount-promo{
+        position: relative;
+        top: 0;
+        box-shadow: none;
+    }
+</style>
+
+<div 
+  x-title="Volume Blocks"
+  x-data="{
+    cartTotal: {{ cart.total_price | money_without_currency | remove: ',' }},
+    cartQuantity: {{ cart.item_count }},
+    title: '{{ section.settings.title }}',
+    updateTitle() {
+      const tiers = [
+        {% for block in section.blocks %}
+          {
+            value: {{ block.settings.tier_value }},
+            dynamicText: '{{ block.settings.dynamic_text }}'
+          },
+        {% endfor %}
+      ];
+      
+      const sortedTiers = tiers.sort((a, b) => a.value - b.value);
+      const nextTier = sortedTiers.find(tier => {
+        {% if section.settings.tier_type == 'cart_quantity' %}
+          return tier.value > this.cartQuantity;
+        {% else %}
+          return tier.value > this.cartTotal;
+        {% endif %}
+      });
+      
+      if (nextTier) {
+        this.title = nextTier.dynamicText;
+      }
+    }
+  }"
+  x-init="updateTitle()"
+  x-effect="updateTitle()"
+  @cart-count-updated.window="cartQuantity = $event.detail"
+  @cart-total-updated.window="cartTotal = $event.detail"
+  class="py-3 {{ section.settings.container }} mx-auto px-4">
+    {% if section.settings.title != blank %}
+        <div class="prose text-center mx-auto font-medium" x-text="title">
+            {{ section.settings.title }}
+        </div>
+    {% endif %}
+    <div class="volume-blocks flex justify-center gap-1 items-start mt-3">
+      {% for block in section.blocks %}
+        <div 
+          {% if section.settings.tier_type == 'cart_quantity' %}
+            :class="{
+              '!bg-black text-white': cartQuantity >= {{ block.settings.tier_value }},
+            }"
+          {% else %}
+            :class="{
+              '!bg-black text-white': cartTotal >= {{ block.settings.tier_value }},
+            }"
+          {% endif %}
+
+          class="tier-block w-16 border border-black text-center bg-white 
+          {% if forloop.first %} rounded-l-full {% endif %} {% if forloop.last %} rounded-r-full {% endif %}">
+          <div class="tier-block__text text-center font-medium leading-[normal]">
+            {{ block.settings.text }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Volume discount promo",
+  "class": "volume-discount-promo",
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Tier",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tier_value",
+          "label": "Tier Value",
+          "default": "5",
+          "info": "Value based on cart total value or cart total quantity"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "5%"
+        },
+        {
+          "type": "text",
+          "id": "dynamic_text",
+          "label": "Dynamic Text",
+          "default": "Buy 2 and get 5% off",
+          "info": "This text will be displayed when user reaches a tier lower than this tier"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+    },
+    {
+      "type": "select",
+      "label": "Tier Type",
+      "id": "tier_type",
+      "options": [
+        {
+          "value": "cart_total",
+          "label": "Cart Total"
+        },
+        {
+          "value": "cart_quantity",
+          "label": "Cart Quantity"
+        }
+      ]
+    },
+    {
+        "type": "header",
+        "content": "Styles"
+    },
+    {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color"
+    },
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color"
+    }
+  ],
+  "presets": [
+    {
+        "name": "Volume discount promo"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,231 @@
+<style>
+  #Main-collection-list-{{ section.id }}{
+      padding-top: {{ section.settings.padding_top | append: 'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
+  }
+</style>
+
+<div id="Main-collection-list-{{ section.id }}" class="main-collection-list {{ section.settings.container }} mx-auto px-4 ">
+  <h1 class="title font-heading py-4 md:text-3xl text-4xl">{{ section.settings.title | escape }}</h1>
+  {%- liquid
+    case section.settings.sort
+      when 'products_high' or 'products_low'
+        assign collections = collections | sort: 'all_products_count'
+      when 'date' or 'date_reversed'
+        assign collections = collections | sort: 'published_at'
+    endcase
+
+    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+      assign collections = collections | reverse
+    endif
+  -%}
+  <ul class="collection-list gap-3 md:gap-4 grid {{ section.settings.grid_desktop }} {{ section.settings.grid_tablet }} {{ section.settings.grid_mobile }}" role="list">
+    {%- for collection in collections -%}
+      <li class="collection-list__item flex justify-center relative">
+        <a href="{{ collection.url }}" class="collection-list__item-link hover:underline">
+          <div class="collection-list__item-image bg-gray-100">
+            {% assign image_class = ' object-cover ' %}
+            {% assign image_class = image_class | append: section.settings.image_ratio %}
+            {%- if collection.image -%}
+                {% render 'img-medium', image: collection.image, class: image_class %}
+            {% else %}
+                {% assign image_class = image_class | append: ' w-full ' %}
+                {% render 'placeholder', class: image_class %}
+            {%- endif -%}
+          </div>
+          <div class="collection-list__item-title">
+            <h2 class="my-2 font-heading hover:underline {% unless collection.image %} absolute z-10 left-4 top-1/2 transform -translate-y-1/2 {% endunless %}">{{ collection.title }}</h2>
+          </div>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+{% schema %}
+{
+  "name": "Collection list page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "Alphabetical, A-Z"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "Alphabetical, Z-A"
+        },
+        {
+          "value": "date_reversed",
+          "label": "Date, newest first"
+        },
+        {
+          "value": "date",
+          "label": "Date, oldest first"
+        },
+        {
+          "value": "products_high",
+          "label": "Product count, highest first"
+        },
+        {
+          "value": "products_low",
+          "label": "Product count, lowest first"
+        }
+      ],
+      "default": "alphabetical",
+      "label": "Sort collections by"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "aspect-square",
+      "options": [
+        {
+          "value": "aspect-auto",
+          "label": "Auto"
+        },
+        {
+          "value": "aspect-square",
+          "label": "Square"
+        },
+        {
+          "value": "aspect-portrait",
+          "label": "Portrait"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Grid layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_desktop",
+      "label": "Desktop grid",
+      "info": "Number of items per row",
+      "default": "lg:grid-cols-4",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "lg:grid-cols-5",
+          "label": "5 items"
+        },
+        {
+          "value": "lg:grid-cols-6",
+          "label": "6 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_tablet",
+      "label": "Tablet grid",
+      "info": "Number of items per row",
+      "default": "md:grid-cols-3",
+      "options": [
+        {
+          "value": "md:grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "md:grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "md:grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "md:grid-cols-4",
+          "label": "4 items"
+        },
+        {
+          "value": "md:grid-cols-5",
+          "label": "5 items"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile grid",
+      "info": "Number of items per row",
+      "default": "grid-cols-2",
+      "options": [
+        {
+          "value": "grid-cols-1",
+          "label": "1 item"
+        },
+        {
+          "value": "grid-cols-2",
+          "label": "2 items"
+        },
+        {
+          "value": "grid-cols-3",
+          "label": "3 items"
+        },
+        {
+          "value": "grid-cols-4",
+          "label": "4 items"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

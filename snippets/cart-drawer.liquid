@@ -1,0 +1,40 @@
+<div class="fixed inset-0 z-[1020] h-full cart-drawer"
+    x-title="Cart Drawer"
+    x-data="Cart({{ cart | json | escape }}, 'cart-drawer')"
+    x-cloak
+    x-show="showCart"
+    x-trap="showCart"
+    @update-cart.window="updateCart()"
+    @keydown.escape.window="showCart = false"
+    @toggle-cart-drawer.window="$nextTick(() => {
+        if (Alpine.store('quickShop').isOpen) {
+            $dispatch('close-quick-shop');
+            setTimeout(() => {
+                showCart = true;
+                document.body.classList.add('overflow-fixed');
+            }, 300);
+        } else {
+            showCart = !showCart;
+            document.body.classList.toggle('overflow-fixed');
+        }
+    })"
+    role="dialog" aria-modal="true">
+    <div class="absolute bg-gray-200 z-[1020] w-full top-0 bottom-0 right-0 max-w-xs md:max-w-md shadow-2xl border-l"
+        x-show="showCart" @click.outside="showCart = false"
+        x-transition:enter="transform transition ease-in-out duration-400" 
+        x-transition:enter-start="translate-x-full opacity-0" 
+        x-transition:enter-end="translate-x-0 opacity-1" 
+        x-transition:leave="transform transition ease-in-out duration-400" 
+        x-transition:leave-start="translate-x-0" 
+        x-transition:leave-end="translate-x-full opacity-0">
+
+        <div x-show="showCart" @click="showCart = false" x-transition.opacity class="fixed inset-0 bg-[#0000004f]"></div>
+
+        <div class="bg-white relative h-full">
+            <div class="cart__drawer-content h-full no-scrollbar mx-auto" x-ref="cart_drawer_content">
+                {% render 'cart-drawer-form' %}
+            </div>
+        </div>
+    </div>
+</div>
+  

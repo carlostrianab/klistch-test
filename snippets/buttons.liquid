@@ -1,0 +1,30 @@
+<div class="block__buttons mt-2 flex flex-wrap gap-4  {{ block.settings.buttons_font_weight }} {{ block.settings.buttons_justify }} {{ block.settings.buttons_justify_mobile }}" {{ block.shopify_attributes }}>
+    {% if section.settings.banner_link != blank %}
+      {%- if block.settings.primary_button != blank -%}
+        <button type="button" class="button {{ block.settings.primary_button_style }}">
+            {{ block.settings.primary_button | escape }}
+        </button>
+      {%- endif -%}
+
+      {%- if block.settings.secondary_button != blank -%}
+        <button class="button {{ block.settings.secondary_button_style }}">
+            {{ block.settings.secondary_button | escape }}
+        </button>
+      {%- endif -%}
+
+    {% else %}
+      {%- if block.settings.primary_button != blank -%}
+        <a href="{{ block.settings.primary_button_link }}" class="button {{ block.settings.primary_button_style }}"
+          {% if block.settings.primary_button_link == blank %} aria-disabled="true"{% endif %}>
+            {{ block.settings.primary_button | escape }}
+        </a>
+      {%- endif -%}
+
+      {%- if block.settings.secondary_button != blank -%}
+        <a href="{{ block.settings.secondary_button_link }}" class="button {{ block.settings.secondary_button_style }}"
+          {% if block.settings.secondary_button_link == blank %} aria-disabled="true"{% endif %}>
+            {{ block.settings.secondary_button | escape }}
+        </a>
+      {%- endif -%}
+    {% endif %}
+</div>

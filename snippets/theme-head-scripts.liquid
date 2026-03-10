@@ -1,0 +1,112 @@
+
+
+{% if settings.enable_edgemesh_redirect and request.design_mode == false %}
+  {% render 'edgemesh-geo-redirect' %}
+{% endif %}
+
+<script>
+    window.shopUrl = '{{ request.origin }}';
+    window.routes = {
+      cart_add_url: '{{ routes.cart_add_url }}',
+      cart_change_url: '{{ routes.cart_change_url }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+      predictive_search_url: '{{ routes.predictive_search_url }}'
+    };
+
+    window.market_price_adjustment = {{ settings.market_price_adjustment }};
+    window.Shopify.currency.symbol = '{{ cart.currency.symbol }}';
+    window.Shopify.show_currency_code = {{ settings.currency_code_enabled }};
+
+    window.cartStrings = {
+      error: `{{ 'sections.cart.cart_error' | t }}`,
+      quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`
+    }
+
+    window.variantStrings = {
+      addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+      soldOut: `{{ 'products.product.sold_out' | t }}`,
+      unavailable: `{{ 'products.product.unavailable' | t }}`,
+    }
+</script>
+
+
+<script> let ppShop='kitschllc.myshopify.com'; </script>
+{% if collection.previous_product %}<link rel="prev" href="{{ collection.previous_product }}">{% endif %}
+{% if collection.next_product %}<link rel="next" href="{{ collection.next_product }}">{% endif %}
+
+{% if template.name == 'product' or template.name == 'collection' %}
+  <script>
+      var afterpay_product = {{ product | json }};
+      setTimeout(function() {
+          if(typeof ShopifyAnalytics !== 'undefined' && ShopifyAnalytics){
+            ShopifyAnalytics.meta.product.title = {{ product.title | json }};
+          }
+      }, 1000);
+  </script>
+{% endif %}
+
+<!-- Twitter conversion tracking base code -->
+<script>
+!function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+},s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='https://static.ads-twitter.com/uwt.js',
+a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+twq('config','odgrs');
+</script>
+<!-- End Twitter conversion tracking base code -->
+
+{% assign pageName = page.title %}
+{% assign pageType = 'Page' %}
+<!-- Twitter page view event -->
+<script type="text/javascript">
+  {% if template.name == 'product' %}
+    {%  assign pageName = product.title %}
+    {%  assign pageType = 'Product' %}
+  {% endif %}
+  {% if template.name == 'collection' %}
+    {%  assign pageName = collection.title %}
+    {%  assign pageType = 'Collection' %}
+  {% endif %}
+  {% if template.name == 'page' %}
+    {%  assign pageName = page.title %}
+    {%  assign pageType = 'Page' %}
+  {% endif %}
+
+  // Insert Twitter Event ID
+  twq('event', 'tw-odgrs-odhc6', {
+    contents: [ // use this to pass an array of products or content
+        // add all items to the array
+        // use this for the first item
+        {
+          content_type: {{ template.name | json }},
+          content_name: {{ pageName | json }},
+        }] 
+  });
+</script>
+<!-- End Twitter conversion tracking event code -->
+
+{% comment %}PDQ Script
+<script id="pdq_custom_ab_test_script" type="text/javascript" src="https://pdq-scripts.pdqprod.link/pdq-text-abtest.js"></script>
+{% endcomment %}
+{% comment %} Microsoft Clarity {% endcomment %}
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "prwonq9hya");
+</script>
+{% comment %} End Microsoft Clarity {% endcomment %}
+
+{% comment %} tatari tag manager {% endcomment %}
+<script>!function(){try{!function(t,i){if(!i.version){window.tatari=i,i.init=function(t,n){var e=function(t,n){i[n]=function(){t.push([n].concat(Array.prototype.slice.call(arguments,0)))}};"track pageview identify".split(" ").forEach(function(t){e(i,t)}),i._i=t,i.config=n,i.pageview()},i.version="1.2.1";var n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://d2hrivdxn8ekm8.cloudfront.net/tag-manager/cd010d3f-199d-4b68-9e99-9969875e4fa2-latest.js";var e=t.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)}}(document,window.tatari||[])}catch(t){console.log(t)}}();tatari.init('cd010d3f-199d-4b68-9e99-9969875e4fa2');</script>
+
+{% comment %} Customer tracking {% endcomment %}
+{% if customer %}
+  <script>
+    window.tatari.identify('{{ customer.id }}');
+  </script>
+{% endif %}
+
+{% comment %} End tatari tag manager {% endcomment %}
+

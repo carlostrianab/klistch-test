@@ -1,0 +1,237 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_wWEpM6": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_rGE73g": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "heading": "Image banner",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-left",
+            "font": "font-heading",
+            "font_weight": "font-bold",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "text_X6zTmp": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Give customers details about the banner image(s) or content on the template.</p>",
+            "font_size": 16,
+            "letter_spacing": 1,
+            "text_align": "md:text-left",
+            "font_weight": "font-normal",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "buttons_nPeiTf": {
+          "type": "buttons",
+          "disabled": true,
+          "settings": {
+            "primary_button": "Primary button",
+            "primary_button_link": "",
+            "primary_button_style": "button--primary",
+            "secondary_button": "",
+            "secondary_button_link": "",
+            "secondary_button_style": "button--primary",
+            "buttons_justify": "md:justify-start",
+            "buttons_justify_mobile": "justify-start"
+          }
+        }
+      },
+      "block_order": [
+        "heading_rGE73g",
+        "text_X6zTmp",
+        "buttons_nPeiTf"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "page-width",
+        "image": "shopify://shop_images/Group_86_3.png",
+        "max_height": 650,
+        "image_mobile": "shopify://shop_images/Group_83_1.jpg",
+        "image_loading": "lazy",
+        "max_height_mobile": 900,
+        "banner_link": "",
+        "image_container": "page-width",
+        "overlay_image": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 0.3,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "box_padding": 16,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "box_padding_mobile": 16,
+        "below_image_mobile": true,
+        "content_background": "#ffffff",
+        "content_background_opacity": 1,
+        "text_color": "#000000",
+        "max_width": 540,
+        "max_width_mobile": 540,
+        "visibility": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "image_with_text_UeJtj3": {
+      "type": "image-with-text",
+      "disabled": true,
+      "settings": {
+        "container": "full-width",
+        "image": "shopify://shop_images/Collection_Page_Banners_2_804f3b48-f1b3-4666-a87a-a4a3c6b783cb.jpg",
+        "image_mobile": "shopify://shop_images/Group_83.jpg",
+        "image_link": "",
+        "image_padding": false,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": "#ffe6d8"
+      }
+    },
+    "custom_liquid_RtTRfg": {
+      "type": "custom-liquid",
+      "settings": {
+        "container": "page-width",
+        "custom_liquid": "<h1 style=\"font-weight: bold; font-size: 30px;\">All Products</h1>",
+        "padding_top": 28,
+        "padding_bottom": 0
+      }
+    },
+    "collection_tabs_vertical_JgekpR": {
+      "type": "collection-tabs-vertical",
+      "blocks": {
+        "filter_e4qJhM": {
+          "type": "filter",
+          "settings": {
+            "title": "Hair Care",
+            "collection": "hair-care",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_AbimHY": {
+          "type": "filter",
+          "settings": {
+            "title": "Sleep",
+            "collection": "sleep",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_x9XD3X": {
+          "type": "filter",
+          "settings": {
+            "title": "Hair Accessories",
+            "collection": "hair-accessories",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_PrCUkX": {
+          "type": "filter",
+          "settings": {
+            "title": "Skin",
+            "collection": "skin",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        },
+        "filter_gBFgiR": {
+          "type": "filter",
+          "settings": {
+            "title": "Shower",
+            "collection": "shower-collection",
+            "products_to_show": 20,
+            "show_atc": false,
+            "show_add_to_bundle": false,
+            "show_sold_count": false,
+            "enable_quick_view_bundle": false
+          }
+        }
+      },
+      "block_order": [
+        "filter_e4qJhM",
+        "filter_AbimHY",
+        "filter_x9XD3X",
+        "filter_PrCUkX",
+        "filter_gBFgiR"
+      ],
+      "settings": {
+        "container": "page-width",
+        "show_subscription_toggle": false,
+        "subscription_toggle_title": "Save 30% w/ Auto-ship",
+        "subscription_toggle_active_title": "Shopping Auto-ship",
+        "subscription_toggle_perks": "Save 30% every order: No commitment, cancel anytime: Flexible delivery schedule: Skip or pause a delivery anytime",
+        "filter_title": "Category",
+        "grid_desktop": "lg:grid-cols-3",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2",
+        "gap": "gap-4"
+      }
+    }
+  },
+  "order": [
+    "image_banner_wWEpM6",
+    "main",
+    "image_with_text_UeJtj3",
+    "custom_liquid_RtTRfg",
+    "collection_tabs_vertical_JgekpR"
+  ]
+}

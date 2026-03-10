@@ -1,0 +1,54 @@
+<div class="{{ parent_class }}" {% if gallery_layout == 'stacked' %} :class="{ 'featured-media': active == {{ index }} }" x-cloak {% endif %}>
+  {%- liquid
+    assign loading = "lazy"
+    assign preload = "false"
+    assign fetchpriority = "auto"
+    if index == 0
+      assign fetchpriority = "high"
+      assign loading = "eager"
+      assign preload = "true"
+    endif
+
+-%}
+
+
+
+  
+  {% case media.media_type %}
+  {% when 'image' %}
+    <div class="product-single__media h-full {% unless index == 0 %} {% endunless %}">
+        <picture>
+          <source
+            media="(max-width: 1000px)"
+            sizes="100vw"
+            srcset="
+              {{ media | image_url: width: 300 }} 300w,
+              {{ media | image_url: width: 400 }} 400w,
+              {{ media | image_url: width: 600 }} 600w,
+              {{ media | image_url: width: 900 }} 900w
+            ">
+          {{ media | image_url: width: 1400 | 
+            image_tag: 
+            widths: '500, 900, 1200, 1400', 
+            sizes: '(min-width: 1000px) 760px, (min-width: 800px) calc(100vw - 380px), (min-width: 400px) 298px, 78.75vw',
+            loading: 'eager', 
+            fetchpriority: 'high', 
+            class: media_class }}
+        </picture>
+    </div>
+  {% when 'external_video' %}
+    <div class="product-single__media h-full">
+      {{ media | external_video_tag }}
+    </div>
+  {% when 'video' %}
+    {{ media | video_tag: controls: true, loop: media_loop, autoplay: media_autoplay , class: media_class }}
+  {% when 'model' %}
+    <div class="product-single__media h-full" data-media-id="{{ media.id }}">
+      {{ media | model_viewer_tag }}
+    </div>
+  {% else %}
+    <div class="product-single__media h-full" data-media-id="{{ media.id }}">
+      {{ media | media_tag }}
+    </div>
+{% endcase %}
+</div>

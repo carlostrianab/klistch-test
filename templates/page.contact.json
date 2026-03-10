@@ -1,0 +1,433 @@
+{
+  "sections": {
+    "custom_liquid_ExKH9N": {
+      "type": "custom-liquid",
+      "custom_css": [],
+      "settings": {
+        "container": "page-width",
+        "custom_liquid": "<h1 class=\"text-xl font-bold \">Contact Us<\/h1>",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "image_with_text_TqdYt9": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_baTUgP": {
+          "type": "heading",
+          "settings": {
+            "heading": "Need Help?",
+            "sub_heading": "<p>Check out our FAQs below or chat with us! We're here to help.<\/p>",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-center",
+            "font": "font-sophillia",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-center"
+          }
+        }
+      },
+      "block_order": [
+        "heading_baTUgP"
+      ],
+      "settings": {
+        "container": "page-width",
+        "image": "shopify:\/\/shop_images\/63832-6745-6752-9852-61418-60633-60602-9487-CreativeProductShoot-Group-1280x1280px_1.jpg",
+        "image_link": "",
+        "image_padding": false,
+        "controls": false,
+        "custom_controls": true,
+        "autoplay": false,
+        "loop": false,
+        "desktop_height": 400,
+        "image_first": true,
+        "preload": true,
+        "image_overlap": "md:-mt-0 md:mb-0",
+        "image_overlap_mobile": "none",
+        "vertical_alignment": "md:items-center",
+        "horizontal_alignment": "md:justify-center",
+        "content_max_width": 540,
+        "vertical_alignment_mobile": "items-center",
+        "horizontal_alignment_mobile": "justify-center",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "blocks_background_color": ""
+      }
+    },
+    "accordion_4AibaF": {
+      "type": "accordion",
+      "blocks": {
+        "accordion_8JmBXz": {
+          "type": "accordion",
+          "settings": {
+            "title": "How Can I Track My Order?",
+            "description": "<p>Once your order has been shipped, you will be emailed a shipping confirmation including the tracking number for your package. Tracking information will be updated within 24 business hours of shipment.<\/p><p>Alternatively, you can track the status of your package <a href=\"https:\/\/mykitsch.com\/pages\/order-lookup\" target=\"_blank\">here<\/a>.<\/p>"
+          }
+        },
+        "accordion_3Cy6RV": {
+          "type": "accordion",
+          "settings": {
+            "title": "Can I Cancel Or Modify My Order?",
+            "description": "<p>While your order is still processing, we may be able to cancel your order. You can send an e-mail to kitsch@mykitsch.com with your order number, keep in mind that in order to get your order to you as soon as possible, we begin processing orders as soon as they are received. If your order is no longer able to be canceled you can definitely process a return once you receive your package. <a href=\"http:\/\/mykitsch.happyreturns.com\/\" target=\"_blank\">Here's  <\/a>a link to our returns for instructions. <br\/><\/p><p>You can also cancel your order by logging into your account and looking under your order history. You can log into your account <a href=\"https:\/\/mykitsch.com\/account\/login?return_url=%2Faccount\" target=\"_blank\">here<\/a>!<\/p><p><br\/>We are unable to make any changes to an order once placed. If you need to make any changes to your order, we recommend canceling and placing a new order so long as it is still eligible.<\/p><p>You can also cancel your order by logging into your account and looking under your order history. You can log into your account <a href=\"https:\/\/mykitsch.com\/account\/login?return_url=%2Faccount\" target=\"_blank\">here<\/a>!<\/p><p><br\/>We are unable to make any changes to an order once placed. If you need to make any changes to your order, we recommend canceling and placing a new order so long as it is still eligible.<\/p>"
+          }
+        },
+        "accordion_KYkHFP": {
+          "type": "accordion",
+          "settings": {
+            "title": "Can I Update My Shipping Address?",
+            "description": "<p>If you have entered an incorrect shipping address, please contact us at <a href=\"mailto:kitsch@mykitsch.com\">kitsch@mykitsch.com <\/a>as soon as possible. Please note, we work quickly to process and ship your order, and once an order has been shipped we are unable to modify the address. <\/p>"
+          }
+        },
+        "accordion_WJWFRf": {
+          "type": "accordion",
+          "settings": {
+            "title": "What If My Order Is Damaged Or Missing?",
+            "description": "<p>If you have any issues regarding your order, please reach out to us at <a href=\"mailto:kitsch@mykitsch.com\">kitsch@mykitsch.com <\/a>or via our <a href=\"https:\/\/mykitsch.com\/pages\/contact-us\" target=\"_blank\">contact page<\/a> for further assistance. <\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "accordion_8JmBXz",
+        "accordion_3Cy6RV",
+        "accordion_KYkHFP",
+        "accordion_WJWFRf"
+      ],
+      "settings": {
+        "container": "page-width",
+        "heading": "Orders",
+        "sub_heading": "",
+        "heading_label": "",
+        "grid_desktop": "lg:grid-cols-1",
+        "grid_tablet": "md:grid-cols-1",
+        "grid_mobile": "grid-cols-1",
+        "font_size": 24,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 24,
+        "text_align_mobile": "text-left",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "accordion_fgNME3": {
+      "type": "accordion",
+      "blocks": {
+        "accordion_tLJ4b8": {
+          "type": "accordion",
+          "settings": {
+            "title": "How Do I Make A Return?",
+            "description": "<p>We offer free returns for US customers within 90 days of delivery. For international returns, we also accept returns within 90 days of delivery, but please note that international customers will need to provide their own shipping label for returns.<br\/><\/p><p>You can initiate a return <a href=\"https:\/\/mykitsch.loopreturns.com\/#\/\" target=\"_blank\" title=\"https:\/\/mykitsch.loopreturns.com\/#\/\">here<\/a> by entering your order number and shipping zip code. US customers can retrieve a pre-paid shipping label. International customers will need to arrange their own shipping method and are responsible for the shipping costs incurred when sending items back.<br\/>Please note shipping cost will not be refunded upon return.<\/p>"
+          }
+        },
+        "accordion_9QpdVg": {
+          "type": "accordion",
+          "settings": {
+            "title": "Where Do You Ship?",
+            "description": "<p>KITSCH currently ships to all states in the US and has international shipping available. For a full list of available shipping locations, please visit the shipping page at checkout. <\/p>"
+          }
+        },
+        "accordion_ETrTLd": {
+          "type": "accordion",
+          "settings": {
+            "title": "When Will My Order Ship?",
+            "description": "<p>Orders are shipped same or next day.<\/p><p>Weekends and holidays are excluded from processing and shipping times, so please account for non-business days when choosing your shipping method. You will receive an email with tracking information when your order has been shipped. <\/p>"
+          }
+        },
+        "accordion_4M3txE": {
+          "type": "accordion",
+          "settings": {
+            "title": "What Shipping Methods Do You Offer?",
+            "description": "<p>We offer standard shipping for $6.82 or free for orders with a subtotal over $35. Orders shipped via standard shipping are typically shipped same or next day and arrive in 5 to 7 business days. Delivery days are Monday through Friday, and orders will not be delivered on Saturday, Sunday, or Holidays.<\/p><p><br\/> We also offer priority shipping for $11.74. Orders shipped via expedited shipping are typically shipped within 24-48 hours and arrive in 2-3 business days. Delivery days are Monday through Friday, and orders will not be delivered on Saturday, Sunday, or Holidays.<\/p><p><strong>International orders could take up to 25 days to be delivered, depending on carrier.<\/strong><\/p>"
+          }
+        },
+        "accordion_gWD9UV": {
+          "type": "accordion",
+          "settings": {
+            "title": "Where Do You Ship?",
+            "description": "<p>Here are list of countries we ship: Åland Islands, Albania, Algeria, Andorra, Angola, Anguilla, Antigua & Barbuda, Argentina, Armenia, Aruba, Ascension Island, Australia, Austria, Bahamas, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bermuda, Bolivia, Bosnia & Herzegovina, Botswana, Brazil, British Indian Ocean Territory, British Virgin Islands, Bulgaria, Burkina Faso, Burundi, Cambodia, Cameroon, Canada, Cape Verde, Caribbean Netherlands, Cayman Islands, Central African Republic, Chad, Chile, China, Christmas Island, Cocos (Keeling) Islands, Colombia, Comoros, Congo - Brazzaville, Congo - Kinshasa, Cook Islands, Costa Rica, Côte d’Ivoire, Croatia, Curaçao, Cyprus, Czechia, Denmark, Djibouti, Dominica, Dominican Republic, Ecuador, Egypt, El Salvador, Equatorial Guinea, Eritrea, Estonia, Eswatini, Ethiopia, Falkland Islands, Faroe Islands, Fiji, Finland, France, French Guiana, French Polynesia, French Southern Territories, Gabon, Gambia, Georgia, Germany, Ghana, Gibraltar, Greece, Greenland, Grenada, Guadeloupe, Guatemala, Guernsey, Guinea, Guinea-Bissau, Guyana, Haiti, Honduras, Hong Kong SAR, Hungary, Iceland, India, Indonesia, Ireland, Isle of Man, Israel, Italy, Jamaica, Japan, Jersey, Jordan, Kazakhstan, Kenya, Kiribati, Kosovo, Kuwait, Kyrgyzstan, Laos, Latvia, Lebanon, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Macao SAR, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, Martinique, Mauritania, Mauritius, Mayotte, Mexico, Moldova, Monaco, Mongolia, Montenegro, Montserrat, Morocco, Mozambique, Myanmar (Burma), Namibia, Nauru, Nepal, Netherlands, New Caledonia, New Zealand, Nicaragua, Niger, Nigeria, Niue, Norfolk Island, North Macedonia, Norway, Oman, Pakistan, Panama, Papua New Guinea, Paraguay, Peru, Pitcairn Islands, Poland, Portugal, Qatar, Réunion, Romania, Rwanda, Samoa, San Marino, São Tomé & Príncipe, Saudi Arabia, Senegal, Serbia, Seychelles, Sierra Leone, Singapore, Sint Maarten, Slovakia, Slovenia, Solomon Islands, Somalia, South Africa, South Georgia & South Sandwich Islands, South Korea, South Sudan, Spain, Sri Lanka, St. Barthélemy, St. Helena, St. Kitts & Nevis, St. Lucia, St. Martin, St. Pierre & Miquelon, St. Vincent & Grenadines, Sudan, Suriname, Svalbard & Jan Mayen, Sweden, Switzerland, Taiwan, Tajikistan, Tanzania, Thailand, Timor-Leste, Togo, Tokelau, Tonga, Trinidad & Tobago, Tristan da Cunha, Tunisia, Turkey, Turkmenistan, Turks & Caicos Islands, Tuvalu, U.S. Outlying Islands, Uganda, Ukraine, United Arab Emirates, United Kingdom, Uruguay, Uzbekistan, Vanuatu, Vatican City, Venezuela, Vietnam, Wallis & Futuna, Western Sahara, Yemen, Zambia, Zimbabwe<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "accordion_tLJ4b8",
+        "accordion_9QpdVg",
+        "accordion_ETrTLd",
+        "accordion_4M3txE",
+        "accordion_gWD9UV"
+      ],
+      "settings": {
+        "container": "page-width",
+        "heading": "Shipping and Returns",
+        "sub_heading": "",
+        "heading_label": "",
+        "grid_desktop": "lg:grid-cols-1",
+        "grid_tablet": "md:grid-cols-1",
+        "grid_mobile": "grid-cols-2",
+        "font_size": 24,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 24,
+        "text_align_mobile": "text-left",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "accordion_txwLah": {
+      "type": "accordion",
+      "blocks": {
+        "accordion_xaBQgn": {
+          "type": "accordion",
+          "settings": {
+            "title": "How Do I Activate My Account?",
+            "description": "<p>If you originally checked out as a guest, you can still activate your account and retrieve rewards associated with your order!<\/p><p>In order to activate your account please select the \"sign up\" option on the login page and create an account with the same email used on your original order. <\/p><p>Once the account is activated, you will be able to view all the information related to any orders associated with that email.<\/p>"
+          }
+        },
+        "accordion_eYFYPA": {
+          "type": "accordion",
+          "settings": {
+            "title": "How Do I Redeem My Rewards?",
+            "description": "<p>You can redeem your rewards by logging into your account <a href=\"https:\/\/mykitsch.com\/account\/login?return_url=%2Faccount\" target=\"_blank\">here<\/a>, and selecting rewards!<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "accordion_xaBQgn",
+        "accordion_eYFYPA"
+      ],
+      "settings": {
+        "container": "page-width",
+        "heading": "Account",
+        "sub_heading": "",
+        "heading_label": "",
+        "grid_desktop": "lg:grid-cols-1",
+        "grid_tablet": "md:grid-cols-1",
+        "grid_mobile": "grid-cols-1",
+        "font_size": 24,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 24,
+        "text_align_mobile": "text-left",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "accordion_XT8Q9Y": {
+      "type": "accordion",
+      "blocks": {
+        "accordion_iiKdwR": {
+          "type": "accordion",
+          "settings": {
+            "title": "What Currency Is Displayed At Checkout?",
+            "description": "<p>We display all prices in USD. When placing an order online, you will want to take into consideration the conversion from USD to your country's currency. Depending on your country's currency, the price paid at checkout may differ from the amount deducted from your bank account.<\/p>"
+          }
+        },
+        "accordion_eCJqYk": {
+          "type": "accordion",
+          "settings": {
+            "title": "What Payment Methods Do You Accept?",
+            "description": "<p>For express checkout, we offer ShopPay, PayPal, and GooglePay. For standard checkout we accept Visa, MasterCard, American Express, Discover, PayPal, Afterpay, Catch and KITSCH gift cards*. If you are using a prepaid gift card, you will need to register a billing address with the credit card company before placing an order.<\/p><p><em>*KITSCH Gift Cards expire after 1 year<\/em><\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "accordion_iiKdwR",
+        "accordion_eCJqYk"
+      ],
+      "settings": {
+        "container": "page-width",
+        "heading": "Payment",
+        "sub_heading": "",
+        "heading_label": "",
+        "grid_desktop": "lg:grid-cols-1",
+        "grid_tablet": "md:grid-cols-1",
+        "grid_mobile": "grid-cols-1",
+        "font_size": 24,
+        "text_align": "md:text-left",
+        "font": "font-heading",
+        "font_weight": "font-bold",
+        "font_size_mobile": 24,
+        "text_align_mobile": "text-left",
+        "background_color": "",
+        "text_color": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "container": "container",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "blocks": {
+        "54763a87-7b6a-4298-8203-8011bffe3ced": {
+          "type": "heading",
+          "settings": {
+            "heading": "Contact us",
+            "sub_heading": "",
+            "heading_label": "",
+            "font_size": 42,
+            "text_align": "md:text-center",
+            "font": "font-heading",
+            "font_weight": "font-medium",
+            "font_size_mobile": 32,
+            "text_align_mobile": "text-left"
+          }
+        },
+        "ace06402-f8b5-44df-8b02-effdf25ca86b": {
+          "type": "textfield",
+          "settings": {
+            "label": "Name",
+            "required": true
+          }
+        },
+        "22fb4b97-46c6-4d96-8340-57e7718728c9": {
+          "type": "email",
+          "settings": {
+            "label": "Title"
+          }
+        },
+        "416ae415-3164-44eb-9f70-d483343ba4db": {
+          "type": "textarea",
+          "settings": {
+            "label": "Message",
+            "required": false
+          }
+        },
+        "975304b1-d3ae-41b1-bc54-3308c29841d4": {
+          "type": "dropdown",
+          "settings": {
+            "label": "Make a selection",
+            "required": false,
+            "options_1": "Option 1",
+            "options_2": "Option 2",
+            "options_3": "Option 3",
+            "options_4": "",
+            "options_5": "",
+            "options_6": "",
+            "options_7": "",
+            "options_8": "",
+            "options_9": "",
+            "options_10": ""
+          }
+        },
+        "e9dc4586-edfd-4e31-871c-7d10ac9fc8a8": {
+          "type": "radio",
+          "disabled": true,
+          "settings": {
+            "label": "Choose an option",
+            "required": false,
+            "options_1": "Option 1",
+            "options_2": "Option 2",
+            "options_3": "Option 3",
+            "options_4": "",
+            "options_5": "",
+            "options_6": "",
+            "options_7": "",
+            "options_8": "",
+            "options_9": "",
+            "options_10": ""
+          }
+        },
+        "11d41906-018c-4c02-894c-dcde1b2d03c0": {
+          "type": "submit",
+          "settings": {
+            "label": "Send Message"
+          }
+        }
+      },
+      "block_order": [
+        "54763a87-7b6a-4298-8203-8011bffe3ced",
+        "ace06402-f8b5-44df-8b02-effdf25ca86b",
+        "22fb4b97-46c6-4d96-8340-57e7718728c9",
+        "416ae415-3164-44eb-9f70-d483343ba4db",
+        "975304b1-d3ae-41b1-bc54-3308c29841d4",
+        "e9dc4586-edfd-4e31-871c-7d10ac9fc8a8",
+        "11d41906-018c-4c02-894c-dcde1b2d03c0"
+      ],
+      "disabled": true,
+      "settings": {
+        "container": "medium-width",
+        "padding_top": 36,
+        "padding_bottom": 40
+      }
+    },
+    "rich_text_JEQDEW": {
+      "type": "rich-text",
+      "blocks": {
+        "text_nPQbpN": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>EMAIL US<\/strong><\/p><p><a href=\"mailto:Kitsch@mykitsch.com\">kitsch@mykitsch.com<\/a><\/p><p><strong>MARKETING Press & Social:<\/strong><\/p><p><a href=\"mailto:Kitsch@mykitsch.com\">marketing@mykitsch.com<\/a><\/p><p><strong>WHOLESALE Major Retailers:<\/strong><\/p><p><a href=\"mailto:Kitsch@mykitsch.com\">sales@mykitsch.com<\/a><\/p><p><strong>Boutique Inquiries:<\/strong><\/p><p>Fill out our Wholesale Application:<a href=\"https:\/\/mykitsch.com\/pages\/wholesale\" target=\"_blank\" title=\"Wholesale application\"><span style=\"text-decoration:underline\"><em><strong>Click here<\/strong><\/em><\/span><\/a><\/p>",
+            "text_font": "font-default",
+            "font_size": 16,
+            "text_align": "md:text-left",
+            "font_size_mobile": 16,
+            "text_align_mobile": "text-left"
+          }
+        }
+      },
+      "block_order": [
+        "text_nPQbpN"
+      ],
+      "settings": {
+        "container": "page-width",
+        "background_color": "#ffffff",
+        "text_color": "#000000",
+        "max_width": 1080,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "margin_top": 0,
+        "margin_bottom": 26
+      }
+    },
+    "custom_liquid_ydLp4E": {
+      "type": "custom-liquid",
+      "settings": {
+        "container": "page-width",
+        "custom_liquid": "<script>\n  window.gladlyConfig = {\n    appId: 'mykitsch.com-Generic4Choices'\n  };\n<\/script>",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "custom_liquid_ExKH9N",
+    "image_with_text_TqdYt9",
+    "accordion_4AibaF",
+    "accordion_fgNME3",
+    "accordion_txwLah",
+    "accordion_XT8Q9Y",
+    "main",
+    "form",
+    "rich_text_JEQDEW",
+    "custom_liquid_ydLp4E"
+  ]
+}

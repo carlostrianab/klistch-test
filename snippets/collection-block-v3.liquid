@@ -1,0 +1,30 @@
+{% assign filterproductdata = '' %}
+{%- capture filterproductdata -%}{% if block.settings.collection != blank %}{% for product in block.settings.collection.products %}{{ product.handle }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}{% for product in block.settings.products %}{{ product.handle }}{% unless forloop.last %},{% endunless %}{% endfor %}{%- endcapture -%}
+{% if block.settings.collection != blank or block.settings.image != blank %}
+    {% assign image = block.settings.collection.featured_image %}
+    {% if block.settings.image != blank %}
+        {% assign image = block.settings.image %}
+    {% endif %}
+    {% if block.settings.link != blank %}
+        <a href="{{ block.settings.link }}" class="block h-full cursor-pointer" data-thumb-filter="{{ block.settings.title | handle}}" aria-label="{{ block.settings.button }}">
+    {% endif %}
+        <div  class="collection-block object-fill bg-cover aspect-square" data-products="{{- filterproductdata -}}">
+            <div class="relative">
+                {% render 'img-medium', image: image, class: "object-cover h-full aspect-square" %}
+                {% if block.settings.secondary_image != blank %}
+                    {% comment %} Display on hover {% endcomment %}
+                    {% render 'img-medium', image: block.settings.secondary_image, class: 'object-cover aspect-square h-full absolute top-0 left-0 opacity-0 hover:opacity-100 transition duration-300 ease-in-out' %}
+                {% endif %}
+            </div>
+            
+            {% if block.settings.title != blank %}
+              <p class="my-3 text-sm md:text-base">
+                {{ block.settings.title }}
+              </p>
+            {% endif %}
+        </div>
+    {% if block.settings.link != blank %}
+        </a>
+    {% endif %}
+
+{% endif %}

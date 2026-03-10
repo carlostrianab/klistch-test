@@ -1,0 +1,36 @@
+<div class="item-flag grid grid-cols-3 gap-1 empty:hidden">
+    {% for tag in product_item.tags %}
+        {% if tag contains 'flag:' %}
+            {% assign flag = tag | split: ':' | last %}
+            <i class="discount-flag not-italic text-xs md:text-sm pb-1 z-10 absolute top-2 right-2 bg-black text-white px-2 py-1 {{ class }}" 
+            style="background-color: {{ settings.flag_background }}; color: {{ settings.flag_color }};">{{ flag }}</i>
+        {% endif %}
+
+        {% if tag contains 'discount:' or tag contains 'Discount:' or tag contains 'discount: ' or tag contains 'Discount: ' %}
+            {% assign discount_percentage = tag | split: ':' | last %}
+            {% assign discount_value = product_item.price | times: discount_percentage | divided_by: 100 %}
+            <i 
+            class="discount-amount hidden not-italic text-xs md:text-sm pb-1 z-20 absolute top-2 right-2 bg-black text-white px-2 py-1 {{ class }}" 
+            style="background-color: {{ settings.discount_flag_background }}; color: {{ settings.discount_flag_color }};">
+              {{ discount_value | money }} OFF
+            </i>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="product-award absolute top-1 left-1 w-12 h-12 empty:hidden">
+    {% for tag in product_item.tags %}
+        {% if tag contains 'award:' %}
+            {% assign award = tag | replace: ':', '-' | append: '.png' %}
+            <img loading="lazy" class="no-hover rounded-full" width="160" height="160" src="{{ award | file_img_url: '160x'}}" alt="{{ award }}">
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% if product_item.metafields.custom.product_flag != blank %}
+    <div class="item-flag flex flex-col absolute top-1 right-1">
+        <div class="h-12 w-12">
+            <img class="no-hover w-full" height="48" width="48" src="{{ product_item.metafields.custom.product_flag | img_url: 'medium' }}" alt="{{ product_item.metafields.custom.product_flag.value.alt | default: 'Flag'  }}">
+        </div>
+    </div>
+{% endif %}

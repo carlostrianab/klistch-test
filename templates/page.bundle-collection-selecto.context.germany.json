@@ -1,0 +1,7 @@
+{
+  "parent": "page.bundle-collection-selecto.json",
+  "context": {
+    "market": "germany"
+  },
+  "sections": {}
+}

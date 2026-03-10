@@ -1,0 +1,23 @@
+<button aria-label="Play video"
+    x-show="!playing"
+    class="absolute transform opacity-70 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full z-10 text-black" @click="$refs.video.play(); playing = true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-play-circle"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+</button>
+
+<button 
+    class="absolute z-10 bottom-16 right-4 bg-white p-1 rounded-full"
+    x-cloak
+    aria-label="Toggle sound"
+    @click="$refs.video.muted = !$refs.video.muted; muted = !muted " type="button">
+    <svg x-show="!muted" xmlns="http://www.w3.org/2000/svg" class="icon icon-sound" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M15 8a5 5 0 0 1 0 8" />
+        <path d="M17.7 5a9 9 0 0 1 0 14" />
+        <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
+    </svg>
+    <svg x-show="muted" xmlns="http://www.w3.org/2000/svg" class="icon icon-nosound" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
+        <path d="M16 10l4 4m0 -4l-4 4" />
+    </svg>
+</button>

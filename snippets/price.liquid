@@ -1,0 +1,278 @@
+{% comment %}
+    Renders a list of product's price (regular, sale)
+
+    Accepts:
+    - product: {Object} Product Liquid object (optional)
+    - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+    - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+    - price_class: {String} Adds a price class to the price element (optional)
+
+    Usage:
+    {% render 'price', product: product %}
+{% endcomment %}
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign on_sale = false
+  assign sold_out = true
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  assign money_price = price | money
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+  endif
+
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+
+  if available
+    assign sold_out = false
+  endif
+
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+-%}
+
+{% assign has_discount = false %}
+{% assign isBundle = false %}
+
+{% for tag in product.tags %}
+
+  {% assign strip_tag = tag | strip | downcase %}
+
+  {% if strip_tag contains 'exclude_cart' %}
+    {% assign isBundle = true %}
+  {% endif %}
+
+  {% if strip_tag contains "discount:" %}
+      {% assign discount_percentage = strip_tag | split: ':' | last | plus: 0 %}
+      {% assign discount_price = product.price | times: discount_percentage | divided_by: 100 %}
+      {% assign has_discount = true %}
+  {% endif %}
+{% endfor %}
+
+{% if request.path == '/pages/auto-ship' %}
+  {% assign discount_percentage = 25 %}
+{% endif %}
+
+{% if isBundle %}
+  {% assign soldOut = false %}
+{% endif %}
+
+<div x-init="$nextTick(() => { 
+      {% if is_pdp and has_discount and settings.enable_tag_discount %}
+          let displayPrice = {{ product.price |  minus: discount_price }};
+          {% if product.compare_at_price > product.price %}
+          setTimeout(() => {
+            $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ product.compare_at_price }} });
+          }, 400);
+          {% else %}
+          
+          setTimeout(() => {
+            $dispatch('price-update', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ product.price }} });
+          }, 400);
+
+          {% endif %}
+      {% endif %}
+
+      checkDiscountCode();
+
+    })"
+    x-title="Product price"
+    x-data="{
+      {% if settings.discount_table != blank %}
+        discount_table: JSON.parse(JSON.stringify(`{{ settings.discount_table }}`)).split(','),
+      {% endif %}
+        isBundle: {{ isBundle }},
+        onSale: {{ on_sale }}, 
+        soldOut: {{ sold_out }},
+        isPDP: {{ is_pdp | default: false }},
+      {% if settings.enable_tag_discount and has_discount %}
+        enable_tag_discount: true,
+        discount_percentage: {{ discount_percentage }},
+      {% else %}
+        enable_tag_discount: false,
+      {% endif %}
+      variant: {
+        price: {{ price }},
+      },
+      getPrice(){
+          if(this.variant){
+            let price = this.variant.price;
+            if(this.enable_tag_discount && !this.isPDP){
+                price = price - (price * this.discount_percentage / 100);
+            }
+
+            price = Math.round(price);
+            if(price % 100 == 99){
+              price = Math.ceil(price / 10) * 10;
+            }
+            return Unick.formatMoney(price);
+        }
+      },
+      checkDiscountCode(){
+          {% unless product.tags contains 'exclude_price_discount' %}
+          if(typeof this?.discount_table !== 'undefined' && this?.discount_table.length > 0){
+              const cookieDiscount = Unick.getCookie('discount_code');
+              if(cookieDiscount){
+                  const discount = this.discount_table.find((item) => {
+                    return item.toString().toLowerCase().includes(cookieDiscount.toLowerCase());
+                  });
+
+                  const discountPercentage = discount?.split(':')[1] || 0;
+                  let productPrice = {{ product.price }};
+                  
+
+                  this.$dispatch('discount-percentage', { percentage: discountPercentage });
+                  
+                  if(discountPercentage > 0){
+                    this.onSale = true;
+                  }
+
+                  let displayPrice = productPrice - (productPrice * discountPercentage / 100);
+                  {% if product.compare_at_price > product.price %}
+                    this.$dispatch('discounted-price', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ product.compare_at_price }} });
+                  {% else %}
+                    this.$dispatch('discounted-price', { id: {{ product.id }}, new_price: displayPrice, new_orignal_price: {{ product.price }} });
+                  {% endif %}
+
+              }else if(!this.enable_tag_discount){
+                this.onSale = false;
+                // reset price and dispatch the events to update the price
+                {% if product.compare_at_price > product.price %}
+                  this.$dispatch('discounted-price', { id: {{ product.id }}, new_price: {{ product.price }}, new_orignal_price: {{ product.compare_at_price }} });
+                {% else %}
+                  this.$dispatch('discounted-price', { id: {{ product.id }}, new_price: {{ product.price }}, new_orignal_price: {{ product.price }} });
+                {% endif %}
+
+              }
+          }
+          {% endunless %}
+      }
+  }"
+  @price-update.window="if($event.detail.id == {{ product.id }}) {
+    isPDP = true;
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+    if(variant.orignal_price > variant.price){
+      onSale = true;
+    }else{
+      onSale = false;
+    }
+  }"
+  @set-onetime-price.window="if($event.detail.id == {{ product.id }}) {
+    if(!$event.detail.subscribe){
+      variant.price = $event.detail.new_price; 
+      variant.orignal_price = $event.detail.new_orignal_price;
+    }
+  }"
+  @set-subscription-price.window="if($event.detail.id == {{ product.id }}) {
+    if($event.detail.subscribe){
+      variant.price = $event.detail.new_price; 
+      variant.orignal_price = $event.detail.new_orignal_price;
+    }
+  }"
+  @discounted-price.window="if($event.detail.id == {{ product.id }}) {
+    variant.price = $event.detail.new_price; 
+    variant.orignal_price = $event.detail.new_orignal_price;
+  }"
+  {% if use_variant %}
+    @variant-updated.window="variant.price = $event.detail.variant.price; if(!isBundle){ soldOut = !$event.detail.availibility }"
+  {% endif %}
+  @discount-applied.window="$nextTick(() => checkDiscountCode())"
+  @discount-removed.window="$nextTick(() => checkDiscountCode())"
+  class="price {{ price_class }} flex gap-x-2 items-center
+  {%- if available == false %} price--sold-out {% endif -%}
+  {%- if compare_at_price > price %} price--on-sale {% endif -%}
+  {%- if product.price_varies == false and product.compare_at_price_varies %} price--no-compare{% endif -%}
+  {%- if show_badges %} price--show-badge {% endif -%}">
+  <div class="price__container">
+
+    {%- if compare_at_price > price %}
+
+      <div class="price__sale flex gap-2">
+        <span class="sr-only">{{ 'products.product.price.sale_price' | t }}</span>
+        <span class="price-item price-item--last {% if compare_at_price > price %} text-red-700 {% endif %}" x-text="getPrice()">
+          {{ money_price }}
+        </span>
+
+        <template x-if="enable_tag_discount">
+          <div class="inline-block">
+            {% if compare_at_price > price %}
+              <s x-show="!isPDP" x-text="Unick.formatMoney({{ compare_at_price }})"
+                class="price-item price-item--regular text-gray-700">
+              </s>
+            {% else %}
+              <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)"
+                class="price-item price-item--regular text-gray-700">
+              </s>
+            {% endif %}
+          </div>
+        </template>
+
+        <template x-if="variant?.orignal_price && variant?.orignal_price > variant?.price && enable_tag_discount">
+          <s x-show="isPDP" x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+
+        {%- unless product.price_varies == false and product.compare_at_price_varies %}
+          <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+          <span x-show="!enable_tag_discount">
+            <s class="price-item price-item--regular text-gray-700">
+              {% if settings.currency_code_enabled %}
+                {{ compare_at_price | money_with_currency }}
+              {% else %}
+                {{ compare_at_price | money }}
+              {% endif %}
+            </s>
+          </span>
+        {%- endunless -%}
+      </div>
+    {%- else -%}
+      <div class="price__regular">
+        <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+        <span class="price-item price-item--regular" x-text="getPrice()" :class="{ 'text-red-700': enable_tag_discount || onSale }">
+          {{ money_price }}
+        </span>
+
+        <template x-if="variant?.orignal_price && variant?.orignal_price > variant?.price ">
+          <s x-text="Unick.formatMoney(variant.orignal_price)" class="price-item price-item--regular text-gray-700"></s>
+        </template>
+        
+        <template x-if="enable_tag_discount">
+          <div class="inline-block tag-discount-price">
+            <s x-show="!isPDP" x-text="Unick.formatMoney(variant.price)"
+              class="price-item price-item--regular text-gray-700">
+            </s>
+          </div>
+        </template>
+
+      </div>
+    {%- endif -%}
+
+    <small class="unit-price {% if product.selected_or_first_available_variant.unit_price_measurement == nil %} hidden{% endif %}">
+      <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+      <span class="price-item price-item--last">
+        <span>{{- product.selected_or_first_available_variant.unit_price | money -}}</span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+        <span>
+          {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+            {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+        </span>
+      </span>
+    </small>
+
+  </div>
+
+</div>

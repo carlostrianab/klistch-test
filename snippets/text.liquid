@@ -1,0 +1,17 @@
+<style>
+    #text_{{ block.id }}{
+        font-size: {{ block.settings.font_size | append: 'px' }};
+        color: {{ section.settings.text_color }};
+        letter-spacing: {{ block.settings.letter_spacing | append: 'px' }};
+    }
+
+    @media (max-width: 768px) {
+        #text_{{ block.id }}{
+            font-size: {{ block.settings.font_size_mobile | append: 'px' }};
+        }
+    }
+</style>
+
+<div id="text_{{ block.id }}" class="block__text prose max-w-none {{ block.settings.text_font }} {{ block.settings.text_align }} {{ block.settings.font_weight }} {{ block.settings.text_align_mobile }}" {{ block.shopify_attributes }}>
+    {{ block.settings.text }}
+</div>

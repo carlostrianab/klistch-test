@@ -1,0 +1,489 @@
+{% unless template == 'index' and section.settings.hide_homepage %}
+  <style>
+    .announcement {
+      min-height: {{ section.settings.height_mobile }}px;
+    }
+    {% if  section.settings.type == 'marquee' %}
+    .announcement-animation .announcement-animation__item .announcement-animation__content{
+      min-width: {{ section.settings.marquee_width | append: 'px' }};
+    }
+    {% endif %}
+    @media (max-width: 768px){
+      .announcement {
+        min-height: {{ section.settings.min_height_mobile }}px;
+      }
+      {% if  section.settings.type == 'marquee' %}
+      .announcement-animation .announcement-animation__item .announcement-animation__content{
+        min-width: {{ section.settings.marquee_width_mobile | append: 'px' }};
+      }
+      {% endif %}
+    }
+  </style>
+
+  {% assign special_messages = section.blocks |  where: 'type', 'special_message' %}
+
+  <div class="announcement" style="background-color: {{ section.settings.background_color }}">
+    <div class="{{ section.settings.container }} mx-auto px-4 relative" x-data="carousel">
+        {% if  section.settings.type == 'marquee' %}
+          <div class="announcement-animation">
+            <div class="announcement-animation__item">
+              {%- for block in section.blocks -%}
+                  {% if block.type == 'announcement' %}
+                      <div class="py-3 px-4 announcement-animation__content"
+                          style="background-color: {{ block.settings.background_color }} ;color: {{ block.settings.text_color }};"
+                          aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+                          {% if block.settings.text != blank %}
+                            <div class="" style="font-size: {{ block.settings.font_size | append: 'px' }}">
+                              {{ block.settings.text }}
+                            </div>
+                          {% endif %}
+                      </div>
+                  {% endif %}
+
+                  {% if block.type == 'discount_message' %}
+                    {% render 'cookie-discount-message', block: block, class: ' border py-1 md:py-2 px-4 announcement-animation__content' %}
+                  {% endif %}
+
+              {% endfor %}
+            </div>
+
+            <div class="announcement-animation__item">
+              {%- for block in section.blocks -%}
+                  {% if block.type == 'announcement' %}
+                      <div class="py-3 px-4 announcement-animation__content"
+                          style="background-color: {{ block.settings.background_color }} ;color: {{ block.settings.text_color }};"
+                          aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+                          {% if block.settings.text != blank %}
+                            <div class="" style="font-size: {{ block.settings.font_size | append: 'px' }}">
+                              {{ block.settings.text }}
+                            </div>
+                          {% endif %}
+                      </div>
+                  {% endif %}
+
+                  {% if block.type == 'discount_message' %}
+                    {% render 'cookie-discount-message', block: block, class: ' border py-1 md:py-2 px-4 announcement-animation__content' %}
+                  {% endif %}
+
+              {% endfor %}
+            </div>
+          </div>
+
+        {% else %}
+          <div
+            {% if section.settings.type == 'grid' %}
+              class="unick__carousel grid {{ section.settings.grid_columns }}"
+            {% endif %}
+            {% if section.settings.type == 'slider' %}
+              class="unick__carousel flex overflow-x-scroll gap-3 snap-x snap-mandatory no-scrollbar"
+              x-ref="slider"
+              @keydown.right="next"
+              @keydown.left="prev"
+            {% endif %}>
+              {%- for block in section.blocks -%}
+
+                    {% if block.type == 'discount_message' %}
+                        {% assign discount_message_class = ' flex justify-center items-center py-1 md:py-2 px-4 text-center w-full snap-start flex-shrink-0 ' %}
+                        {% if block.settings.position == 'absolute' %}
+                          {% assign discount_message_class = ' py-1 w-full  z-[110] fixed border-b border-black top-0' %}
+                        {% endif %}
+                        {% render 'cookie-discount-message', block: block, class: discount_message_class %}
+                    {% endif %}
+
+                  {% if block.type == 'announcement' %}
+                    <div id="announcement__item-{{ block.id }}" class="announcement__item flex justify-center items-center py-1 md:py-2 px-4 text-center w-full snap-start flex-shrink-0"
+                      style="background-color: {{ block.settings.background_color }} ;color: {{ block.settings.text_color }};"
+                      role="region"
+                      aria-label="{{ 'sections.header.announcement' | t }}" {{ block.shopify_attributes }}>
+                        <style>
+                          #announcement__item-{{ block.id }} p{
+                            color: {{ block.settings.text_color }} !important;
+                          }
+                        </style>
+                        {% if block.settings.text != blank %}
+                          <div style="font-size: {{ block.settings.font_size | append: 'px' }}">
+                            {{ block.settings.text }}
+                          </div>
+                        {% endif %}
+                    </div>
+                  {% endif %}
+
+
+              {%- endfor -%}
+          </div>
+        {% endif %}
+
+        {% if section.settings.type == 'slider' %}
+          <button @click="prev" :aria-disabled="atBeginning"
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+            style="color: {{ section.settings.arrow_color }}; background-color: {{ section.settings.arrow_bg }}"
+            class="bg-transparent arrow arrow-left  absolute left-2 h-full top-[50%] transform -translate-y-1/2">
+              {% render 'icon-chevron-left' %}
+          </button>
+
+          <button @click="next" :aria-disabled="atEnd"
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+            style="color: {{ section.settings.arrow_color }}; background-color: {{ section.settings.arrow_bg }}"
+            class="bg-transparent arrow arrow-right absolute right-2 h-full top-[50%] transform -translate-y-1/2">
+            {% render 'icon-chevron-right' %}
+          </button>
+        {% endif %}
+
+    </div>
+
+    {% if special_messages.size > 0 %}
+      {% comment %} Special message will show based on discount cookie. If a discount_code cookie matches the discountCode, it will show the message {% endcomment %}
+      <div class="special-messages relative">
+        {% for block in special_messages %}
+            <div
+              x-data="{
+                  showMessage: false,
+                  discountCode: '{{ block.settings.discount_code }}',
+                  checkDiscount(){
+                    if(this.discountCode == Unick.getCookie('discount_code')){
+                      this.showMessage = true;
+                    }
+                  }
+                }"
+              x-init="$nextTick(() => checkDiscount())"
+              x-cloak
+              x-show="showMessage"
+              class="py-3 px-4 fixed top-0 w-full text-center" style="background-color: {{ block.settings.background_color }} ;color: {{ block.settings.text_color }};"  {{ block.shopify_attributes }}>
+                {% if block.settings.text != blank %}
+                  <div class="" style="font-size: {{ block.settings.font_size | append: 'px' }}">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+
+
+{% endunless %}
+
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "default": "page-width",
+      "label": "Container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_homepage",
+      "label": "Hide on homepage"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Type",
+      "default": "grid",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "list",
+          "label": "List"
+        },
+        {
+          "value": "marquee",
+          "label": "Marquee"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "grid_columns",
+      "label": "Grid Columns",
+      "default": "lg:grid-cols-3",
+      "info": "Only applies when type is set to grid",
+      "options": [
+        {
+          "value": "lg:grid-cols-1",
+          "label": "1 Column"
+        },
+        {
+          "value": "lg:grid-cols-2",
+          "label": "2 Columns"
+        },
+        {
+          "value": "lg:grid-cols-3",
+          "label": "3 Columns"
+        },
+        {
+          "value": "lg:grid-cols-4",
+          "label": "4 Columns"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Marquee Settings"
+    },
+    {
+      "type": "range",
+      "id": "marquee_width",
+      "label": "Marquee Width",
+      "default": 500,
+      "min": 50,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "info": "Set the width of the marquee"
+    },
+    {
+      "type": "range",
+      "id": "marquee_width_mobile",
+      "label": "Marquee Width (mobile)",
+      "default": 340,
+      "min": 50,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "info": "Set the width of the marquee"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg",
+      "label": "Arrow background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#fff"
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Minimum height",
+      "default": 60,
+      "min": 10,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "info": "Fix CLS issue by setting a minimum height"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Minimum height (mobile)",
+      "default": 60,
+      "min": 10,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "info": "Fix CLS issue by setting a minimum height"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Welcome to our store</p>",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 52,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        }
+      ]
+    },
+    {
+      "type": "special_message",
+      "name": "Special message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount code",
+          "info": "If this discount code is applied, the special message will be shown"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Welcome to our store</p>",
+          "label": "Text"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "unit": "px",
+          "min": 8,
+          "max": 52,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        }
+      ]
+    },
+    {
+      "type": "discount_message",
+      "name": "Discount message",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "discount_message",
+          "label": "Discount message",
+          "default": "your coupon {discount_code} is reserved",
+          "info": "{discount_code} will be dynamic based on cookie. you can move it around the text message"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_toggle_button",
+            "label": "Show toggle button",
+            "default": false,
+        },
+        {
+            "type": "checkbox",
+            "id": "show_applied_message",
+            "label": "Show applied message",
+            "default": true,
+        },
+        {
+          "type": "text",
+          "id": "discount_apply_button",
+          "label": "Discount apply button",
+          "default": "Apply {discount_code} now",
+          "info": "{discount_code} will be dynamic based on cookie. you can move it around the text message"
+        },
+        {
+          "type": "text",
+          "id": "discount_code",
+          "label": "Discount code"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+         "type": "text",
+         "id": "currency",
+         "label": "Location",
+         "info": "You can make this appear on specific countries only. Enter the currency code. Example: USD, EUR, GBP",
+         "default": "all"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "default": "inline",
+          "info": "set absolute to hide announcement bar and show discount message only",
+          "options": [
+            {
+              "value": "inline",
+              "label": "Inline"
+            },
+            {
+              "value": "absolute",
+              "label": "Absolute"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,466 @@
+
+<footer class="footer bg-[#f0f0f0] mt-8">
+  {% if section.settings.show_scroll_top %}
+    {% render 'scroll-top' %}
+  {% endif %}
+  <div class="{{ section.settings.container }} mx-auto px-4">
+
+      {% if section.settings.certificate_logo != blank %}
+        <div class="footer__certificate-logo mx-auto" style="width: {{ section.settings.certificate_logo_width | append: 'px'  }}">
+            {% render 'img-medium', image: section.settings.certificate_logo %}
+        </div>
+      {% endif %}
+    
+      {% if section.settings.show_newsletter %}
+        <div class="footer__newsletter page-width">
+          {% if section.settings.newsletter_title != blank %}
+            <h2 class="text-center text-3xl font-default">{{ section.settings.newsletter_title }}</h2>
+          {% endif %}
+          {% if section.settings.newsletter_subtitle != blank %}
+            <div class="text-base py-2 font-medium">
+              {{ section.settings.newsletter_subtitle }}
+            </div>
+          {% endif %}
+    
+          {% if section.settings.newsletter_html != blank %}
+            <div class="footer__newsletter--html">
+              {{ section.settings.newsletter_html }}
+            </div>
+          {% endif %}
+    
+        </div>
+      {% endif %}
+    
+      {%- if section.blocks.size > 0 -%}
+        <div class="footer__content-top page-width pt-8">
+          {%- if section.blocks.size > 0 -%}
+            <div class="footer__blocks-wrapper grid grid-cols-1 md:grid-cols-5 gap-4">
+              {%- for block in section.blocks -%}
+                <div class="footer-block grid__item 
+                  {% if block.type == "social_links" %} col-span-2 row-span-3 {% endif %}
+                  {% if block.type == 'link_list' and block.settings.heading != blank %} 
+                    footer-block--menu
+                  {% endif %}" 
+                  {{ block.shopify_attributes }}>
+                  
+                  {%- if block.settings.heading != blank -%}
+                    <p class="footer-block__heading font-medium uppercase mb-2 text-lg">{{- block.settings.heading | escape -}}</p>
+                  {%- endif -%}
+    
+                  {%- case block.type -%}
+    
+                    {%- when 'social_links' -%}
+                      {%- if block.settings.show_icons -%}
+                        {% render 'social-links' %}
+                      {%- endif -%}
+    
+                      {% if block.settings.enable_currency %}
+                        {% render 'currency-selector' %}
+                      {% endif %}
+    
+                      {% if block.settings.html != blank %}
+                        <div class="footer-block__html">
+                          {{ block.settings.html }}
+                        </div>
+                      {% endif %}
+                    {%- when 'text' -%}
+                      <div class="footer-block__details-content rte">
+                        {{ block.settings.subtext }}
+                      </div>
+                    {%- when 'link_list' -%}
+                      {%- if block.settings.menu != blank and block.settings.heading != blank -%}
+                        <ul class="footer-block__details-content list-unstyled font-medium">
+                          {%- for link in block.settings.menu.links -%}
+                            <li>
+                              <a href="{{ link.url }}" {% if link.url contains '#'  %} {% unless link.url contains '/#'  %}  aria-label="Link" {%- endunless -%}  {%- endif -%} class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}">
+                                {{ link.title }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%} 
+                        
+                    {%- when 'image' -%}
+    
+                      <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
+                        {%- if block.settings.image != blank -%}
+                          {%- assign image_size = block.settings.image_width | append: 'x' -%}
+                          <img
+                            data-em-optimize
+                            src="{{ block.settings.image | img_url: 'master' }}"
+                            alt="{{ block.settings.image.alt | escape }}"
+                            loading="lazy"
+                            width="{{ block.settings.image.width }}"
+                            height="{{ block.settings.image.height }}"
+                            style="max-width: min(100%, {{ block.settings.image_width }}px);"
+                          >
+                        {%- else -%}
+                          {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                        {%- endif -%}
+                      </div>
+                    {%- endcase -%}
+                  
+                </div>
+              {%- endfor -%}
+    
+              <div class="row-span-2 col-span-2 md:col-span-3 md:grid grid-cols-3">
+              {% if section.settings.show_social %}
+                  <div class="social-links-footer py-2 col-span-2">
+                    {% render 'social-links', class: "justify-center md:justify-start" %}
+                    {% if section.settings.social_text != blank %}
+                      <div class="py-3 font-medium text-center md:text-left">
+                        {{ section.settings.social_text }}
+                      </div>
+                    {% endif %}
+    
+                    {%- if section.settings.extra_links != blank -%}
+                        <ul class="footer-extra__links font-medium mt-3 text-center justify-center md:justify-start md:text-left flex flex-wrap gap-3">
+                          {%- for link in section.settings.extra_links.links -%}
+                            <li class="flex-shrink-0">
+                              <a href="{{ link.url }}" 
+                                {% if link.url contains '#' %} aria-label="Link" {%- endif -%} 
+                                class="link hover:underline {% if link.active %} list-menu__item--active{% endif %}">
+                                {{ link.title }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%} 
+                  </div>
+    
+                  {% if section.settings.social_html != blank %}
+                    <div class="social__code col-span-1 text-center md:text-left">
+                      {{ section.settings.social_html }}
+                    </div>
+                  {% endif %}
+    
+              {% endif %}
+    
+              </div>
+              
+            </div>
+          {%- endif -%}
+    
+        </div>
+      {%- endif -%}
+    
+      <div class="footer__content-bottom py-6 mt-6 border-t border-gray-300">
+        <div class="page-width">
+    
+          <div class="footer__column footer__column--info flex flex-col flex-wrap">
+              <div class="footer__copyright">
+                <div class="copyright__content flex items-center text-sm">
+                  &copy; {{ 'now' | date: "%Y" }}, &ThinSpace;
+                  {% if section.settings.copyright_text != blank %}
+                    {{ section.settings.copyright_text }}
+                  {% else %}
+                    {{ shop.name | link_to: routes.root_url }}
+                  {% endif %}
+                </div>
+              </div>
+              
+              <div class="md:flex justify-between">
+                {%- if section.settings.payment_enable -%}
+                  <div class="footer__payment mt-8">
+                    <span class="sr-only">{{ 'sections.footer.payment' | t }}</span>
+                    <ul class="list flex flex-wrap gap-3" role="list">
+                      {%- for type in shop.enabled_payment_types -%}
+                        <li class="list-payment__item">
+                          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+      
+                {% if section.settings.enable_currency %}
+                    {% render 'currency-selector' %}
+                {% endif %}
+        
+              </div>
+            </div>
+    
+    
+        </div>
+    
+      </div>
+
+  </div>
+
+</footer>
+
+{%- comment -%} Extra scripts {%- endcomment -%}
+<script>
+  window.Shopify.currency.symbol = '{{ cart.currency.symbol }}';
+</script>
+
+{% if localization.country.iso_code == "GB" %}
+    <script>
+        (function() {
+          setTimeout(() => {
+            console.log('Attentive UK');
+            attentive.analytics.enable()
+            }, 2000);
+        })();
+    </script>
+{% endif %}
+
+<!-- temp -->
+<style>
+  .locale-selectors__container .locale-selectors__content{
+    text-align: left;
+    justify-content: start;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "Title"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "social_links",
+      "name": "Social links",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Heading",
+          "label": "Title"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icons",
+          "label": "Show icons",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_currency",
+          "label": "Native Multi-Currency",
+          "default": false,
+          "info": "This will enable Shopify native multi-currency"
+        },
+        {
+          "type": "html",
+          "id": "html",
+          "label": "CODE",
+          "info": "this will show under the social icons"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Heading",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "default": "<p>Share store details, promotions, or brand content with your customers.</p>",
+          "label": "Subtext"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 200,
+          "step": 5,
+          "unit": "px",
+          "label": "Image width",
+          "default": 100
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Image alignment on large screen",
+          "options": [
+            {
+              "value": "",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "large-width",
+          "label": "Large Width"
+        },
+        {
+          "value": "medium-width",
+          "label": "Medium Width"
+        },
+        {
+          "value": "small-width",
+          "label": "Small Width"
+        }
+      ],
+      "default": "page-width",
+      "label": "Container"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "default": false,
+      "label": "Show newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_subtitle",
+      "label": "Sub title"
+    },
+    {
+      "type": "html",
+      "id": "newsletter_html",
+      "label": "Newsletter HTML"
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "richtext",
+      "id": "copyright_text",
+      "label": "Copyright text"
+    },
+    {
+      "type": "header",
+      "content": "Payment methods"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "Show payment methods"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_currency",
+      "label": "Native Multi-Currency",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": false,
+      "label": "Show social"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_top",
+      "default": false,
+      "label": "Show scroll to top"
+    },
+    {
+      "type": "richtext",
+      "id": "social_text",
+      "label": "Show social"
+    },
+    {
+      "type": "link_list",
+      "id": "extra_links",
+      "label": "Extra links"
+    },
+    {
+          "type": "html",
+          "id": "social_html",
+          "label": "CODE"
+    },
+    {
+      "type": "image_picker",
+      "id": "certificate_logo",
+      "label": "Certificate logo"
+    },
+    {
+      "type": "range",
+      "id": "certificate_logo_width",
+      "label": "Certificate logo width",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 340
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "text"
+      }
+    ]
+  }
+}
+{% endschema %}
