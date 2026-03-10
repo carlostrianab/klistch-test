@@ -1,1 +1,119 @@
-{"sections":{"main":{"type":"main-product","blocks":{"title":{"type":"title","settings":{}},"price":{"type":"price","settings":{"show_afterpay":true}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","color_swatch_style":"basic","hide_color":false}},"quantity_selector":{"type":"quantity_selector","disabled":true,"settings":{"quantity_selector_style":"input"}},"buy_buttons":{"type":"buy_buttons","settings":{"show_qty":true,"show_dynamic_checkout":false,"show_bundle_items":false,"dynamic_price":false,"extra_products":[],"shipping_text":"SHIPS SAME OR <br> NEXT DAY","return_text":"90 DAY RETURNS"}},"description":{"type":"description","settings":{}},"share":{"type":"share","settings":{"share_label":"Share"}}},"block_order":["title","price","variant_picker","quantity_selector","buy_buttons","description","share"],"settings":{"container":"page-width","enable_breadcrumbs":true,"enable_sticky_info":true,"content_alignment":"self-start","sticky_gallery":false,"smaller_gallery_on_mobile":false,"media_ratio":"aspect-auto w-full","enable_video_looping":false,"enable_video_autoplay":false,"media_right":false,"show_arrows_mobile":true,"show_thumbnails_mobile":false,"padding_top":36,"padding_bottom":12}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_afterpay": true
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "color_swatch_style": "basic",
+            "hide_color": false
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "disabled": true,
+          "settings": {
+            "quantity_selector_style": "input"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_qty": true,
+            "show_dynamic_checkout": false,
+            "show_bundle_items": false,
+            "dynamic_price": false,
+            "fixed_bundle_discount": "0",
+            "extra_products": [],
+            "shipping_text": "SHIPS SAME OR <br> NEXT DAY",
+            "return_text": "90 DAY RETURNS"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "share"
+      ],
+      "settings": {
+        "container": "page-width",
+        "enable_breadcrumbs": true,
+        "enable_sticky_info": true,
+        "content_alignment": "self-start",
+        "sticky_gallery": false,
+        "smaller_gallery_on_mobile": false,
+        "media_ratio": "aspect-auto w-full",
+        "enable_video_looping": false,
+        "enable_video_autoplay": false,
+        "media_right": false,
+        "show_arrows_mobile": true,
+        "show_thumbnails_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "byo_bundle_6pQhaC": {
+      "type": "byo-bundle",
+      "name": "Build your own bundle",
+      "settings": {
+        "container": "page-width",
+        "show_suggestions": true,
+        "suggestion_description": "<p>Not sure what to get? Some prefill your box copy here!</p>",
+        "sidebar_title": "BUILD YOUR PACK",
+        "sidebar_sub_title": "<p>Description</p>",
+        "empty_placeholder": 2,
+        "min_limit": 2,
+        "discount_percentage": "",
+        "tier_2_limit": 0,
+        "tier_2_discount_percentage": "",
+        "tier_3_limit": 0,
+        "tier_3_discount_percentage": "",
+        "footer_checkout_text": "Checkout",
+        "discount_code": "package15off",
+        "checkout_behavior": "checkout",
+        "grid_desktop": "lg:grid-cols-5",
+        "grid_tablet": "md:grid-cols-3",
+        "grid_mobile": "grid-cols-2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "byo_bundle_6pQhaC"
+  ]
+}
