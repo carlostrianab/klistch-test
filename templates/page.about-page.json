@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "16618654628cc3415d": { "type": "image-banner", "settings": { "container": "full-width", "image": "shopify:\/\/shop_images\/Kitsch_About_Us_Page_Revamp_1afd6727-19a9-46ba-895b-2ebd3f2e174c.jpg", "max_height": 650, "max_height_mobile": 900, "banner_link": "", "image_container": "container", "overlay_image": false, "overlay_color": "#000000", "overlay_opacity": 0.3, "vertical_alignment": "md:items-center", "horizontal_alignment": "md:justify-start", "vertical_alignment_mobile": "items-center", "horizontal_alignment_mobile": "justify-center", "below_image_mobile": true, "content_background": "#000000", "content_background_opacity": 0, "text_color": "#ffffff", "max_width": 440 } },

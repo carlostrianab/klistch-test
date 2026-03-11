@@ -86,9 +86,15 @@
         "padding_top": 36,
         "padding_bottom": 12
       }
+    },
+    "routine_builder_bWQthi": {
+      "type": "routine-builder",
+      "name": "Routine Builder",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "routine_builder_bWQthi"
   ]
 }
