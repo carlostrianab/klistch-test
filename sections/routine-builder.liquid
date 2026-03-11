@@ -1,0 +1,53 @@
+
+
+<div class="routine-builder-accordion page-width space-y-4 pt-10 pb-10" x-data="RoutineBuilder">
+  {% assign routine = product.metafields.custom.build_your_routine.value %}
+  {% assign current_product_id = product.id %}
+  {% if routine %}
+      <h1 class="font-heading text-2xl text-center lg:text-left lg:text-3xl font-bold w-full">Create you own routine!</h1>
+    <h2>{{ routine.title.value }}</h2>
+    <div>{{ routine.description.value }}</div>
+  {% endif %}
+   {% for step in routine.steps.value %}
+        <div x-data="{ expanded: false }" class="accordion-item border border-gray-300 rounded">
+          <button @click="expanded = !expanded" class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 flex justify-between items-center">
+            <span class="font-semibold">{{ step.title.value }}</span>
+            <span class="transition-transform" :class="{ 'rotate-180': expanded }">
+              ▼
+            </span>
+          </button>
+          <div x-show="expanded" x-collapse.duration.300ms class="p-4 bg-white flex flex-col gap-[30px]">
+            <div class="mb-4 accordion-description">
+                {{ step.description.value }}
+            </div>
+            <div class="accordion-products flex flex-wrap gap-4" @toggle-product="toggleProduct($event.detail)">
+                 {% for product in step.products.value %}
+                   {% render 'routine-product-card',
+                    card_product: product,
+                    current_id: current_product_id,
+                    media_aspect_ratio: 'square',
+                    show_secondary_image: false,
+                    show_vendor: true,
+                    show_rating: false,
+                    show_add_to_cart: false,
+                    extend_height: true,
+                    lazy_load: true %}
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+</div>
+ </div>
+{% schema %}
+{
+  "name": "Routine Builder",
+  "templates": ["product"],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Routine Builder"
+    }
+  ]
+}
+{% endschema %}
