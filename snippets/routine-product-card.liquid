@@ -1,0 +1,177 @@
+{% comment %}
+    Renders a product card
+
+    Accepts:
+    - card_product: {Object} Product Liquid object (optional)
+    - media_aspect_ratio: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+    - show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+    - show_vendor: {Boolean} Show the product vendor. Default: false
+    - show_rating: {Boolean} Show the product rating. Default: false
+    - show_add_to_cart: {Boolean} Show the add to cart button. Default: false
+    - extend_height: {Boolean} Card height extends to available container space. Default: true (optional)
+    - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+    - current_id: {Number} ID of the page's current product; used to auto-select matching card
+
+    Usage:
+    {% render 'routine-product-card', show_vendor: section.settings.show_vendor, current_id: product.id %}
+{% endcomment %}
+
+{%- if card_product -%}
+  <div class="card-wrapper flex flex-col h-full p-4 rounded cursor-pointer transition-all relative" x-data="{ selected: false }" x-init="if({{ card_product.id }} === {{ current_id | default: 0 }}) { selected = true; }" @click="if({{ card_product.id }} !== {{ current_id | default: 0 }}) { console.log(`{{ card_product.title }}`); selected = !selected; $dispatch('toggle-product', { id: {{ card_product.id }}, variant_id: {{ card_product.first_available_variant.id }}, title: `{{ card_product.title }}` }); }" :class="{ 'border-2': selected, 'border': !selected }" x-bind:style="selected ? { 'background-color': 'var(--button-primary-background-color)', 'border-color': 'var(--button-primary-background-color-dark)' } : {}">
+    {% if product.id == card_product.id %}
+      <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 text-xs rounded font-semibold">Current Product</div>
+    {% endif %}
+      <div class="cart__media relative group" x-bind="behaviour" x-data="QuickViewButton">
+        {% if settings.quick_view_enabled %}
+          <button  type="button" x-cloak @click="$dispatch('toggle-quick-view', { handle: `{{ card_product.handle }}` })"
+            x-bind="animation"
+            aria-label="{{ 'products.product.quick_view.button' | t }}"
+            class="cart__quick-view absolute top-4 right-4 md:bottom-6 md:top-auto px-0 md:px-4 rounded-full md:rounded-md w-10 h-10 flex items-center justify-center md:transform md:left-1/2 md:-translate-x-1/2 button--primary md:w-full md:max-w-max border z-20">
+            <span class="hidden md:block">
+              {{ 'products.product.quick_view.button' | t }}
+            </span>
+            <span class="md:hidden">
+              {% render 'icon-cart', class: 'w-5' %}
+            </span>
+          </button>
+        {% endif %}
+
+        <div
+          class="cursor-pointer"
+         
+          aria-label="{{ card_product.title }}">
+          {%- if card_product.featured_media -%}
+            {% if prefetch %}
+              {% assign position = 1 %}
+            {% endif %}
+            {% render 'img-medium', image: card_product.featured_media, position: position, loading: image_loading %}
+            {% if card_product.media[1] != blank and show_secondary_image %}
+              {% render 'img-medium', image: card_product.media[1], class: ' absolute z-10 top-0 left-0 h-full w-full object-cover opacity-0 group-hover:opacity-100 ' %}
+            {% endif %}
+          {%- endif -%}
+          {% unless hide_flags == true %}
+            {% render 'product-flags', product_item: card_product %}
+          {% endunless %}
+        </div>
+
+        {% if show_sold_count and card_product.metafields.custom.sold_units != blank %}
+          {% assign sold_count = card_product.metafields.custom.sold_units %}
+          {% assign k_count = sold_count | divided_by: 1000 %}
+          {% assign m_count = sold_count | divided_by: 1000000 %}
+          {% if sold_count >= 1000000 %}
+              {% assign m_count = m_count | round: 1 %}
+              {% assign sold_count = m_count | append: 'M+' %}
+          {% elsif sold_count >= 1000 %}
+              {% assign k_count = k_count | round: 1 %}
+              {% assign sold_count = k_count | append: 'K+' %}
+          {% endif %}
+
+          <div class="overflow-hidden text-right text-sm units-sold absolute bottom-3 left-2 z-[100] bg-white px-2 py-0.5 rounded-md border border-black font-medium leading-[normal]">
+              {{ 'products.product.sold_count' | t: count: sold_count }} 
+          </div>
+
+        {% endif %}
+      </div>
+      <div
+       class="card__content block cursor-pointer  {% if show_add_to_cart %} pt-4 {% else %} py-4 {% endif %} text-center space-y-1">
+          <p class="card__heading font-medium">
+            {% if title_prefix %}
+              <span style="color: {{ prefix_color }}">
+                {{ title_prefix | escape }}
+              </span>
+            {% endif %}
+            {{ card_product.title | escape }}
+          </p>
+          <div class="flex justify-center gap-2 items-center">
+
+            {%- if show_rating -%}
+              {% render 'review-snippet' product: card_product, compact_reviews:compact_reviews  %}
+            {%- endif -%}
+
+          </div>
+          <div class="card__information">
+
+            {% unless hide_price == true %}
+              <div class="card__price">
+                {% render 'price', product: card_product, price_class: "justify-center font-medium" %}
+              </div>
+            {% endunless %}
+
+            {% if settings.show_product_excerpt and card_product.metafields.custom.product_excerpt != blank %}
+              <div class="py-1 opacity-70 text-sm">
+                {{ card_product.metafields.custom.product_excerpt |  metafield_tag }}
+              </div>
+            {% endif %}
+          </div>
+      </div>
+        
+      {% if show_add_to_cart %}
+        <div class="cart__actions mt-auto">
+          {% render 'add-to-cart', product: card_product, show_quantity: false %}
+        </div>
+      {% endif %}
+
+      {% if show_add_to_bundle %}
+          <button type="button"
+              @click="$dispatch('add-bundle', {
+                  id: {{ card_product.first_available_variant.id }},
+                  title: `{{ card_product.title }}`,
+                  price: {{ card_product.price | money_without_currency }},
+                  image: '{{ card_product | image_url: width: 500 }}',
+                  selling_plan_id: {{ card_product.first_available_variant.selling_plan_allocations[0].selling_plan.id | default: 0 }}
+              });" 
+              aria-label="add to bundle" 
+              class="button button--black font-semibold mt-auto">
+              {{ 'products.product.add_to_bundle' | t }}
+          </button>
+      {% endif %}
+
+      {% comment %} Enavi QuickShop Test Button {% endcomment %}
+      {% if quick_shop_enabled %}
+        <button type="button" 
+          x-data="QuickShopButton"
+          data-product-handle="{{ card_product.handle }}"
+          {% if card_product.tags contains 'exclude_cart' %}data-is-bundle="true"{% endif %}
+          {% if card_product.metafields.my_fields.alternative_colors != blank %}data-has-options="true"{% endif %}
+          x-bind="behaviour"
+          class="font-bold quick-shop-button w-full py-2 px-4 bg-white hover:bg-gray-50 text-black text-sm border-t transition-colors"
+          style="border: 1px solid var(--button-primary-background-color); margin-top: auto;">
+          {{ 'products.product.quick_shop' | t }}  
+        </button>
+      {% endif %}
+
+      {% if card_product.id == current_id %}
+        <div class="text-green-600 font-medium text-sm text-center mt-2">
+          Included in your routine.
+        </div>
+      {% endif %}
+  </div>
+{%- else -%}
+  <div class="card-wrapper">
+    <div class="card">
+      <div class="cart__media border">
+        {%- assign random_number = "now" | date: "%N" | modulo: 5 | plus: 1 -%}
+        {% assign product_name = random_number | prepend: 'product-' %}
+        {{ product_name | placeholder_svg_tag }}
+      </div>
+
+      <div class="card__content py-4">
+        <h3 class="card__heading font-medium">
+          <a role="link" aria-disabled="true" class="">
+            {{ 'onboarding.product_title' | t }}
+          </a>
+        </h3>
+
+        <div class="cart__information">
+          {%- if show_vendor -%}
+            <span class="sr-only">{{ 'accessibility.vendor' | t }}</span>
+            <div class="cart__information-vendor">{{ 'products.product.vendor' | t }}</div>
+          {%- endif -%}
+          {% render 'price' %}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+{%- endif -%}
