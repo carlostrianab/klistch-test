@@ -595,11 +595,24 @@
             </noscript>
           
           {% when 'benefits_ingredients' %}
-            {% render 'benefits-ingredients-panel',
-              benefits: product.metafields.custom.benefits,
-              ingredients: product.metafields.custom.ingredients,
-              how_to_use: product.metafields.custom.how_to_use %}
 
+            {% assign benefits_value = product.selected_or_first_available_variant.metafields.custom.benefits %}
+            {% if benefits_value == blank or benefits_value == '' %}
+              {% assign benefits_value = product.metafields.custom.benefits %}
+            {% endif %}
+            {% assign ingredients_value = product.selected_or_first_available_variant.metafields.custom.ingredients %}
+            {% if ingredients_value == blank or ingredients_value == '' %}
+              {% assign ingredients_value = product.metafields.custom.ingredients %}
+            {% endif %}
+            {% assign how_to_use_value = product.selected_or_first_available_variant.metafields.custom.how_to_use %}
+            {% if how_to_use_value == blank or how_to_use_value == '' %}
+              {% assign how_to_use_value = product.metafields.custom.how_to_use %}
+            {% endif %}
+            {% render 'benefits-ingredients-panel',
+              benefits: benefits_value,
+              ingredients: ingredients_value,
+              how_to_use: how_to_use_value %}
+              
           {%- when 'buy_buttons' -%}
 
             {% render 'add-to-cart'

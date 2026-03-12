@@ -1,5 +1,3 @@
-// Keyboard accessibility for benefits-ingredients-panel tabs
-
 document.addEventListener("DOMContentLoaded", function () {
   const tablist = document.querySelector('.benefits-ingredients-tabs [role="tablist"]');
   if (!tablist) {
