@@ -39,7 +39,7 @@ document.addEventListener("alpine:init", () => {
           throw new Error(`Add to cart failed: ${response.status}`);
         }
 
-        // Update cart drawer and header using jQuery section rendering
+        // Update cart drawer and header using regular JavaScript
         this.updateCartDrawerWithJQuery();
 
         // Clear selected items after successful add
@@ -50,20 +50,28 @@ document.addEventListener("alpine:init", () => {
     },
     async updateCartDrawerWithJQuery() {
       // Fetch cart drawer section and update .cart-items
-      fetch("?section_id=cart-drawer")
+      fetch("?section_id=cart-drawer&preview_theme_id=183783358774")
         .then(response => response.text())
         .then(cartData => {
-          var cart_html = $(cartData);
-          var cart_items = $(".cart-items", cart_html);
-          $(".cart-items").replaceWith(cart_items);
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(cartData, "text/html");
+          const cartItems = doc.querySelector(".cart-items");
+          const currentCartItems = document.querySelector(".cart-items");
+          if (cartItems && currentCartItems) {
+            currentCartItems.replaceWith(cartItems);
+          }
         });
-      // Fetch header section and update .header-cart-count
-      fetch("?section_id=header")
+      // Fetch header section and update .cart-count-bubble
+      fetch("?section_id=header&preview_theme_id=183783358774")
         .then(response => response.text())
         .then(headerData => {
-          var cart_html = $(headerData);
-          var cart_count = $(".header-cart-count", cart_html);
-          $(".header-cart-count").replaceWith(cart_count);
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(headerData, "text/html");
+          const cartBubble = doc.querySelector(".cart-count-bubble");
+          const currentCartBubble = document.querySelector(".cart-count-bubble");
+          if (cartBubble && currentCartBubble) {
+            currentCartBubble.replaceWith(cartBubble);
+          }
         });
     },
     toggleProduct(product) {
