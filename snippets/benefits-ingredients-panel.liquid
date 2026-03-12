@@ -1,0 +1,100 @@
+{%- comment -%}
+  Renders a tabbed panel for Benefits, Ingredients, and How to Use.
+  Accepts:
+    - benefits: {String} (optional) The benefits content (e.g. product.metafields.custom.benefits.value)
+    - ingredients: {String} (optional) The ingredients content (e.g. product.metafields.custom.ingredients.value)
+    - how_to_use: {String} (optional) The how to use content (e.g. product.metafields.custom.how_to_use.value)
+  Usage:
+    {% render 'benefits-ingredients-panel',
+      benefits: product.metafields.custom.benefits.value,
+      ingredients: product.metafields.custom.ingredients.value,
+      how_to_use: product.metafields.custom.how_to_use.value %}
+{%- endcomment -%}
+
+{% if benefits or ingredients or how_to_use %}
+
+    {% assign first_tab = '' %}
+    {% if benefits %}
+    {% assign first_tab = 'benefits' %}
+    {% elsif ingredients %}
+    {% assign first_tab = 'ingredients' %}
+    {% elsif how_to_use %}
+    {% assign first_tab = 'how' %}
+    {% endif %}
+
+    <div x-data="{ tab: '{{ first_tab }}' }" class="benefits-ingredients-tabs w-full">
+    <div class="flex border-b mb-4">
+        {% if benefits %}
+        <button
+        :class="tab === 'benefits' ? 'tab-active' : 'tab-inactive'"
+        class="tab-btn px-4 py-2 focus:outline-none w-full"
+        @click="tab = 'benefits'"
+        type="button"
+        >
+        Benefits
+        </button>
+        {% endif %}
+        {% if ingredients %}
+        <button
+        :class="tab === 'ingredients' ? 'tab-active' : 'tab-inactive'"
+        class="tab-btn px-4 py-2 focus:outline-none w-full"
+        @click="tab = 'ingredients'"
+        type="button"
+        >
+        Ingredients
+        </button>
+        {% endif %}
+        {% if how_to_use %}
+        <button
+        :class="tab === 'how' ? 'tab-active' : 'tab-inactive'"
+        class="tab-btn px-4 py-2 focus:outline-none w-full"
+        @click="tab = 'how'"
+        type="button"
+        >
+        How to Use
+        </button>
+        {% endif %}
+    </div>
+    <div>
+        {% if benefits %}
+        <div x-show="tab === 'benefits'">
+        <h3 class="text-lg font-bold mb-2">Benefits</h3>
+        <div>{{ benefits | metafield_tag }}</div>
+        </div>
+        {% endif %}
+        {% if ingredients %}
+        <div x-show="tab === 'ingredients'">
+        <h3 class="text-lg font-bold mb-2">Ingredients</h3>
+        <div>{{ ingredients | metafield_tag }}</div>
+        </div>
+        {% endif %}
+        {% if how_to_use %}
+        <div x-show="tab === 'how'">
+        <h3 class="text-lg font-bold mb-2">How to Use</h3>
+        <div>{{ how_to_use | metafield_tag }}</div>
+        </div>
+        {% endif %}
+    </div>
+    </div>
+
+    <style>
+    .benefits-ingredients-tabs button{
+        border-radius: 10px 10px 0 0;
+        border: 1px solid var(--button-primary-background-color);
+    }
+    .tab-btn {
+
+    background: transparent;
+    color: inherit;
+    transition: background 0.2s, color 0.2s;
+    }
+    .tab-active {
+    background: var(--button-primary-background-color);
+    color: #000;
+    }
+    .tab-inactive {
+    background: transparent;
+    color: inherit;
+    }
+    </style>
+{% endif %}

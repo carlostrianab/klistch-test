@@ -593,9 +593,15 @@
                 </div>
               </div>
             </noscript>
+          
+          {% when 'benefits_ingredients' %}
+            {% render 'benefits-ingredients-panel',
+              benefits: product.metafields.custom.benefits,
+              ingredients: product.metafields.custom.ingredients,
+              how_to_use: product.metafields.custom.how_to_use %}
 
           {%- when 'buy_buttons' -%}
-            
+
             {% render 'add-to-cart'
               product: product,
               show_qty: block.settings.show_qty,
@@ -1811,6 +1817,11 @@
           "info": "You can hide the color and use the color variants metafield instead"
         }
       ]
+    },
+    {
+      "type": "benefits_ingredients",
+      "name": "Benefits & Ingredients",
+      "limit": 1
     },
     {
       "type": "buy_buttons",
