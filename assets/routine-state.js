@@ -32,25 +32,15 @@ document.addEventListener("alpine:init", () => {
             "Content-Type": "application/json",
             Accept: "application/json"
           },
-          body: JSON.stringify({
-            items,
-            sections: "cart-count-bubble,cart-drawer",
-            sections_url: window.location.pathname
-          })
+          body: JSON.stringify({ items })
         });
 
         if (!response.ok) {
           throw new Error(`Add to cart failed: ${response.status}`);
         }
 
-        const data = await response.json();
-
-        console.log("Cart updated:", data);
-
-        // Update cart count bubble using Section Rendering API
-        this.updateCartCountBubble(data.sections["cart-count-bubble"]);
-        // Update cart drawer content using Section Rendering API
-        this.updateCartDrawer(data.sections["cart-drawer"]);
+        // Update cart drawer and header using jQuery section rendering
+        this.updateCartDrawerWithJQuery();
 
         // Clear selected items after successful add
         this.selectedItems = [];
@@ -58,31 +48,23 @@ document.addEventListener("alpine:init", () => {
         console.error("Error adding to cart:", error);
       }
     },
-    updateCartDrawer(sectionHtml) {
-      if (!sectionHtml) return;
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(sectionHtml, "text/html");
-
-      const newDrawer = doc.querySelector(".cart__drawer-content");
-      const currentDrawer = document.querySelector(".cart__drawer-content");
-
-      if (newDrawer && currentDrawer) {
-        currentDrawer.replaceWith(newDrawer);
-      }
-    },
-    updateCartCountBubble(sectionHtml) {
-      if (!sectionHtml) return;
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(sectionHtml, "text/html");
-
-      const newBubble = doc.querySelector(".cart-count-bubble");
-      const currentBubble = document.querySelector(".cart-count-bubble");
-
-      if (newBubble && currentBubble) {
-        currentBubble.replaceWith(newBubble);
-      }
+    async updateCartDrawerWithJQuery() {
+      // Fetch cart drawer section and update .cart-items
+      fetch("?section_id=cart-drawer")
+        .then(response => response.text())
+        .then(cartData => {
+          var cart_html = $(cartData);
+          var cart_items = $(".cart-items", cart_html);
+          $(".cart-items").replaceWith(cart_items);
+        });
+      // Fetch header section and update .header-cart-count
+      fetch("?section_id=header")
+        .then(response => response.text())
+        .then(headerData => {
+          var cart_html = $(headerData);
+          var cart_count = $(".header-cart-count", cart_html);
+          $(".header-cart-count").replaceWith(cart_count);
+        });
     },
     toggleProduct(product) {
       const exists = this.selectedItems.find(i => i.id === product.id);
