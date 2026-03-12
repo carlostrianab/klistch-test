@@ -59,6 +59,10 @@
           "settings": {
             "share_label": "Share"
           }
+        },
+        "benefits_ingredients_PfydGj": {
+          "type": "benefits_ingredients",
+          "settings": {}
         }
       },
       "block_order": [
@@ -68,7 +72,8 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share"
+        "share",
+        "benefits_ingredients_PfydGj"
       ],
       "settings": {
         "container": "page-width",
