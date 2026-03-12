@@ -17,13 +17,17 @@
 {% endcomment %}
 
 {%- if card_product -%}
-  <div class="card-wrapper flex flex-col h-full p-4 rounded cursor-pointer transition-all relative" x-data="{ selected: false }" x-init="if({{ card_product.id }} === {{ current_id | default: 0 }}) { selected = true; }" @click="if({{ card_product.id }} !== {{ current_id | default: 0 }}) { console.log(`{{ card_product.title }}`); selected = !selected; $dispatch('toggle-product', { id: {{ card_product.id }}, variant_id: {{ card_product.first_available_variant.id }}, title: `{{ card_product.title }}` }); }" :class="{ 'border-2': selected, 'border': !selected }" x-bind:style="selected ? { 'background-color': 'var(--button-primary-background-color)', 'border-color': 'var(--button-primary-background-color-dark)' } : {}">
+  <div class="card-wrapper flex flex-col h-full p-4 rounded cursor-pointer transition-all relative {% unless card_product.available %}card--disabled opacity-50{% endunless %}" x-data="{ selected: false }" x-init="if({{ card_product.id }} === {{ current_id | default: 0 }}) { selected = true; }" @click="if({{ card_product.id }} !== {{ current_id | default: 0 }}) { console.log(`{{ card_product.title }}`); selected = !selected; $dispatch('toggle-product', { id: {{ card_product.id }}, variant_id: {{ card_product.first_available_variant.id }}, title: `{{ card_product.title }}` }); }" :class="{ 'border-2': selected, 'border': !selected }" x-bind:style="selected ? { 'background-color': 'var(--button-primary-background-color)', 'border-color': 'var(--button-primary-background-color-dark)' } : {}">
     {% if product.id == card_product.id %}
       <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 text-xs rounded font-semibold">Current Product</div>
     {% endif %}
+    {% unless card_product.available %}
+      <div class="text-red-600 font-medium text-center mt-2">Not available</div>
+    {% endunless %}
+
       <div class="cart__media relative group" x-bind="behaviour" x-data="QuickViewButton">
         {% if settings.quick_view_enabled %}
-          <button  type="button" x-cloak @click="$dispatch('toggle-quick-view', { handle: `{{ card_product.handle }}` })"
+          <button  type="button" x-cloak @click="{% unless card_product.available %}$dispatch('toggle-quick-view', { handle: `{{ card_product.handle }}` }){% endunless %}"
             x-bind="animation"
             aria-label="{{ 'products.product.quick_view.button' | t }}"
             class="cart__quick-view absolute top-4 right-4 md:bottom-6 md:top-auto px-0 md:px-4 rounded-full md:rounded-md w-10 h-10 flex items-center justify-center md:transform md:left-1/2 md:-translate-x-1/2 button--primary md:w-full md:max-w-max border z-20">
