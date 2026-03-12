@@ -23,53 +23,73 @@
     {% endif %}
 
     <div x-data="{ tab: '{{ first_tab }}' }" class="benefits-ingredients-tabs w-full">
-    <div class="flex border-b mb-4">
+    <div aria-live="polite" aria-atomic="true" class="sr-only" x-text="
+      tab === 'benefits' ? 'Benefits tab selected' :
+      tab === 'ingredients' ? 'Ingredients tab selected' :
+      tab === 'how' ? 'How to Use tab selected' : ''
+    "></div>
+    <div class="flex border-b mb-4" role="tablist" aria-label="Product information tabs">
         {% if benefits %}
         <button
+        role="tab"
+        id="tab-benefits"
+        :aria-selected="tab === 'benefits' ? 'true' : 'false'"
+        :tabindex="tab === 'benefits' ? 0 : -1"
+        aria-controls="tabpanel-benefits"
         :class="tab === 'benefits' ? 'tab-active' : 'tab-inactive'"
         class="tab-btn px-4 py-2 focus:outline-none w-full"
         @click="tab = 'benefits'"
         type="button"
         >
-        Benefits
+        Benefits <span class="sr-only">tab</span>
         </button>
         {% endif %}
         {% if ingredients %}
         <button
+        role="tab"
+        id="tab-ingredients"
+        :aria-selected="tab === 'ingredients' ? 'true' : 'false'"
+        :tabindex="tab === 'ingredients' ? 0 : -1"
+        aria-controls="tabpanel-ingredients"
         :class="tab === 'ingredients' ? 'tab-active' : 'tab-inactive'"
         class="tab-btn px-4 py-2 focus:outline-none w-full"
         @click="tab = 'ingredients'"
         type="button"
         >
-        Ingredients
+        Ingredients <span class="sr-only">tab</span>
         </button>
         {% endif %}
         {% if how_to_use %}
         <button
+        role="tab"
+        id="tab-how"
+        :aria-selected="tab === 'how' ? 'true' : 'false'"
+        :tabindex="tab === 'how' ? 0 : -1"
+        aria-controls="tabpanel-how"
         :class="tab === 'how' ? 'tab-active' : 'tab-inactive'"
         class="tab-btn px-4 py-2 focus:outline-none w-full"
         @click="tab = 'how'"
         type="button"
         >
-        How to Use
+        How to Use <span class="sr-only">tab</span>
         </button>
         {% endif %}
     </div>
     <div>
         {% if benefits %}
-        <div x-show="tab === 'benefits'">
+        <div x-show="tab === 'benefits'" role="tabpanel" id="tabpanel-benefits" aria-labelledby="tab-benefits">
         <h3 class="text-lg font-bold mb-2">Benefits</h3>
         <div>{{ benefits | metafield_tag }}</div>
         </div>
         {% endif %}
         {% if ingredients %}
-        <div x-show="tab === 'ingredients'">
+        <div x-show="tab === 'ingredients'" role="tabpanel" id="tabpanel-ingredients" aria-labelledby="tab-ingredients">
         <h3 class="text-lg font-bold mb-2">Ingredients</h3>
         <div>{{ ingredients | metafield_tag }}</div>
         </div>
         {% endif %}
         {% if how_to_use %}
-        <div x-show="tab === 'how'">
+        <div x-show="tab === 'how'" role="tabpanel" id="tabpanel-how" aria-labelledby="tab-how">
         <h3 class="text-lg font-bold mb-2">How to Use</h3>
         <div>{{ how_to_use | metafield_tag }}</div>
         </div>
@@ -97,4 +117,6 @@
     color: inherit;
     }
     </style>
+
+    <script src="{{ 'benefits-tabs.js' | asset_url }}" defer></script>
 {% endif %}
