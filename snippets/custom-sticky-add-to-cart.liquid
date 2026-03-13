@@ -1,0 +1,109 @@
+<style>
+    #shopify-section-footer{
+        margin-bottom: 4rem;
+    }
+</style>
+
+<div 
+    x-data="{
+        lastScrollTop: 500,
+        show: false,
+        inStock: {{ product.available }}
+    }"
+    x-cloak
+    x-title="Footer Add to Cart"
+    x-show="show && inStock"
+    x-transition:enter="transform transition ease-in-out duration-500" 
+    x-transition:enter-start="translate-y-full opacity-0" 
+    x-transition:enter-end="translate-y-0 opacity-1" 
+    x-transition:leave="transform transition ease-in-out duration-500" 
+    x-transition:leave-start="translate-y-0" 
+    x-transition:leave-end="translate-y-full opacity-0" 
+    @scroll.window="$nextTick(() => {
+        // var st = window.pageYOffset || document.documentElement.scrollTop;
+        // show = st > lastScrollTop;
+        let AddToCart = document.querySelector('.main-product form.product-form .button-add-to-cart');
+        if(AddToCart?.getBoundingClientRect().top < -10){
+            show = true;
+        }else{
+            show = false;
+        }
+
+    })"
+    class="add-to-cart-footer p-3 bg-white text-black fixed bottom-0 w-full z-20 shadow border-t">
+    <div class="page-width">
+        <div class="flex justify-between items-center gap-4" 
+            x-data="variantsSelector({{ product.variants | json | escape }}, {{ product.selected_or_first_available_variant | json | escape }})"
+            @variant-changed.window="$nextTick(() => {
+                selectOptions[$event.detail?.position] = $event.detail?.event?.target.value;
+                let getVariant = Unick.findVariant(variants , selectOptions); 
+                selectedVariant = (getVariant) ? getVariant : null;
+            })">
+
+
+            <div class="hidden md:flex gap-2 md:w-8/12 items-center">
+                {% render 'img-small', image: product.featured_image, class: 'w-16' %}
+                <div class="flex flex-col gap-1">
+                    <div class=" font-semibold w-full">{{ product.title }}</div>
+                    {% render 'price', product: product, is_pdp: true, use_variant: true, class: 'text-sm' %}
+                    <!-- Variant Info -->
+                    <template x-if="selectedVariant">
+                        <div class="text-s text-black mt-1">
+                            <span x-text="selectedVariant.title"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            {% if true %}
+                <div class="flex w-24 md:hidden border border-black rounded-sm"
+                    @quantity-pack-updated.window="$nextTick(() => {
+                        qty = $event.detail.qty;
+                    })"
+                    x-init="$nextTick(() => {
+                        $watch('qty', value => {
+                            console.log('qty', value);
+                           
+                            $dispatch('quantity-updated', { qty: value });
+                            
+                        });
+                    });"
+                    @quantity-updated.window="$nextTick(() => {
+                        qty = $event.detail.qty;
+                    })"
+                    x-data="{ qty: 1 }">
+                    <button  
+                        @click="qty > 1 ? qty-- : qty = 1"
+                        class="quantity__button no-js-hidden text-center cursor-pointer px-2" name="minus" type="button">
+                        <span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+                        &minus;
+                    </button>
+                    <input class="quantity__input text-center bg-white border-transparent w-9 px-0.5"
+                        type="text"
+                        name="quantity"
+                        aria-label="{{ 'products.product.quantity.label' | t }}"
+                        x-model="qty"
+                        min="1"
+                        value="{{ defaultQTY }}">
+                    <button  @click="qty++"
+                        class="quantity__button no-js-hidden text-center cursor-pointer px-2" name="plus" type="button">
+                        <span class="sr-only">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+                        &plus;
+                    </button>
+                </div>
+            {% endif %}
+
+            <button type="button" 
+                x-text="selectedVariant.available ? '{{ 'products.product.add_to_cart' | t }}' : '{{ 'products.product.notify_me' | t }}'"
+                @click="if(selectedVariant.available) { document.querySelector('.main-product form.product-form .button-add-to-cart').click(); }"
+                :disabled="!selectedVariant.available"
+                :class="{'opacity-50 cursor-not-allowed': !selectedVariant.available, 'button--primary': true}"
+                class="button w-full md:w-3/12 font-semibold">
+                {{ 'products.product.add_to_cart' | t }}
+            </button>
+
+           
+        </div>
+    </div>
+
+</div>
